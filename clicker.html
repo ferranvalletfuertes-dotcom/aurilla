@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Clicker - Nivel 6</title>
+    <style>
+        :root {
+            --bg-color: #0f0c29;
+            --panel-bg: rgba(255, 255, 255, 0.05);
+            --neon-blue: #00f2fe;
+            --neon-purple: #4facfe;
+            --text-main: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .game-container {
+            display: flex;
+            width: 100%;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* --- ZONA DE CLIC --- */
+        .click-zone {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--panel-bg);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .bps-display {
+            font-size: 1.2rem;
+            color: #aaa;
+            margin-bottom: 50px;
+        }
+
+        .orb {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--neon-blue), var(--neon-purple));
+            box-shadow: 0 0 50px var(--neon-blue), inset 0 0 20px rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: transform 0.05s ease;
+            animation: pulse 4s infinite alternate;
+        }
+
+        .orb:active {
+            transform: scale(0.92);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 40px var(--neon-blue); }
+            100% { box-shadow: 0 0 80px var(--neon-purple); }
+        }
+
+        /* --- ZONA DE TIENDA --- */
+        .shop-zone {
+            flex: 1;
+            background: var(--panel-bg);
+            border-radius: 20px;
+            padding: 20px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .upgrade-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .upgrade-card:hover {
+            border-color: var(--neon-blue);
+            background: rgba(0, 242, 254, 0.1);
+        }
+
+        .upgrade-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .upgrade-info h3 { margin: 0 0 5px 0; font-size: 1.2rem; }
+        .upgrade-info p { margin: 0; font-size: 0.9rem; color: #bbb; }
+        .upgrade-cost { font-weight: bold; color: var(--neon-blue); }
+        .upgrade-count { font-size: 1.5rem; font-weight: bold; opacity: 0.5; }
+
+        /* --- SISTEMA DE PARTÍCULAS --- */
+        .floating-text {
+            position: absolute;
+            color: var(--neon-blue);
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px var(--neon-blue), 0 0 20px #fff;
+            pointer-events: none; 
+            user-select: none;
+            z-index: 100;
+            animation: floatUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-80px) scale(1.3);
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <div class="click-zone">
+            <div class="score-display"><span id="score">0</span></div>
+            <div class="bps-display"><span id="cps">0</span> Créditos / seg</div>
+            <div id="orb" class="orb"></div>
+        </div>
+
+        <div class="shop-zone">
+            <h2>Mercado de Mejoras</h2>
+            <div id="shop-container"></div>
+        </div>
+    </div>
+
+    <script>
+        const Game = {
+    state: {
+        score: 0,
+        clickPower: 1,
+        cps: 0,
+        lifetimeScore: 0,
+        prestigePoints: 0,
+        prestigeMultiplier: 1
+    },
+    
+    upgrades: [],
+
+    init() {
+        this.cacheDOM();
+        this.generateUpgrades();
+        this.loadData();
+        this.bindEvents();
+        this.renderShop();
+        this.startGameLoop();
+        setInterval(() => this.saveData(), 5000);
+    },
+
+    cacheDOM() {
+        this.dom = {
+            score: document.getElementById('score'),
+            cps: document.getElementById('cps'),
+            orb: document.getElementById('orb'),
+            shop: document.getElementById('shop-container')
+        };
+    },
+
+    generateUpgrades() {
+        const baseNames = ["Cursor", "CPU", "Servidor", "IA Básica", "Red Neuronal", "Computadora Cuántica", "Esfera de Dyson", "Motor Galáctico", "Manipulador Cósmico", "Creador de Universos"];
+        for (let i = 0; i < 50; i++) {
+            let nameIndex = i % baseNames.length;
+            let prefix = i >= baseNames.length ? `Mk ${Math.floor(i/baseNames.length) + 1} ` : "";
+            this.upgrades.push({
+                id: `upg_${i}`,
+                name: prefix + baseNames[nameIndex],
+                baseCost: Math.floor(15 * Math.pow(2.5, i)),
+                costMult: 1.15,
+                cpsBonus: i === 0 ? 0.5 : Math.floor(2 * Math.pow(2.2, i)),
+                clickBonus: i % 3 === 0 ? Math.floor(1 * Math.pow(2, i)) : 0,
+                count: 0
+            });
+        }
+    },
+
+    bindEvents() {
+        this.dom.orb.addEventListener('mousedown', (e) => this.click(e));
+    },
+
+    click(e) {
+        this.state.score += this.state.clickPower;
+        this.state.lifetimeScore += this.state.clickPower;
+        this.updateUI();
+        this.createParticle(e);
+    },
+
+    createParticle(e) {
+        const particle = document.createElement('div');
+        particle.className = 'floating-text';
+        particle.textContent = `+${this.state.clickPower}`;
+        const offsetX = (Math.random() - 0.5) * 50; 
+        const offsetY = (Math.random() - 0.5) * 50;
+        particle.style.left = `${e.clientX + offsetX}px`;
+        particle.style.top = `${e.clientY + offsetY}px`;
+        document.body.appendChild(particle);
+        particle.addEventListener('animationend', () => particle.remove());
+    },
+
+    buyUpgrade(index) {
+        const upgrade = this.upgrades[index];
+        const currentCost = this.calculateCost(upgrade);
+        if (this.state.score >= currentCost) {
+            this.state.score -= currentCost;
+            upgrade.count++;
+            this.state.cps += (upgrade.cpsBonus * this.state.prestigeMultiplier);
+            this.state.clickPower += upgrade.clickBonus;
+            this.renderShop(); 
+            this.updateUI();
+        }
+    },
+
+    calculateCost(upgrade) {
+        return Math.floor(upgrade.baseCost * Math.pow(upgrade.costMult, upgrade.count));
+    },
+
+    saveData() {
+        const saveState = {
+            score: this.state.score,
+            lifetimeScore: this.state.lifetimeScore,
+            prestigePoints: this.state.prestigePoints,
+            upgrades: this.upgrades.map(u => u.count)
+        };
+        localStorage.setItem('neonClickerSave', JSON.stringify(saveState));
+    },
+
+    loadData() {
+        const saved = localStorage.getItem('neonClickerSave');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            this.state.score = parsed.score || 0;
+            this.state.lifetimeScore = parsed.lifetimeScore || parsed.score || 0;
+            this.state.prestigePoints = parsed.prestigePoints || 0;
+            parsed.upgrades.forEach((count, index) => {
+                if (this.upgrades[index]) {
+                    this.upgrades[index].count = count;
+                    this.state.cps += (this.upgrades[index].cpsBonus * count * this.state.prestigeMultiplier);
+                    this.state.clickPower += (this.upgrades[index].clickBonus * count);
+                }
+            });
+        }
+    },
+
+    calculatePendingPrestige() {
+        const base = this.state.lifetimeScore / 1000000000; 
+        if (base < 1) return 0;
+        return Math.floor(Math.cbrt(base));
+    },
+
+    lastTime: performance.now(),
+    startGameLoop() {
+        const loop = (currentTime) => {
+            const deltaTime = (currentTime - this.lastTime) / 1000;
+            this.lastTime = currentTime;
+            if (this.state.cps > 0) {
+                const addedScore = this.state.cps * deltaTime;
+                this.state.score += addedScore;
+                this.state.lifetimeScore += addedScore;
+                this.updateUI();
+            }
+            this.checkShopAvailability();
+            requestAnimationFrame(loop);
+        };
+        requestAnimationFrame(loop);
+    },
+
+    updateUI() {
+        this.dom.score.textContent = Math.floor(this.state.score).toLocaleString();
+        this.dom.cps.textContent = this.state.cps.toFixed(1);
+    },
+
+    renderShop() {
+        this.dom.shop.innerHTML = '';
+        const sortedUpgrades = this.upgrades.map((upgrade, index) => ({
+            originalIndex: index,
+            upgrade: upgrade,
+            currentCost: this.calculateCost(upgrade)
+        })).sort((a, b) => a.currentCost - b.currentCost);
+
+        sortedUpgrades.forEach((item) => {
+            const { originalIndex, upgrade, currentCost } = item;
+            const card = document.createElement('div');
+            card.className = `upgrade-card ${this.state.score < currentCost ? 'disabled' : ''}`;
+            card.onclick = () => this.buyUpgrade(originalIndex);
+            const effectText = upgrade.cpsBonus > 0 ? `+${(upgrade.cpsBonus * this.state.prestigeMultiplier).toFixed(1)} CPS` : `+${upgrade.clickBonus} Clic`;
+            card.innerHTML = `
+                <div class="upgrade-info">
+                    <h3>${upgrade.name}</h3>
+                    <p>${effectText} | Costo: <span class="upgrade-cost">${currentCost.toLocaleString()}</span></p>
+                </div>
+                <div class="upgrade-count">${upgrade.count}</div>
+            `;
+            this.dom.shop.appendChild(card);
+        });
+    },
+
+    checkShopAvailability() {
+        const cards = this.dom.shop.children;
+        const sortedCosts = this.upgrades.map(u => this.calculateCost(u)).sort((a, b) => a - b);
+        for (let i = 0; i < cards.length; i++) {
+            if (this.state.score >= sortedCosts[i]) {
+                cards[i].classList.remove('disabled');
+            } else {
+                cards[i].classList.add('disabled');
+            }
+        }
+    }
+};
+
+Game.init();
+    </script>
+</body>
+</html>
