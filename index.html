@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Vampire Survivors Clone - Fase 12 (Héroes y Secretos)</title>
+    <title>Vampire Survivors Clone - Fase 13 (Motor Espacial & Escalado Crítico)</title>
     <style>
         body { margin: 0; overflow: hidden; background-color: #030305; font-family: 'Segoe UI', sans-serif; color: white; user-select: none; }
         canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; }
@@ -25,6 +25,7 @@
         #timer { font-size: 30px; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.8); position: absolute; left: 50%; transform: translateX(-50%); top: 25px; font-family: monospace; }
         #pause-ui-btn { position: absolute; top: 25px; right: 20px; background: rgba(0, 255, 204, 0.1); border: 2px solid #00ffcc; color: #00ffcc; padding: 8px 15px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 5px; transition: 0.2s; pointer-events: auto; z-index: 6; }
         #pause-ui-btn:hover { background: #00ffcc; color: #030305; box-shadow: 0 0 15px rgba(0, 255, 204, 0.6); }
+
         #minimap-container { position: absolute; bottom: 20px; right: 20px; width: 200px; height: 200px; background: rgba(5, 5, 8, 0.8); border: 2px solid #333; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.8); overflow: hidden; pointer-events: none; }
         #minimapCanvas { width: 100%; height: 100%; }
 
@@ -56,7 +57,6 @@
         .btn-danger { background: #111; border: 1px solid #ff003c; color: #ff003c; padding: 10px 15px; cursor: pointer; border-radius: 5px; font-weight: bold; transition: 0.2s; }
         .btn-danger:hover { background: #ff003c; color: #111; }
 
-        /* Selector de Personajes */
         #char-container { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; max-width: 900px; }
         .char-card { background: #111; border: 2px solid #444; border-radius: 10px; width: 200px; padding: 20px; text-align: center; cursor: pointer; transition: 0.2s; position: relative; }
         .char-card:hover { transform: scale(1.05); }
@@ -64,7 +64,6 @@
         .char-card.locked:hover { transform: none; }
         .char-card.selected { border-color: #00ffcc; box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); }
         
-        /* Easter Egg Div */
         #anomaly { position: absolute; bottom: 10px; right: 10px; width: 10px; height: 10px; cursor: crosshair; opacity: 0; z-index: 100; }
     </style>
 </head>
@@ -73,7 +72,7 @@
     <div id="warning">AMENAZA NIVEL OMEGA</div>
 
     <div id="screen-main" class="screen active">
-        <h1>Megabonk:<br>Arena Confinada</h1>
+        <h1>Megabonk:<br>Motor Espacial</h1>
         <button class="btn" onclick="openCharSelect()">Despliegue de Combate</button>
         <button class="btn" onclick="openSkillTree()">Matriz Neural</button>
         
@@ -83,12 +82,9 @@
             <button class="btn-small" onclick="exportCode()">Exportar Código</button>
             <button class="btn-danger" onclick="hardReset()">Borrar Datos</button>
         </div>
-        
-        <!-- EASTER EGG (No mires el código si quieres buscarlo tú) -->
         <div id="anomaly" onclick="triggerAnomaly()"></div>
     </div>
 
-    <!-- PANTALLA SELECCION HÉROES -->
     <div id="screen-char" class="screen">
         <h1 style="color: #fff; font-size: 40px; margin-bottom: 30px;">Selecciona tu Chasis</h1>
         <div id="char-container"></div>
@@ -146,17 +142,24 @@
         let gameState = 'menu';
         const WORLD_SIZE = 6000; 
 
-        const MAX_ENEMIES = 600; 
-        const MAX_PROJECTILES = 600;
-        const MAX_GEMS = 1000;
-        const MAX_TEXTS = 300;
+        // CONFIGURACIÓN DE POOL (Aumentado para aprovechar el nuevo motor de colisiones)
+        const MAX_ENEMIES = 800; 
+        const MAX_PROJECTILES = 800;
+        const MAX_GEMS = 1200;
+        const MAX_TEXTS = 500; 
+
+        // CONFIGURACIÓN DEL SPATIAL HASH GRID (Motor Espacial)
+        const CELL_SIZE = 150;
+        const COLS = Math.ceil(WORLD_SIZE / CELL_SIZE);
+        const ROWS = COLS;
+        // Matriz plana 1D de matrices preasignadas para evitar recolector de basura
+        const spatialGrid = Array.from({length: COLS * ROWS}, () => []);
 
         let player, camera, weapon, frames, kills, gameTimeSeconds;
-        let revivesLeft = 0; // Para el árbol de habilidades
+        let revivesLeft = 0; 
         let selectedCharId = 'char_base';
         const keys = {};
-        
-        let anomalyClicks = 0; // Easter egg counter
+        let anomalyClicks = 0; 
 
         let enemiesPool = Array.from({length: MAX_ENEMIES}, () => ({active: false}));
         let projectilesPool = Array.from({length: MAX_PROJECTILES}, () => ({active: false}));
@@ -181,8 +184,7 @@
             boss: createImgFromSVG(`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#900" stroke="#f00" stroke-width="5"/><circle cx="30" cy="40" r="10" fill="#000"/><circle cx="70" cy="40" r="10" fill="#000"/><path d="M 30 70 Q 50 90 70 70" stroke="#000" stroke-width="8" fill="none"/></svg>`)
         };
 
-        // --- SISTEMA DE GUARDADO Y HÉROES ---
-        let saveData = JSON.parse(localStorage.getItem('megabonk_heroes')) || { esencias: 0, unlockedNodes: ['core'], unlockedChars: ['char_base'] };
+        let saveData = JSON.parse(localStorage.getItem('megabonk_13')) || { esencias: 0, unlockedNodes: ['core'], unlockedChars: ['char_base'] };
         
         const charsData = [
             { id: 'char_base', name: 'Recluta', desc: 'Estadísticas Base.', stats: { hp: 1, spd: 1, dmg: 1 }, cond: 'Desbloqueado' },
@@ -191,71 +193,52 @@
             { id: 'char_glitch', name: 'MissingNo', desc: 'Rendimiento Inestable.', stats: { hp: 1.5, spd: 1.5, dmg: 3 }, cond: '???' }
         ];
 
-        function saveGame() { 
-            localStorage.setItem('megabonk_heroes', JSON.stringify(saveData)); 
-            document.getElementById('esencias-count').innerText = saveData.esencias; 
-        }
+        function saveGame() { localStorage.setItem('megabonk_13', JSON.stringify(saveData)); document.getElementById('esencias-count').innerText = saveData.esencias; }
 
         function hardReset() {
-            if(confirm("¿Estás absolutamente seguro de que quieres purgar toda la memoria? Esto no se puede deshacer y borrará todo tu progreso de Nivel 8.")) {
-                localStorage.removeItem('megabonk_heroes');
-                location.reload();
+            if(confirm("¿Purga total de memoria? Esto no se puede deshacer.")) {
+                localStorage.removeItem('megabonk_13'); location.reload();
             }
         }
 
-        function exportCode() { const code = btoa(JSON.stringify(saveData)); prompt("Copia este código y guárdalo a salvo:", code); }
+        function exportCode() { const code = btoa(JSON.stringify(saveData)); prompt("Guarda tu progreso:", code); }
 
         function loadCode() {
             const input = document.getElementById('save-code-input').value.trim();
             if(input.toLowerCase() === 'ferrvn') {
                 saveData = { esencias: 999999, unlockedNodes: metaSkills.map(s => s.id), unlockedChars: charsData.map(c => c.id) };
-                saveGame(); alert("Modo Administrador 'ferrvn' Activado. Sistema hackeado."); return;
+                saveGame(); alert("Administrador 'ferrvn' Activado."); return;
             }
             try {
                 const parsed = JSON.parse(atob(input));
                 if(parsed.esencias !== undefined) {
-                    saveData = parsed;
-                    if(!saveData.unlockedChars) saveData.unlockedChars = ['char_base'];
-                    saveGame(); alert("Datos restaurados correctamente.");
+                    saveData = parsed; if(!saveData.unlockedChars) saveData.unlockedChars = ['char_base'];
+                    saveGame(); alert("Datos restaurados.");
                 }
-            } catch(e) { alert("El código ingresado no es válido."); }
+            } catch(e) { alert("Código inválido."); }
         }
 
-        // EASTER EGG LOGIC
         function triggerAnomaly() {
             anomalyClicks++;
             if(anomalyClicks >= 5 && !saveData.unlockedChars.includes('char_glitch')) {
-                saveData.unlockedChars.push('char_glitch');
-                saveGame();
-                alert("ANOMALÍA DETECTADA. MISSINGNO DESBLOQUEADO.");
+                saveData.unlockedChars.push('char_glitch'); saveGame(); alert("ANOMALÍA DETECTADA. MISSINGNO DESBLOQUEADO.");
             }
         }
 
         function openCharSelect() {
             gameState = 'char_select';
-            const container = document.getElementById('char-container');
-            container.innerHTML = '';
-            
+            const container = document.getElementById('char-container'); container.innerHTML = '';
             charsData.forEach(c => {
                 const isUnlocked = saveData.unlockedChars.includes(c.id);
                 const div = document.createElement('div');
                 div.className = `char-card ${isUnlocked ? '' : 'locked'} ${c.id === selectedCharId && isUnlocked ? 'selected' : ''}`;
-                div.innerHTML = `
-                    <h3 style="color:${isUnlocked ? '#00ffcc' : '#777'}; margin-top:0;">${c.name}</h3>
-                    <p style="font-size:12px; color:#aaa;">${isUnlocked ? c.desc : c.cond}</p>
-                `;
-                if(isUnlocked) {
-                    div.onclick = () => {
-                        selectedCharId = c.id;
-                        openCharSelect(); // Re-render to show selected
-                    };
-                }
+                div.innerHTML = `<h3 style="color:${isUnlocked ? '#00ffcc' : '#777'}; margin-top:0;">${c.name}</h3><p style="font-size:12px; color:#aaa;">${isUnlocked ? c.desc : c.cond}</p>`;
+                if(isUnlocked) { div.onclick = () => { selectedCharId = c.id; openCharSelect(); }; }
                 container.appendChild(div);
             });
             switchScreen('screen-char');
         }
 
-        // --- ÁRBOL DE HABILIDADES EXPANDIDO ---
         let metaSkills = [{ id: 'core', name: 'Placa Base', desc: 'Arranque del sistema.', cost: 0, x: 3000, y: 3000, req: [], icon: 'B' }];
         const branches = [
             { prefix: 'spd', name: 'Impulso', color: 'S', angle: 0, stat: 'Velocidad', val: 2, sym: '%' },
@@ -278,11 +261,10 @@
             }
         });
         
-        // Añadir Rama Especial (Arriba, Revivir)
         let prevRev = 'core';
         for(let i = 1; i <= 3; i++) {
             metaSkills.push({
-                id: `rev${i}`, name: `Prot. Lázaro v${i}.0`, desc: `+1 Resurrección (Cura 50%)`,
+                id: `rev${i}`, name: `Prot. Lázaro v${i}.0`, desc: `+1 Resurrección`,
                 cost: 5000 * Math.pow(10, i-1), x: 3000, y: 3000 - (150 * i), req: [prevRev], icon: '♥'
             }); prevRev = `rev${i}`;
         }
@@ -329,11 +311,8 @@
                 if(id.startsWith('rev')) revivesLeft += 1;
             });
 
-            // Aplicar Multiplicadores del Personaje Seleccionado
             const charStats = charsData.find(c => c.id === selectedCharId).stats;
-            bHp *= charStats.hp;
-            bSpeed *= charStats.spd;
-            bDmg *= charStats.dmg;
+            bHp *= charStats.hp; bSpeed *= charStats.spd; bDmg *= charStats.dmg;
 
             player = { x: 0, y: 0, radius: 25, speed: bSpeed, hp: bHp, maxHp: bHp, regen: bRegen, angle: 0, level: 1, xp: 0, maxXp: 15, magnet: bMag, critChance: bCrit, xpMult: 1 };
             camera = { x: 0, y: 0 }; 
@@ -362,45 +341,31 @@
         function abortMission() { document.getElementById('screen-pause').classList.remove('active'); triggerGameOver(true); }
 
         function triggerGameOver(aborted = false) {
-            // Lógica de Desbloqueo de Tanque
             if (gameTimeSeconds >= 300 && !saveData.unlockedChars.includes('char_tank')) {
-                saveData.unlockedChars.push('char_tank');
-                alert("NUEVO CHASIS DESBLOQUEADO: Juggernaut (Sobreviviste 5 minutos)");
+                saveData.unlockedChars.push('char_tank'); alert("NUEVO CHASIS DESBLOQUEADO: Juggernaut");
             }
 
             if (!aborted && revivesLeft > 0) {
-                gameState = 'gameover';
-                document.getElementById('gameover-title').innerText = "SISTEMAS CAYENDO...";
+                gameState = 'gameover'; document.getElementById('gameover-title').innerText = "SISTEMAS CAYENDO...";
                 document.getElementById('gameover-stats').innerText = `Tienes ${revivesLeft} Resurrecciones disponibles.`;
-                document.getElementById('btn-revive').style.display = 'block';
-                switchScreen('screen-gameover');
+                document.getElementById('btn-revive').style.display = 'block'; switchScreen('screen-gameover');
                 return;
             }
 
-            gameState = 'gameover';
-            const m = Math.floor(gameTimeSeconds / 60); const s = Math.floor(gameTimeSeconds % 60);
+            gameState = 'gameover'; const m = Math.floor(gameTimeSeconds / 60); const s = Math.floor(gameTimeSeconds % 60);
             saveData.esencias += kills; saveGame();
             document.getElementById('gameover-title').innerText = "Aniquilado";
             document.getElementById('gameover-stats').innerText = `Tiempo: ${m}:${s < 10 ? '0'+s : s} | Bajas: ${kills} | Cristales: ${kills}`;
-            document.getElementById('btn-revive').style.display = 'none';
-            switchScreen('screen-gameover');
+            document.getElementById('btn-revive').style.display = 'none'; switchScreen('screen-gameover');
         }
 
         function useRevive() {
-            revivesLeft--;
-            player.hp = player.maxHp * 0.5; // Revive con 50% HP
-            
-            // Empujar enemigos lejos
+            revivesLeft--; player.hp = player.maxHp * 0.5;
             for(let i=0; i<enemiesPool.length; i++) {
-                if(enemiesPool[i].active && Math.hypot(player.x - enemiesPool[i].x, player.y - enemiesPool[i].y) < 500) {
-                    enemiesPool[i].active = false;
-                }
+                if(enemiesPool[i].active && Math.hypot(player.x - enemiesPool[i].x, player.y - enemiesPool[i].y) < 500) enemiesPool[i].active = false;
             }
-            
             spawnText(player.x, player.y - 50, `¡PROTOCOLOS RESTAURADOS!`, '52, 219, 132', 20);
-            gameState = 'playing';
-            switchScreen(null);
-            document.getElementById('hud').classList.add('active');
+            gameState = 'playing'; switchScreen(null); document.getElementById('hud').classList.add('active');
         }
 
         function getRandomRarity(forceLegendary = false) {
@@ -451,17 +416,6 @@
             });
         }
 
-        function getClosestEnemy(x, y) {
-            let closest = null; let minDist = Infinity;
-            for (let i = 0; i < enemiesPool.length; i++) { 
-                const e = enemiesPool[i];
-                if (!e.active || Math.abs(e.x - x) > 1000 || Math.abs(e.y - y) > 1000) continue; 
-                const dist = Math.hypot(x - e.x, y - e.y); 
-                if (dist < minDist) { minDist = dist; closest = e; } 
-            }
-            return closest;
-        }
-
         function spawnText(x, y, text, color, size) {
             let t = getFreeObj(textsPool);
             if (t) { t.active = true; t.x = x; t.y = y; t.text = text; t.color = color; t.alpha = 1; t.size = size; }
@@ -493,19 +447,24 @@
                 ey = player.y + Math.sin(angle) * dist;
             } while(ex < -WORLD_SIZE/2 || ex > WORLD_SIZE/2 || ey < -WORLD_SIZE/2 || ey > WORLD_SIZE/2);
             
-            const m = Math.floor(gameTimeSeconds / 60);
-            const compoundMult = Math.pow(1.08, m); // 8% por minuto
+            // ESCALADO CONTINUO (Soluciona la falta de dificultad tardía)
+            const m = gameTimeSeconds / 60; 
+            const hpMult = Math.pow(1.30, m); // +30% HP cada minuto
+            const dmgMult = Math.pow(1.15, m); // +15% Daño cada minuto
             
             e.active = true; e.x = ex; e.y = ey;
             if (isBoss) {
-                const bossMult = compoundMult * 1.5;
-                e.radius = 70; e.speed = 3.5; e.hp = 1500 * bossMult; e.maxHp = 1500 * bossMult; e.type = 'boss'; e.img = sprites.boss;
+                e.radius = 70; e.speed = 3.5; 
+                e.hp = 1500 * hpMult * 1.5; e.maxHp = 1500 * hpMult * 1.5; 
+                e.damage = 20 * dmgMult;
+                e.type = 'boss'; e.img = sprites.boss;
                 document.getElementById('warning').style.opacity = 1; setTimeout(() => document.getElementById('warning').style.opacity = 0, 3000);
             } else {
                 const isElite = Math.random() < Math.min(0.3, 0.05 + (m * 0.02));
                 e.radius = isElite ? 40 : 22;
-                e.speed = Math.min(7, (isElite ? 2.5 : 3.5 + Math.random() * 1.5) * Math.pow(1.03, m));
-                e.hp = (isElite ? 150 : 30) * compoundMult; e.maxHp = (isElite ? 150 : 30) * compoundMult;
+                e.speed = Math.min(8, (isElite ? 2.5 : 3.5 + Math.random() * 1.5) * Math.pow(1.05, m));
+                e.hp = (isElite ? 150 : 30) * hpMult; e.maxHp = (isElite ? 150 : 30) * hpMult;
+                e.damage = (isElite ? 5 : 2) * dmgMult;
                 e.type = isElite ? 'elite' : 'normal'; e.img = isElite ? sprites.elite : sprites.enemy;
             }
         }
@@ -513,9 +472,10 @@
         function update() {
             if (gameState !== 'playing') return;
             gameTimeSeconds += 1/60;
-            const m = Math.floor(gameTimeSeconds / 60); const s = Math.floor(gameTimeSeconds % 60);
-            document.getElementById('timer').innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+            const mFloor = Math.floor(gameTimeSeconds / 60); const s = Math.floor(gameTimeSeconds % 60);
+            document.getElementById('timer').innerText = `${mFloor < 10 ? '0'+mFloor : mFloor}:${s < 10 ? '0'+s : s}`;
 
+            // Actualizar textos flotantes
             for (let i = 0; i < textsPool.length; i++) {
                 let ft = textsPool[i];
                 if(ft.active) { ft.y -= 0.5; ft.alpha -= 0.02; if (ft.alpha <= 0) ft.active = false; }
@@ -537,8 +497,39 @@
             player.y = Math.max(-WORLD_SIZE/2 + player.radius, Math.min(WORLD_SIZE/2 - player.radius, player.y));
             camera.x = player.x - canvas.width / 2; camera.y = player.y - canvas.height / 2;
 
+            // ACTUALIZAR CUADRÍCULA ESPACIAL (Zero-GC)
+            for(let i=0; i<spatialGrid.length; i++) spatialGrid[i].length = 0;
+            for(let i=0; i<enemiesPool.length; i++) {
+                let e = enemiesPool[i];
+                if(!e.active) continue;
+                let col = Math.floor((e.x + WORLD_SIZE/2) / CELL_SIZE);
+                let row = Math.floor((e.y + WORLD_SIZE/2) / CELL_SIZE);
+                if(col >= 0 && col < COLS && row >= 0 && row < ROWS) {
+                    spatialGrid[row * COLS + col].push(e);
+                }
+            }
+
+            // FUNCIÓN DE BÚSQUEDA OPTIMIZADA
+            function getClosestEnemySpatial(x, y) {
+                let closest = null; let minDist = Infinity;
+                let pCol = Math.floor((x + WORLD_SIZE/2) / CELL_SIZE);
+                let pRow = Math.floor((y + WORLD_SIZE/2) / CELL_SIZE);
+                
+                for(let r = Math.max(0, pRow - 5); r <= Math.min(ROWS - 1, pRow + 5); r++) {
+                    for(let c = Math.max(0, pCol - 5); c <= Math.min(COLS - 1, pCol + 5); c++) {
+                        let cellEnemies = spatialGrid[r * COLS + c];
+                        for(let j=0; j<cellEnemies.length; j++) {
+                            let e = cellEnemies[j];
+                            let dist = Math.hypot(x - e.x, y - e.y);
+                            if (dist < minDist) { minDist = dist; closest = e; }
+                        }
+                    }
+                }
+                return closest;
+            }
+
             if (weapon.timer <= 0) {
-                const closest = getClosestEnemy(player.x, player.y);
+                const closest = getClosestEnemySpatial(player.x, player.y);
                 if (closest) {
                     const baseAngle = Math.atan2(closest.y - player.y, closest.x - player.x);
                     for(let i = 0; i < weapon.multishot; i++) {
@@ -559,26 +550,31 @@
 
             if (weapon.auraRadius > 0 && frames % 5 === 0) { 
                 const auraHitSq = Math.pow(player.radius + weapon.auraRadius, 2);
-                for(let i=0; i<enemiesPool.length; i++) {
-                    let e = enemiesPool[i];
-                    if(!e.active) continue;
-                    if(Math.abs(player.x - e.x) > player.radius + weapon.auraRadius + e.radius) continue;
-                    if(Math.abs(player.y - e.y) > player.radius + weapon.auraRadius + e.radius) continue;
-                    
-                    if (Math.pow(player.x - e.x, 2) + Math.pow(player.y - e.y, 2) < auraHitSq) {
-                        e.hp -= weapon.auraDmg / 3; 
-                        if (e.hp <= 0) {
-                            if(e.type === 'boss' && Math.random() < 0.01 && !saveData.unlockedChars.includes('char_rng')) {
-                                saveData.unlockedChars.push('char_rng'); saveGame();
-                                spawnText(e.x, e.y, "¡ESPECTRO DESBLOQUEADO!", "155,89,182", 20);
+                let pCol = Math.floor((player.x + WORLD_SIZE/2) / CELL_SIZE);
+                let pRow = Math.floor((player.y + WORLD_SIZE/2) / CELL_SIZE);
+                
+                for(let r = Math.max(0, pRow - 3); r <= Math.min(ROWS - 1, pRow + 3); r++) {
+                    for(let c = Math.max(0, pCol - 3); c <= Math.min(COLS - 1, pCol + 3); c++) {
+                        let cellEnemies = spatialGrid[r * COLS + c];
+                        for(let j=0; j<cellEnemies.length; j++) {
+                            let e = cellEnemies[j];
+                            if (Math.pow(player.x - e.x, 2) + Math.pow(player.y - e.y, 2) < auraHitSq) {
+                                e.hp -= weapon.auraDmg / 3; 
+                                if(Math.random() < 0.15) spawnText(e.x, e.y - 10, "⚡", "255, 255, 0", 12);
+                                if (e.hp <= 0) {
+                                    if(e.type === 'boss' && Math.random() < 0.01 && !saveData.unlockedChars.includes('char_rng')) {
+                                        saveData.unlockedChars.push('char_rng'); saveGame();
+                                        spawnText(e.x, e.y, "¡ESPECTRO DESBLOQUEADO!", "155,89,182", 20);
+                                    }
+                                    spawnGem(e.x, e.y, e.type); e.active = false; kills++; document.getElementById('score-text').innerText = `Bajas: ${kills}`;
+                                }
                             }
-                            spawnGem(e.x, e.y, e.type); e.active = false; kills++; document.getElementById('score-text').innerText = `Bajas: ${kills}`;
                         }
                     }
                 }
             }
 
-            const spawnRate = Math.max(3, 30 - Math.floor(gameTimeSeconds / 15)); 
+            const spawnRate = Math.max(2, 30 - Math.floor(gameTimeSeconds / 10)); 
             if (frames % spawnRate === 0) spawnEnemy(); 
             if (frames > 0 && frames % 2400 === 0) spawnEnemy(true); 
 
@@ -588,7 +584,7 @@
 
                 if(p.x < -WORLD_SIZE/2 || p.x > WORLD_SIZE/2 || p.y < -WORLD_SIZE/2 || p.y > WORLD_SIZE/2) { p.active = false; continue; }
 
-                const target = getClosestEnemy(p.x, p.y);
+                const target = getClosestEnemySpatial(p.x, p.y);
                 if (target) {
                     const desiredAngle = Math.atan2(target.y - p.y, target.x - p.x);
                     let angleDiff = desiredAngle - p.angle;
@@ -598,23 +594,34 @@
                 }
                 p.x += p.vx; p.y += p.vy;
                 
-                for (let j = 0; j < enemiesPool.length; j++) {
-                    const e = enemiesPool[j];
-                    if (!e.active || Math.abs(p.x - e.x) > p.radius + e.radius || Math.abs(p.y - e.y) > p.radius + e.radius) continue;
+                let pCol = Math.floor((p.x + WORLD_SIZE/2) / CELL_SIZE);
+                let pRow = Math.floor((p.y + WORLD_SIZE/2) / CELL_SIZE);
+                let hit = false;
+                
+                for(let r = Math.max(0, pRow - 1); r <= Math.min(ROWS - 1, pRow + 1); r++) {
+                    for(let c = Math.max(0, pCol - 1); c <= Math.min(COLS - 1, pCol + 1); c++) {
+                        let cellEnemies = spatialGrid[r * COLS + c];
+                        for(let j=0; j<cellEnemies.length; j++) {
+                            let e = cellEnemies[j];
+                            if (Math.abs(p.x - e.x) > p.radius + e.radius || Math.abs(p.y - e.y) > p.radius + e.radius) continue;
 
-                    if (Math.hypot(p.x - e.x, p.y - e.y) < p.radius + e.radius) {
-                        e.hp -= p.damage; p.active = false; 
-                        if (p.isCrit) spawnText(e.x, e.y - 20, `¡CRÍTICO!`, '255, 0, 255', 12);
-                        
-                        if (e.hp <= 0) {
-                            if(e.type === 'boss' && Math.random() < 0.01 && !saveData.unlockedChars.includes('char_rng')) {
-                                saveData.unlockedChars.push('char_rng'); saveGame();
-                                spawnText(e.x, e.y, "¡ESPECTRO DESBLOQUEADO!", "155,89,182", 20);
+                            if (Math.hypot(p.x - e.x, p.y - e.y) < p.radius + e.radius) {
+                                e.hp -= p.damage; p.active = false; hit = true;
+                                if (p.isCrit) spawnText(e.x, e.y - 20, `¡CRÍTICO!`, '255, 0, 255', 12);
+                                
+                                if (e.hp <= 0) {
+                                    if(e.type === 'boss' && Math.random() < 0.01 && !saveData.unlockedChars.includes('char_rng')) {
+                                        saveData.unlockedChars.push('char_rng'); saveGame();
+                                        spawnText(e.x, e.y, "¡ESPECTRO DESBLOQUEADO!", "155,89,182", 20);
+                                    }
+                                    spawnGem(e.x, e.y, e.type); e.active = false; kills++; document.getElementById('score-text').innerText = `Bajas: ${kills}`;
+                                }
+                                break; 
                             }
-                            spawnGem(e.x, e.y, e.type); e.active = false; kills++; document.getElementById('score-text').innerText = `Bajas: ${kills}`;
                         }
-                        break; 
+                        if(hit) break;
                     }
+                    if(hit) break;
                 }
             }
 
@@ -633,7 +640,7 @@
                             saveData.esencias += g.esencias; saveGame(); triggerLevelUp(true);
                         } else {
                             let finalXp = g.xp * player.xpMult; player.xp += finalXp;
-                            if (finalXp > 1) spawnText(player.x, player.y - 30, `+${finalXp.toFixed(1)} XP`, '52, 219, 132', 14);
+                            if (finalXp > 1 && Math.random() < 0.5) spawnText(player.x, player.y - 30, `+${finalXp.toFixed(1)} XP`, '52, 219, 132', 14);
                         }
                         g.active = false;
                     }
@@ -661,7 +668,8 @@
 
                 if(Math.abs(player.x - e.x) < player.radius + e.radius && Math.abs(player.y - e.y) < player.radius + e.radius) {
                     if (Math.hypot(player.x - e.x, player.y - e.y) < player.radius + e.radius - 5) {
-                        player.hp -= (e.type === 'boss' ? 10 : (e.type === 'elite' ? 3 : 1));
+                        // DAÑO ESCALADO AL JUGADOR
+                        player.hp -= e.damage;
                         if (player.hp <= 0) { triggerGameOver(); return; }
                     }
                 }
@@ -716,10 +724,16 @@
                 ctx.save(); ctx.translate(e.x - camera.x, e.y - camera.y); drawFunc(); ctx.restore(); 
             };
 
+            drawEntity(player, () => {
+                ctx.rotate(frames * 0.01); ctx.beginPath(); ctx.arc(0, 0, player.magnet, 0, Math.PI * 2);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)'; ctx.lineWidth = 1; ctx.setLineDash([10, 15]); ctx.stroke(); ctx.setLineDash([]);
+            });
+
             if (weapon.auraRadius > 0) {
                 drawEntity(player, () => {
-                    ctx.beginPath(); ctx.arc(0, 0, player.radius + weapon.auraRadius, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(0, 255, 204, 0.05)'; ctx.fill(); ctx.strokeStyle = 'rgba(0, 255, 204, 0.3)'; ctx.lineWidth = 2; ctx.stroke();
+                    const pulse = Math.sin(frames * 0.1) * 5;
+                    ctx.beginPath(); ctx.arc(0, 0, player.radius + weapon.auraRadius + pulse, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255, 0, 60, 0.15)'; ctx.fill(); ctx.strokeStyle = 'rgba(255, 0, 60, 0.6)'; ctx.lineWidth = 2; ctx.stroke();
                 });
             }
 
