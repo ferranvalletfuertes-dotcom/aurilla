@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Vampire Survivors Clone - Fase 8.1 (Nivel 8 - Pausa Pro)</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #030305; font-family: 'Segoe UI', sans-serif; color: white; user-select: none; }
+        canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; }
+        
+        .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 10; background: rgba(3, 3, 5, 0.95); backdrop-filter: blur(10px); }
+        .screen.active { display: flex; }
+        
+        h1 { font-size: 50px; color: #00ffcc; text-shadow: 0 0 20px rgba(0, 255, 204, 0.5); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 10px; text-align: center; }
+        h2 { color: #ccc; font-weight: 300; margin-bottom: 40px; }
+        
+        .btn { background: rgba(0,255,204,0.05); border: 2px solid #00ffcc; color: #00ffcc; padding: 15px 40px; font-size: 20px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: all 0.2s; border-radius: 5px; margin: 10px; box-shadow: 0 0 15px rgba(0, 255, 204, 0.1); }
+        .btn:hover { background: #00ffcc; color: #030305; box-shadow: 0 0 30px rgba(0, 255, 204, 0.6); transform: scale(1.05); }
+
+        #hud { position: absolute; top: 0; left: 0; width: 100%; z-index: 5; display: none; pointer-events: none; }
+        #hud.active { display: block; }
+        #xp-bar-bg { width: 100%; height: 12px; background-color: #111; }
+        #xp-bar-fill { width: 0%; height: 100%; background-color: #00ffcc; transition: width 0.2s ease-out; box-shadow: 0 0 15px #00ffcc; }
+        #stats { padding: 15px; font-weight: bold; text-shadow: 2px 2px 4px black; font-size: 20px; display: flex; justify-content: space-between; align-items: flex-start; }
+        
+        #timer { font-size: 30px; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.8); position: absolute; left: 50%; transform: translateX(-50%); top: 15px; font-family: monospace; }
+
+        /* Botón de Pausa UI */
+        #pause-ui-btn { position: absolute; top: 15px; right: 20px; background: rgba(0, 255, 204, 0.1); border: 2px solid #00ffcc; color: #00ffcc; padding: 8px 15px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 5px; transition: 0.2s; pointer-events: auto; z-index: 6; }
+        #pause-ui-btn:hover { background: #00ffcc; color: #030305; box-shadow: 0 0 15px rgba(0, 255, 204, 0.6); }
+
+        #tree-container { width: 95%; height: 85%; background: #0a0a0e; border: 2px solid #222; border-radius: 10px; overflow: auto; position: relative; box-shadow: inset 0 0 50px rgba(0,0,0,0.9); }
+        #tree-content { position: relative; width: 6000px; height: 6000px; background: radial-gradient(circle, #12121a 10%, #030305 80%); }
+        svg.connections { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        
+        .node { position: absolute; width: 40px; height: 40px; background: #111; border: 2px solid #444; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 2; transition: all 0.2s; color: white; font-weight: bold; font-size: 14px; transform: translate(-50%, -50%); }
+        .node:hover { transform: translate(-50%, -50%) scale(1.3); border-color: #fff; z-index: 3; }
+        .node.unlocked { border-color: #00ffcc; background: #004d40; box-shadow: 0 0 15px rgba(0, 255, 204, 0.4); }
+        .node.available { border-color: #f1c40f; animation: pulse 2s infinite; }
+        
+        .node-info { position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.95); border: 1px solid #444; padding: 12px; border-radius: 8px; width: 250px; display: none; text-align: center; font-size: 13px; pointer-events: none; z-index: 10; }
+        .node:hover .node-info { display: block; }
+        .node-info span { color: #00ffcc; font-weight: bold; font-size: 15px; display: block; margin-top: 5px; }
+
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(241, 196, 15, 0); } 100% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0); } }
+
+        #currency-display { position: absolute; top: 20px; left: 30px; font-size: 24px; color: #00ffcc; font-weight: bold; text-shadow: 0 0 10px rgba(0,255,204, 0.5); z-index: 20; display: none; }
+        
+        #level-up-screen { z-index: 15; }
+        .card { background: #111; border: 2px solid #333; border-radius: 10px; width: 220px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.2s; margin: 10px; position: relative; overflow: hidden; }
+        .card:hover { transform: translateY(-10px); }
+        .rarity-label { position: absolute; top: 0; left: 0; width: 100%; padding: 5px 0; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #030305; }
+
+        #warning { position: absolute; top: 20%; left: 50%; transform: translateX(-50%); font-size: 50px; color: #ff003c; font-weight: bold; text-shadow: 0 0 30px #ff003c; opacity: 0; transition: opacity 0.5s; z-index: 4; pointer-events: none; letter-spacing: 5px; }
+    </style>
+</head>
+<body>
+    <div id="currency-display">Cristales: <span id="esencias-count">0</span></div>
+    <div id="warning">ANOMALÍA DETECTADA</div>
+
+    <div id="screen-main" class="screen active">
+        <h1>Megabonk:<br>Horizonte Cero</h1>
+        <button class="btn" onclick="startGame()">Despliegue Infinito</button>
+        <button class="btn" onclick="openSkillTree()">Matriz Neural</button>
+    </div>
+
+    <!-- Nueva Pantalla de Pausa Manual -->
+    <div id="screen-pause" class="screen">
+        <h1 style="color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.5);">SISTEMA PAUSADO</h1>
+        <button class="btn" onclick="togglePause()">Reanudar Combate</button>
+        <button class="btn" onclick="abortMission()" style="border-color: #ff003c; color: #ff003c;">Abortar Misión</button>
+    </div>
+
+    <div id="screen-tree" class="screen">
+        <h1 style="font-size: 30px;">Matriz Neural (Valores Exactos)</h1>
+        <div id="tree-container">
+            <div id="tree-content">
+                <svg class="connections" id="tree-lines"></svg>
+            </div>
+        </div>
+        <button class="btn" onclick="closeSkillTree()">Confirmar</button>
+    </div>
+
+    <div id="hud">
+        <div id="xp-bar-bg"><div id="xp-bar-fill"></div></div>
+        <div id="stats">
+            <div>
+                <span id="level-text" style="display:block;">Nivel: 1</span>
+                <span id="score-text" style="display:block; font-size: 14px; color: #aaa; margin-top: 5px;">Bajas: 0</span>
+            </div>
+            <div id="timer">00:00</div>
+            <button id="pause-ui-btn" onclick="togglePause()">II PAUSA</button>
+        </div>
+    </div>
+
+    <div id="level-up-screen" class="screen">
+        <h1 style="color: #fff; text-shadow: 0 0 20px #fff;" id="level-up-title">Sistemas Actualizables</h1>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; max-width: 1000px;" id="cards-container"></div>
+    </div>
+
+    <div id="screen-gameover" class="screen">
+        <h1 style="color: #ff003c; text-shadow: 0 0 20px #ff003c;">Fallo Crítico</h1>
+        <h2 id="gameover-stats"></h2>
+        <button class="btn" onclick="startGame()">Reiniciar Secuencia</button>
+        <button class="btn" onclick="openSkillTree()">Matriz Neural</button>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let gameState = 'menu'; // menu, playing, paused, paused_manual, skilltree, gameover
+        
+        let player, camera, weapon, enemies, projectiles, gems, frames, kills, gameTimeSeconds;
+        const keys = {};
+
+        // Escucha de teclado y atajo de Pausa
+        window.addEventListener('keydown', e => {
+            keys[e.key.toLowerCase()] = true;
+            if (e.key === 'Escape' || e.key.toLowerCase() === 'p') {
+                togglePause();
+            }
+        });
+        window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+        function createImgFromSVG(svgString) { const img = new Image(); img.src = 'data:image/svg+xml;base64,' + btoa(svgString); return img; }
+
+        const sprites = {
+            player: createImgFromSVG(`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M10,90 L50,10 L90,90 L50,70 Z" fill="#00ffcc" stroke="#ffffff" stroke-width="3"/><circle cx="50" cy="60" r="10" fill="#030305"/></svg>`),
+            enemy: createImgFromSVG(`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M20,30 L80,30 L90,80 L50,60 L10,80 Z" fill="#e74c3c" stroke="#500" stroke-width="4"/><circle cx="35" cy="45" r="5" fill="#fff"/><circle cx="65" cy="45" r="5" fill="#fff"/></svg>`),
+            elite: createImgFromSVG(`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M10,50 L50,10 L90,50 L50,90 Z" fill="#e67e22" stroke="#fff" stroke-width="4"/><polygon points="40,40 60,40 50,70" fill="#000"/></svg>`),
+            boss: createImgFromSVG(`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#900" stroke="#f00" stroke-width="5"/><circle cx="30" cy="40" r="10" fill="#000"/><circle cx="70" cy="40" r="10" fill="#000"/><path d="M 30 70 Q 50 90 70 70" stroke="#000" stroke-width="8" fill="none"/></svg>`)
+        };
+
+        let saveData = JSON.parse(localStorage.getItem('megabonk_v5')) || { esencias: 0, unlockedNodes: ['core'] };
+        function saveGame() { localStorage.setItem('megabonk_v5', JSON.stringify(saveData)); document.getElementById('esencias-count').innerText = saveData.esencias; }
+
+        let metaSkills = [{ id: 'core', name: 'Placa Base', desc: 'Arranque del sistema.', cost: 0, x: 3000, y: 3000, req: [], icon: 'B' }];
+        const branches = [
+            { prefix: 'spd', name: 'Impulso', color: 'S', angle: 0, stat: 'Velocidad', val: 2, sym: '%' },
+            { prefix: 'dmg', name: 'Plasma', color: 'D', angle: Math.PI/4, stat: 'Daño Base', val: 5, sym: '' },
+            { prefix: 'mag', name: 'Gravedad', color: 'M', angle: Math.PI/2, stat: 'Magnetismo', val: 15, sym: '' },
+            { prefix: 'rng', name: 'Lente', color: 'R', angle: Math.PI*0.75, stat: 'Alcance Aura', val: 10, sym: 'px' },
+            { prefix: 'arm', name: 'Blindaje', color: 'A', angle: Math.PI, stat: 'Vida Máxima', val: 10, sym: '' },
+            { prefix: 'cri', name: 'Precisión', color: 'C', angle: Math.PI*1.25, stat: 'Crítico', val: 1, sym: '%' },
+            { prefix: 'cdr', name: 'Refigeración', color: 'F', angle: Math.PI*1.5, stat: 'Vel. Recarga', val: 2, sym: '%' },
+            { prefix: 'reg', name: 'Biosíntesis', color: 'H', angle: Math.PI*1.75, stat: 'Regen HP/s', val: 0.5, sym: '' }
+        ];
+
+        branches.forEach(branch => {
+            let prevId = 'core';
+            for (let i = 1; i <= 20; i++) {
+                const id = `${branch.prefix}${i}`;
+                metaSkills.push({
+                    id: id, name: `${branch.name} v${i}.0`, desc: `+${(branch.val * i).toFixed(2)}${branch.sym} ${branch.stat}`,
+                    cost: 150 * i * i, x: 3000 + Math.cos(branch.angle) * (120 * i), y: 3000 + Math.sin(branch.angle) * (120 * i), req: [prevId], icon: branch.color
+                });
+                prevId = id;
+            }
+        });
+
+        function renderSkillTree() {
+            const container = document.getElementById('tree-content'); container.innerHTML = '<svg class="connections" id="tree-lines"></svg>';
+            let linesHTML = '';
+            metaSkills.forEach(skill => {
+                skill.req.forEach(reqId => {
+                    const reqSkill = metaSkills.find(s => s.id === reqId);
+                    if(reqSkill) {
+                        const color = (saveData.unlockedNodes.includes(skill.id) && saveData.unlockedNodes.includes(reqId)) ? '#00ffcc' : '#222';
+                        linesHTML += `<line x1="${skill.x}" y1="${skill.y}" x2="${reqSkill.x}" y2="${reqSkill.y}" stroke="${color}" stroke-width="${saveData.unlockedNodes.includes(skill.id) ? 4 : 2}" />`;
+                    }
+                });
+                const node = document.createElement('div');
+                const isUnlocked = saveData.unlockedNodes.includes(skill.id); const reqsMet = skill.req.every(r => saveData.unlockedNodes.includes(r)); const canAfford = saveData.esencias >= skill.cost;
+                node.className = `node ${isUnlocked ? 'unlocked' : ''} ${!isUnlocked && reqsMet && canAfford ? 'available' : ''}`;
+                node.style.left = `${skill.x}px`; node.style.top = `${skill.y}px`;
+                node.innerHTML = `${skill.icon}<div class="node-info"><b>${skill.name}</b><br/>${skill.desc}<span>${isUnlocked ? 'INSTALADO' : 'Coste: ' + skill.cost + ' C'}</span></div>`;
+                if (!isUnlocked && reqsMet) { node.onclick = () => { if (saveData.esencias >= skill.cost) { saveData.esencias -= skill.cost; saveData.unlockedNodes.push(skill.id); saveGame(); renderSkillTree(); } }; }
+                container.appendChild(node);
+            });
+            document.getElementById('tree-lines').innerHTML = linesHTML;
+        }
+
+        function initGameData() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            
+            let bHp = 100, bRegen = 0, bSpeed = 7, bDmg = 15, bMag = 100, bCrit = 0.05, bCdr = 25, bAuraRadius = 0;
+            saveData.unlockedNodes.forEach(id => {
+                const node = metaSkills.find(n => n.id === id);
+                if(!node || node.id === 'core') return;
+                if(id.startsWith('arm')) bHp += 10;
+                if(id.startsWith('reg')) bRegen += 0.5;
+                if(id.startsWith('spd')) bSpeed *= 1.02;
+                if(id.startsWith('dmg')) bDmg += 5;
+                if(id.startsWith('mag')) bMag += 15;
+                if(id.startsWith('cri')) bCrit += 0.01;
+                if(id.startsWith('cdr')) bCdr *= 0.98;
+                if(id.startsWith('rng')) bAuraRadius += 10;
+            });
+
+            player = { x: 0, y: 0, radius: 25, speed: bSpeed, hp: bHp, maxHp: bHp, regen: bRegen, angle: 0, level: 1, xp: 0, maxXp: 15, magnet: bMag, critChance: bCrit, xpMult: 1 };
+            camera = { x: 0, y: 0 }; 
+            weapon = { cooldown: Math.max(5, bCdr), timer: 0, speed: 18, radius: 6, color: '#00ffcc', multishot: 1, damage: bDmg, turnSpeed: 0.06, auraRadius: bAuraRadius, auraDmg: bDmg * 0.5 };
+            
+            enemies = []; projectiles = []; gems = []; frames = 0; kills = 0; gameTimeSeconds = 0;
+            document.getElementById('xp-bar-fill').style.width = '0%'; document.getElementById('level-text').innerText = `Nivel: 1`; document.getElementById('score-text').innerText = `Bajas: 0`; document.getElementById('warning').style.opacity = 0;
+        }
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            if(screenId) document.getElementById(screenId).classList.add('active');
+            document.getElementById('hud').classList.remove('active');
+            document.getElementById('currency-display').style.display = (screenId === 'screen-main' || screenId === 'screen-tree') ? 'block' : 'none';
+        }
+
+        function startGame() { initGameData(); gameState = 'playing'; switchScreen(null); document.getElementById('hud').classList.add('active'); }
+        function openSkillTree() { gameState = 'skilltree'; renderSkillTree(); switchScreen('screen-tree'); const c = document.getElementById('tree-container'); c.scrollLeft = 3000 - c.clientWidth/2; c.scrollTop = 3000 - c.clientHeight/2; }
+        function closeSkillTree() { gameState = 'menu'; switchScreen('screen-main'); }
+
+        // Sistema Limpio de Pausa Manual
+        function togglePause() {
+            if (gameState === 'playing') {
+                gameState = 'paused_manual';
+                document.getElementById('screen-pause').classList.add('active');
+            } else if (gameState === 'paused_manual') {
+                gameState = 'playing';
+                document.getElementById('screen-pause').classList.remove('active');
+                // Forzar soltar teclas para no atascar el movimiento al volver
+                for(let key in keys) keys[key] = false;
+            }
+        }
+
+        function abortMission() {
+            document.getElementById('screen-pause').classList.remove('active');
+            triggerGameOver();
+        }
+
+        function triggerGameOver() {
+            gameState = 'gameover';
+            const m = Math.floor(gameTimeSeconds / 60); const s = Math.floor(gameTimeSeconds % 60);
+            saveData.esencias += kills; saveGame();
+            document.getElementById('gameover-stats').innerText = `Tiempo de Supervivencia: ${m}:${s < 10 ? '0'+s : s} | Bajas: ${kills} | Cristales: ${kills}`;
+            switchScreen('screen-gameover');
+        }
+
+        function getRandomRarity(forceLegendary = false) {
+            if (forceLegendary) return { name: 'Legendaria', color: '#f1c40f', bg: '#f1c40f', mult: 8, shadow: 'rgba(241,196,15,0.8)' };
+            const r = Math.random() * 100;
+            if (r < 40) return { name: 'Común', color: '#ccc', bg: '#444', mult: 1, shadow: 'rgba(204,204,204,0.2)' };
+            if (r < 65) return { name: 'Especial', color: '#2ecc71', bg: '#2ecc71', mult: 1.5, shadow: 'rgba(46,204,113,0.4)' };
+            if (r < 82) return { name: 'Rara', color: '#3498db', bg: '#3498db', mult: 2.5, shadow: 'rgba(52,152,219,0.5)' };
+            if (r < 92) return { name: 'Épica', color: '#9b59b6', bg: '#9b59b6', mult: 4, shadow: 'rgba(155,89,182,0.6)' };
+            if (r < 98) return { name: 'Mítica', color: '#ff003c', bg: '#ff003c', mult: 6, shadow: 'rgba(255,0,60,0.7)' };
+            return { name: 'Legendaria', color: '#f1c40f', bg: '#f1c40f', mult: 8, shadow: 'rgba(241,196,15,0.8)' };
+        }
+
+        const upgradesPool = [
+            { id: 'multi', name: 'Dispersión', desc: m => `+${m >= 8 ? 3 : (m >= 4 ? 2 : 1)} Proyectil(es)`, apply: m => weapon.multishot += (m >= 8 ? 3 : (m >= 4 ? 2 : 1)) },
+            { id: 'dmg', name: 'Núcleo Denso', desc: m => `+${Math.floor(8 * m)} Daño Base`, apply: m => weapon.damage += Math.floor(8 * m) },
+            { id: 'spd', name: 'Propulsores', desc: m => `+${Math.floor(5 * m)}% Velocidad`, apply: m => player.speed *= (1 + (0.05 * m)) },
+            { id: 'cdr', name: 'Sobremarcha', desc: m => `-${Math.floor(5 * m)}% Recarga`, apply: m => weapon.cooldown = Math.max(3, weapon.cooldown * (1 - (0.05 * m))) },
+            { id: 'crit', name: 'Láser Crítico', desc: m => `+${Math.floor(5 * m)}% Prob. Crítico`, apply: m => player.critChance += (0.05 * m) },
+            { id: 'homing', name: 'IA Avanzada', desc: m => `Rastreo +${Math.floor(15 * m)}%`, apply: m => weapon.turnSpeed += (0.015 * m) },
+            { id: 'aura_rad', name: 'Campo de Microondas', desc: m => `+${Math.floor(25 * m)} Radio de Aura`, apply: m => weapon.auraRadius += Math.floor(25 * m) },
+            { id: 'aura_dmg', name: 'Intensidad de Aura', desc: m => `+${Math.floor(5 * m)} Daño en Área`, apply: m => weapon.auraDmg += Math.floor(5 * m) },
+            { id: 'regen', name: 'Biosíntesis', desc: m => `+${(0.5 * m).toFixed(1)} Regeneración/s`, apply: m => player.regen += (0.5 * m) },
+            { id: 'maxhp', name: 'Blindaje Pesado', desc: m => `+${Math.floor(25 * m)} Vida Máxima`, apply: m => { player.maxHp += Math.floor(25 * m); player.hp += Math.floor(25 * m); } },
+            { id: 'xp', name: 'Analizador de Datos', desc: m => `+${Math.floor(10 * m)}% Exp Obtenida`, apply: m => player.xpMult += (0.10 * m) }
+        ];
+
+        function triggerLevelUp(isBossChest = false) {
+            gameState = 'paused'; 
+            document.getElementById('level-up-screen').classList.add('active');
+            document.getElementById('level-up-title').innerText = isBossChest ? "Cápsula de Jefe Detectada" : "Sistemas Actualizables";
+            
+            let choices = [...upgradesPool].sort(() => 0.5 - Math.random()).slice(0, 4);
+            const container = document.getElementById('cards-container'); container.innerHTML = '';
+            
+            choices.forEach(c => {
+                const rarity = getRandomRarity(isBossChest);
+                const card = document.createElement('div'); card.className = 'card';
+                card.style.borderColor = rarity.color; card.style.boxShadow = `0 10px 30px ${rarity.shadow}`;
+                
+                card.innerHTML = `
+                    <div class="rarity-label" style="background:${rarity.bg}; color:${rarity.name==='Común'?'#fff':'#030305'}">${rarity.name}</div>
+                    <h2 style="color:${rarity.color}; font-size: 18px; margin: 25px 0 10px 0; min-height: 45px; display: flex; align-items: center; justify-content: center;">${c.name}</h2>
+                    <p style="color:#ddd; font-size: 14px; font-weight: bold;">${c.desc(rarity.mult)}</p>
+                `;
+                card.onclick = () => { c.apply(rarity.mult); document.getElementById('level-up-screen').classList.remove('active'); gameState = 'playing'; };
+                container.appendChild(card);
+            });
+        }
+
+        function getClosestEnemy(x, y) {
+            let closest = null; let minDist = Infinity;
+            for (let e of enemies) { const dist = Math.hypot(x - e.x, y - e.y); if (dist < minDist) { minDist = dist; closest = e; } }
+            return closest;
+        }
+
+        function spawnEnemy(isBoss = false) {
+            const angle = Math.random() * Math.PI * 2; const dist = Math.max(canvas.width, canvas.height) / 1.1;
+            const ex = player.x + Math.cos(angle) * dist; const ey = player.y + Math.sin(angle) * dist;
+            
+            const timeMult = 1 + Math.log10(1 + (gameTimeSeconds / 30)) * 2; 
+            
+            if (isBoss) {
+                const bossMult = 1 + (gameTimeSeconds / 60) * 1.5;
+                enemies.push({ x: ex, y: ey, radius: 70, speed: 3.0, hp: 1500 * bossMult, maxHp: 1500 * bossMult, type: 'boss', img: sprites.boss });
+                document.getElementById('warning').style.opacity = 1; setTimeout(() => document.getElementById('warning').style.opacity = 0, 3000);
+            } else {
+                const isElite = Math.random() < 0.15;
+                enemies.push({ 
+                    x: ex, y: ey, radius: isElite ? 40 : 22, 
+                    speed: Math.min(6, (isElite ? 2.5 : 3.5 + Math.random() * 1.5) * (1 + Math.log10(1 + gameTimeSeconds/60))),
+                    hp: (isElite ? 150 : 30) * timeMult, maxHp: (isElite ? 150 : 30) * timeMult,
+                    type: isElite ? 'elite' : 'normal', img: isElite ? sprites.elite : sprites.enemy
+                });
+            }
+        }
+
+        function update() {
+            if (gameState !== 'playing') return;
+            gameTimeSeconds += 1/60;
+            const m = Math.floor(gameTimeSeconds / 60); const s = Math.floor(gameTimeSeconds % 60);
+            document.getElementById('timer').innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+
+            if (frames % 60 === 0 && player.hp < player.maxHp) {
+                player.hp = Math.min(player.maxHp, player.hp + player.regen);
+            }
+
+            let dx = 0; let dy = 0;
+            if (keys['w'] || keys['arrowup']) dy -= 1; if (keys['s'] || keys['arrowdown']) dy += 1;
+            if (keys['a'] || keys['arrowleft']) dx -= 1; if (keys['d'] || keys['arrowright']) dx += 1;
+
+            if (dx !== 0 || dy !== 0) {
+                const length = Math.hypot(dx, dy);
+                player.x += (dx / length) * player.speed; player.y += (dy / length) * player.speed;
+                player.angle = Math.atan2(dy, dx) + Math.PI/2;
+            }
+            camera.x = player.x - canvas.width / 2; camera.y = player.y - canvas.height / 2;
+
+            if (weapon.timer <= 0 && enemies.length > 0) {
+                const closest = getClosestEnemy(player.x, player.y);
+                if (closest) {
+                    const baseAngle = Math.atan2(closest.y - player.y, closest.x - player.x);
+                    for(let i = 0; i < weapon.multishot; i++) {
+                        let offset = weapon.multishot > 1 ? -0.4 + (0.8 / (weapon.multishot - 1)) * i : 0;
+                        let isCrit = Math.random() < player.critChance;
+                        projectiles.push({
+                            x: player.x, y: player.y, vx: Math.cos(baseAngle + offset) * weapon.speed, vy: Math.sin(baseAngle + offset) * weapon.speed,
+                            radius: isCrit ? weapon.radius * 1.5 : weapon.radius, color: isCrit ? '#ff00ff' : weapon.color,
+                            damage: isCrit ? weapon.damage * 2.5 : weapon.damage, angle: baseAngle + offset, turnSpeed: weapon.turnSpeed
+                        });
+                    }
+                    weapon.timer = weapon.cooldown;
+                }
+            }
+            weapon.timer--;
+
+            if (weapon.auraRadius > 0 && frames % 10 === 0) {
+                enemies.forEach((e, j) => {
+                    if (Math.hypot(player.x - e.x, player.y - e.y) < player.radius + weapon.auraRadius + e.radius) {
+                        e.hp -= weapon.auraDmg / 6; 
+                        if (e.hp <= 0) {
+                            let xpVal = (e.type === 'elite' ? 15 : 1), gRadius = (e.type === 'elite' ? 12 : 6), gColor = (e.type === 'elite' ? '#00ffcc' : '#34db84'); 
+                            gems.push({ x: e.x, y: e.y, radius: gRadius, color: gColor, xp: xpVal, isChest: false });
+                            enemies.splice(j, 1); kills++; document.getElementById('score-text').innerText = `Bajas: ${kills}`;
+                        }
+                    }
+                });
+            }
+
+            const spawnRate = Math.max(2, 25 - Math.floor(gameTimeSeconds / 8));
+            if (frames % spawnRate === 0 && enemies.length < 300) spawnEnemy(); 
+            if (frames > 0 && frames % 3600 === 0) spawnEnemy(true);
+
+            for (let i = projectiles.length - 1; i >= 0; i--) {
+                const p = projectiles[i];
+                const target = getClosestEnemy(p.x, p.y);
+                if (target) {
+                    const desiredAngle = Math.atan2(target.y - p.y, target.x - p.x);
+                    let angleDiff = desiredAngle - p.angle;
+                    while (angleDiff <= -Math.PI) angleDiff += Math.PI * 2; while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+                    p.angle += Math.sign(angleDiff) * Math.min(Math.abs(angleDiff), p.turnSpeed);
+                    p.vx = Math.cos(p.angle) * weapon.speed; p.vy = Math.sin(p.angle) * weapon.speed;
+                }
+                p.x += p.vx; p.y += p.vy;
+                if (Math.hypot(player.x - p.x, player.y - p.y) > 2000) { projectiles.splice(i, 1); continue; }
+
+                for (let j = enemies.length - 1; j >= 0; j--) {
+                    const e = enemies[j];
+                    if (Math.hypot(p.x - e.x, p.y - e.y) < p.radius + e.radius) {
+                        e.hp -= p.damage; projectiles.splice(i, 1);
+                        if (e.hp <= 0) {
+                            if (e.type === 'boss') {
+                                gems.push({ x: e.x, y: e.y, radius: 25, color: '#f1c40f', xp: 0, isChest: true, esencias: 100 });
+                            } else {
+                                let xpVal = 1, gRadius = 6, gColor = '#34db84'; 
+                                if (e.type === 'elite') { xpVal = 15; gRadius = 12; gColor = '#00ffcc'; }
+                                gems.push({ x: e.x, y: e.y, radius: gRadius, color: gColor, xp: xpVal, isChest: false });
+                            }
+                            enemies.splice(j, 1); kills++; document.getElementById('score-text').innerText = `Bajas: ${kills}`;
+                        }
+                        break; 
+                    }
+                }
+            }
+
+            for (let i = gems.length - 1; i >= 0; i--) {
+                const g = gems[i];
+                const dist = Math.hypot(player.x - g.x, player.y - g.y);
+                if (dist < player.magnet || g.isChest) { 
+                    const angle = Math.atan2(player.y - g.y, player.x - g.x);
+                    g.x += Math.cos(angle) * (g.isChest ? 8 : 15); g.y += Math.sin(angle) * (g.isChest ? 8 : 15);
+                    
+                    if (Math.hypot(player.x - g.x, player.y - g.y) < player.radius + g.radius) {
+                        if (g.isChest) {
+                            saveData.esencias += g.esencias; saveGame(); triggerLevelUp(true);
+                        } else {
+                            player.xp += (g.xp * player.xpMult);
+                            if (player.xp >= player.maxXp) {
+                                player.level++; player.xp -= player.maxXp; player.maxXp = Math.floor(player.maxXp * 1.5);
+                                document.getElementById('level-text').innerText = `Nivel: ${player.level}`;
+                                triggerLevelUp(false);
+                            }
+                            document.getElementById('xp-bar-fill').style.width = `${(player.xp / player.maxXp) * 100}%`;
+                        }
+                        gems.splice(i, 1);
+                    }
+                }
+            }
+
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                const e = enemies[i];
+                const angle = Math.atan2(player.y - e.y, player.x - e.x);
+                e.x += Math.cos(angle) * e.speed; e.y += Math.sin(angle) * e.speed;
+                if (Math.hypot(player.x - e.x, player.y - e.y) < player.radius + e.radius - 8) {
+                    player.hp -= (e.type === 'boss' ? 10 : (e.type === 'elite' ? 3 : 1));
+                    if (player.hp <= 0) { triggerGameOver(); return; }
+                }
+            }
+            frames++;
+        }
+
+        function draw() {
+            if (gameState !== 'playing' && gameState !== 'paused' && gameState !== 'paused_manual') { 
+                ctx.fillStyle = '#030305'; ctx.fillRect(0, 0, canvas.width, canvas.height); return; 
+            }
+            ctx.fillStyle = '#030305'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = '#111118'; ctx.lineWidth = 2;
+            const gridSize = 150; const startX = -(camera.x % gridSize); const startY = -(camera.y % gridSize);
+            ctx.beginPath();
+            for (let x = startX; x < canvas.width; x += gridSize) { ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); }
+            for (let y = startY; y < canvas.height; y += gridSize) { ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); }
+            ctx.stroke();
+
+            const drawEntity = (e, drawFunc) => { ctx.save(); ctx.translate(e.x - camera.x, e.y - camera.y); drawFunc(); ctx.restore(); };
+
+            if (weapon.auraRadius > 0) {
+                drawEntity(player, () => {
+                    ctx.beginPath(); ctx.arc(0, 0, player.radius + weapon.auraRadius, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(0, 255, 204, 0.05)'; ctx.fill();
+                    ctx.strokeStyle = 'rgba(0, 255, 204, 0.3)'; ctx.lineWidth = 2; ctx.stroke();
+                });
+            }
+
+            gems.forEach(g => drawEntity(g, () => {
+                ctx.beginPath();
+                if (g.isChest) { 
+                    ctx.rect(-g.radius, -g.radius, g.radius*2, g.radius*2);
+                    ctx.fillStyle = g.color; ctx.shadowBlur = 30; ctx.shadowColor = g.color; ctx.fill();
+                    ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.stroke();
+                } else {
+                    ctx.moveTo(0, -g.radius); ctx.lineTo(g.radius, 0); ctx.lineTo(0, g.radius); ctx.lineTo(-g.radius, 0); ctx.closePath();
+                    ctx.fillStyle = g.color; ctx.shadowBlur = 15; ctx.shadowColor = g.color; ctx.fill();
+                }
+            }));
+
+            enemies.forEach(e => drawEntity(e, () => {
+                const angleToPlayer = Math.atan2(player.y - e.y, player.x - e.x) + Math.PI/2;
+                ctx.rotate(angleToPlayer);
+                if(e.img.complete) { ctx.drawImage(e.img, -e.radius, -e.radius, e.radius*2, e.radius*2); }
+                ctx.rotate(-angleToPlayer); 
+                
+                if (e.hp < e.maxHp) {
+                    ctx.fillStyle = '#f00'; ctx.fillRect(-e.radius, -e.radius - 15, e.radius*2, 5);
+                    ctx.fillStyle = '#0f0'; ctx.fillRect(-e.radius, -e.radius - 15, (e.radius*2) * (e.hp/e.maxHp), 5);
+                }
+            }));
+
+            projectiles.forEach(p => drawEntity(p, () => {
+                ctx.rotate(p.angle); ctx.beginPath(); ctx.ellipse(0, 0, p.radius * 2, p.radius, 0, 0, Math.PI * 2);
+                ctx.fillStyle = p.color; ctx.shadowBlur = 20; ctx.shadowColor = p.color; ctx.fill();
+            }));
+
+            drawEntity(player, () => {
+                ctx.rotate(player.angle);
+                if(sprites.player.complete) { ctx.drawImage(sprites.player, -player.radius, -player.radius, player.radius*2, player.radius*2); }
+            });
+
+            ctx.fillStyle = '#f00'; ctx.fillRect(canvas.width/2 - 40, canvas.height/2 + 45, 80, 8);
+            ctx.fillStyle = '#0f0'; ctx.fillRect(canvas.width/2 - 40, canvas.height/2 + 45, 80 * (player.hp/player.maxHp), 8);
+            ctx.shadowBlur = 0; 
+        }
+
+        function loop() { update(); draw(); requestAnimationFrame(loop); }
+        saveGame(); loop();
+    </script>
+</body>
+</html>
