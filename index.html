@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Vampire Survivors Clone - Fase 13 (Motor Espacial & Escalado Crítico)</title>
+    <title>Vampire Survivors Clone - Fase 13.1 (Balance de Poder)</title>
     <style>
         body { margin: 0; overflow: hidden; background-color: #030305; font-family: 'Segoe UI', sans-serif; color: white; user-select: none; }
         canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; }
@@ -39,6 +39,7 @@
         .node-info { position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.95); border: 1px solid #444; padding: 12px; border-radius: 8px; width: 250px; display: none; text-align: center; font-size: 13px; pointer-events: none; z-index: 10; }
         .node:hover .node-info { display: block; }
         .node-info span { color: #00ffcc; font-weight: bold; font-size: 15px; display: block; margin-top: 5px; }
+
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(241, 196, 15, 0); } 100% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0); } }
 
         #currency-display { position: absolute; top: 20px; left: 30px; font-size: 24px; color: #00ffcc; font-weight: bold; text-shadow: 0 0 10px rgba(0,255,204, 0.5); z-index: 20; display: none; }
@@ -141,18 +142,14 @@
         
         let gameState = 'menu';
         const WORLD_SIZE = 6000; 
-
-        // CONFIGURACIÓN DE POOL (Aumentado para aprovechar el nuevo motor de colisiones)
         const MAX_ENEMIES = 800; 
         const MAX_PROJECTILES = 800;
-        const MAX_GEMS = 1200;
-        const MAX_TEXTS = 500; 
+        const MAX_GEMS = 1500;
+        const MAX_TEXTS = 600; 
 
-        // CONFIGURACIÓN DEL SPATIAL HASH GRID (Motor Espacial)
         const CELL_SIZE = 150;
         const COLS = Math.ceil(WORLD_SIZE / CELL_SIZE);
         const ROWS = COLS;
-        // Matriz plana 1D de matrices preasignadas para evitar recolector de basura
         const spatialGrid = Array.from({length: COLS * ROWS}, () => []);
 
         let player, camera, weapon, frames, kills, gameTimeSeconds;
@@ -184,23 +181,18 @@
             boss: createImgFromSVG(`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#900" stroke="#f00" stroke-width="5"/><circle cx="30" cy="40" r="10" fill="#000"/><circle cx="70" cy="40" r="10" fill="#000"/><path d="M 30 70 Q 50 90 70 70" stroke="#000" stroke-width="8" fill="none"/></svg>`)
         };
 
-        let saveData = JSON.parse(localStorage.getItem('megabonk_13')) || { esencias: 0, unlockedNodes: ['core'], unlockedChars: ['char_base'] };
+        let saveData = JSON.parse(localStorage.getItem('megabonk_13_1')) || { esencias: 0, unlockedNodes: ['core'], unlockedChars: ['char_base'] };
         
+        // NERF AL ESPECTRO APLICADO AQUÍ
         const charsData = [
             { id: 'char_base', name: 'Recluta', desc: 'Estadísticas Base.', stats: { hp: 1, spd: 1, dmg: 1 }, cond: 'Desbloqueado' },
             { id: 'char_tank', name: 'Juggernaut', desc: '+100% Vida, -20% Velocidad.', stats: { hp: 2, spd: 0.8, dmg: 1 }, cond: 'Sobrevive 5 Minutos' },
-            { id: 'char_rng', name: 'Espectro', desc: '+150% Daño, -50% Vida.', stats: { hp: 0.5, spd: 1.2, dmg: 2.5 }, cond: 'Drop Boss (1%)' },
+            { id: 'char_rng', name: 'Espectro', desc: '+80% Daño, -70% Vida.', stats: { hp: 0.3, spd: 1.1, dmg: 1.8 }, cond: 'Drop Boss (1%)' },
             { id: 'char_glitch', name: 'MissingNo', desc: 'Rendimiento Inestable.', stats: { hp: 1.5, spd: 1.5, dmg: 3 }, cond: '???' }
         ];
 
-        function saveGame() { localStorage.setItem('megabonk_13', JSON.stringify(saveData)); document.getElementById('esencias-count').innerText = saveData.esencias; }
-
-        function hardReset() {
-            if(confirm("¿Purga total de memoria? Esto no se puede deshacer.")) {
-                localStorage.removeItem('megabonk_13'); location.reload();
-            }
-        }
-
+        function saveGame() { localStorage.setItem('megabonk_13_1', JSON.stringify(saveData)); document.getElementById('esencias-count').innerText = saveData.esencias; }
+        function hardReset() { if(confirm("¿Purga total de memoria? Esto no se puede deshacer.")) { localStorage.removeItem('megabonk_13_1'); location.reload(); } }
         function exportCode() { const code = btoa(JSON.stringify(saveData)); prompt("Guarda tu progreso:", code); }
 
         function loadCode() {
@@ -368,9 +360,13 @@
             gameState = 'playing'; switchScreen(null); document.getElementById('hud').classList.add('active');
         }
 
-        function getRandomRarity(forceLegendary = false) {
-            if (forceLegendary) return { name: 'Legendaria', color: '#f1c40f', bg: '#f1c40f', mult: 8, shadow: 'rgba(241,196,15,0.8)' };
+        function getRandomRarity(isBossChest = false) {
             const r = Math.random() * 100;
+            if (isBossChest) {
+                if (r < 60) return { name: 'Épica', color: '#9b59b6', bg: '#9b59b6', mult: 4, shadow: 'rgba(155,89,182,0.6)' };
+                if (r < 90) return { name: 'Mítica', color: '#ff003c', bg: '#ff003c', mult: 6, shadow: 'rgba(255,0,60,0.7)' };
+                return { name: 'Legendaria', color: '#f1c40f', bg: '#f1c40f', mult: 8, shadow: 'rgba(241,196,15,0.8)' };
+            }
             if (r < 40) return { name: 'Común', color: '#ccc', bg: '#444', mult: 1, shadow: 'rgba(204,204,204,0.2)' };
             if (r < 65) return { name: 'Especial', color: '#2ecc71', bg: '#2ecc71', mult: 1.5, shadow: 'rgba(46,204,113,0.4)' };
             if (r < 82) return { name: 'Rara', color: '#3498db', bg: '#3498db', mult: 2.5, shadow: 'rgba(52,152,219,0.5)' };
@@ -384,7 +380,8 @@
             { id: 'dmg', name: 'Núcleo Denso', desc: m => `+${Math.floor(8 * m)} Daño Base`, apply: m => weapon.damage += Math.floor(8 * m) },
             { id: 'spd', name: 'Propulsores', desc: m => `+${Math.floor(5 * m)}% Velocidad`, apply: m => player.speed *= (1 + (0.05 * m)) },
             { id: 'cdr', name: 'Sobremarcha', desc: m => `-${Math.floor(5 * m)}% Recarga`, apply: m => weapon.cooldown = Math.max(3, weapon.cooldown * (1 - (0.05 * m))) },
-            { id: 'crit', name: 'Láser Crítico', desc: m => `+${Math.floor(5 * m)}% Prob. Crítico`, apply: m => player.critChance += (0.05 * m) },
+            // NERF MASIVO AL CRÍTICO APLICADO AQUÍ
+            { id: 'crit', name: 'Láser Crítico', desc: m => `+${(0.5 * m).toFixed(1)}% Prob. Crítico`, apply: m => player.critChance += (0.005 * m) },
             { id: 'homing', name: 'IA Avanzada', desc: m => `Rastreo +${Math.floor(15 * m)}%`, apply: m => weapon.turnSpeed += (0.015 * m) },
             { id: 'aura_rad', name: 'Campo Microondas', desc: m => `+${Math.floor(25 * m)} Radio Aura`, apply: m => weapon.auraRadius += Math.floor(25 * m) },
             { id: 'aura_dmg', name: 'Intensidad Aura', desc: m => `+${Math.floor(10 * m)} Daño/s Área`, apply: m => weapon.auraDmg += Math.floor(10 * m) },
@@ -421,16 +418,18 @@
             if (t) { t.active = true; t.x = x; t.y = y; t.text = text; t.color = color; t.alpha = 1; t.size = size; }
         }
 
-        function spawnGem(x, y, type) {
+        function spawnGem(x, y, type, xpVal = 1) {
             let g = getFreeObj(gemsPool);
             if(!g) return;
             g.active = true; g.x = x; g.y = y;
             if (type === 'boss') {
                 g.radius = 25; g.color = '#f1c40f'; g.xp = 0; g.isChest = true; g.esencias = 100;
+            } else if (type === 'boss_xp') {
+                g.radius = 35; g.color = '#ff00ff'; g.xp = xpVal; g.isChest = false; 
             } else if (type === 'elite') {
-                g.radius = 12; g.color = '#00ffcc'; g.xp = 15; g.isChest = false;
+                g.radius = 12; g.color = '#00ffcc'; g.xp = xpVal; g.isChest = false;
             } else {
-                g.radius = 6; g.color = '#34db84'; g.xp = 1; g.isChest = false;
+                g.radius = 6; g.color = '#34db84'; g.xp = xpVal; g.isChest = false;
             }
             g.type = type;
         }
@@ -447,10 +446,9 @@
                 ey = player.y + Math.sin(angle) * dist;
             } while(ex < -WORLD_SIZE/2 || ex > WORLD_SIZE/2 || ey < -WORLD_SIZE/2 || ey > WORLD_SIZE/2);
             
-            // ESCALADO CONTINUO (Soluciona la falta de dificultad tardía)
             const m = gameTimeSeconds / 60; 
-            const hpMult = Math.pow(1.30, m); // +30% HP cada minuto
-            const dmgMult = Math.pow(1.15, m); // +15% Daño cada minuto
+            const hpMult = Math.pow(1.30, m); 
+            const dmgMult = Math.pow(1.15, m); 
             
             e.active = true; e.x = ex; e.y = ey;
             if (isBoss) {
@@ -475,7 +473,8 @@
             const mFloor = Math.floor(gameTimeSeconds / 60); const s = Math.floor(gameTimeSeconds % 60);
             document.getElementById('timer').innerText = `${mFloor < 10 ? '0'+mFloor : mFloor}:${s < 10 ? '0'+s : s}`;
 
-            // Actualizar textos flotantes
+            const xpTimeMultiplier = Math.pow(1.2, mFloor); 
+
             for (let i = 0; i < textsPool.length; i++) {
                 let ft = textsPool[i];
                 if(ft.active) { ft.y -= 0.5; ft.alpha -= 0.02; if (ft.alpha <= 0) ft.active = false; }
@@ -497,7 +496,6 @@
             player.y = Math.max(-WORLD_SIZE/2 + player.radius, Math.min(WORLD_SIZE/2 - player.radius, player.y));
             camera.x = player.x - canvas.width / 2; camera.y = player.y - canvas.height / 2;
 
-            // ACTUALIZAR CUADRÍCULA ESPACIAL (Zero-GC)
             for(let i=0; i<spatialGrid.length; i++) spatialGrid[i].length = 0;
             for(let i=0; i<enemiesPool.length; i++) {
                 let e = enemiesPool[i];
@@ -509,7 +507,6 @@
                 }
             }
 
-            // FUNCIÓN DE BÚSQUEDA OPTIMIZADA
             function getClosestEnemySpatial(x, y) {
                 let closest = null; let minDist = Infinity;
                 let pCol = Math.floor((x + WORLD_SIZE/2) / CELL_SIZE);
@@ -566,7 +563,18 @@
                                         saveData.unlockedChars.push('char_rng'); saveGame();
                                         spawnText(e.x, e.y, "¡ESPECTRO DESBLOQUEADO!", "155,89,182", 20);
                                     }
-                                    spawnGem(e.x, e.y, e.type); e.active = false; kills++; document.getElementById('score-text').innerText = `Bajas: ${kills}`;
+                                    
+                                    if (e.type === 'boss') {
+                                        if (gameTimeSeconds < 600) {
+                                            spawnGem(e.x, e.y, 'boss', 0);
+                                        } else {
+                                            spawnGem(e.x, e.y, 'boss_xp', Math.floor(500 * xpTimeMultiplier));
+                                        }
+                                    } else {
+                                        spawnGem(e.x, e.y, e.type, Math.floor((e.type === 'elite' ? 15 : 1) * xpTimeMultiplier));
+                                    }
+                                    
+                                    e.active = false; kills++; document.getElementById('score-text').innerText = `Bajas: ${kills}`;
                                 }
                             }
                         }
@@ -614,7 +622,18 @@
                                         saveData.unlockedChars.push('char_rng'); saveGame();
                                         spawnText(e.x, e.y, "¡ESPECTRO DESBLOQUEADO!", "155,89,182", 20);
                                     }
-                                    spawnGem(e.x, e.y, e.type); e.active = false; kills++; document.getElementById('score-text').innerText = `Bajas: ${kills}`;
+                                    
+                                    if (e.type === 'boss') {
+                                        if (gameTimeSeconds < 600) {
+                                            spawnGem(e.x, e.y, 'boss', 0);
+                                        } else {
+                                            spawnGem(e.x, e.y, 'boss_xp', Math.floor(500 * xpTimeMultiplier));
+                                        }
+                                    } else {
+                                        spawnGem(e.x, e.y, e.type, Math.floor((e.type === 'elite' ? 15 : 1) * xpTimeMultiplier));
+                                    }
+                                    
+                                    e.active = false; kills++; document.getElementById('score-text').innerText = `Bajas: ${kills}`;
                                 }
                                 break; 
                             }
@@ -668,7 +687,6 @@
 
                 if(Math.abs(player.x - e.x) < player.radius + e.radius && Math.abs(player.y - e.y) < player.radius + e.radius) {
                     if (Math.hypot(player.x - e.x, player.y - e.y) < player.radius + e.radius - 5) {
-                        // DAÑO ESCALADO AL JUGADOR
                         player.hp -= e.damage;
                         if (player.hp <= 0) { triggerGameOver(); return; }
                     }
@@ -686,8 +704,8 @@
 
             for(let i=0; i<gemsPool.length; i++) {
                 let g = gemsPool[i];
-                if(g.active && (g.isChest || g.type === 'elite')) {
-                    miniCtx.fillStyle = g.isChest ? '#f1c40f' : '#34db84';
+                if(g.active && (g.isChest || g.type === 'elite' || g.type === 'boss_xp')) {
+                    miniCtx.fillStyle = g.isChest ? '#f1c40f' : (g.type === 'boss_xp' ? '#ff00ff' : '#34db84');
                     miniCtx.beginPath(); miniCtx.arc(offsetX + mapP(g.x), offsetY + mapP(g.y), g.isChest ? 4 : 2, 0, Math.PI*2); miniCtx.fill();
                 }
             }
