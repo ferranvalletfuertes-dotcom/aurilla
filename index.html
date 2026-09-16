@@ -505,51 +505,275 @@
             letter-spacing: 1px;
         }
 
-        /* MATRIZ NEURAL */
-        #tree-wrapper {
-            width: 95%; 
-            height: 74vh; 
-            background: #040508; 
-            border: 2px solid rgba(0, 255, 204, 0.25); 
-            border-radius: 14px; 
-            overflow: hidden; 
-            position: relative; 
-            box-shadow: inset 0 0 70px rgba(0,0,0,0.95);
-            cursor: grab;
-        }
-        #tree-wrapper:active { cursor: grabbing; }
-        #tree-canvas { width: 100%; height: 100%; display: block; }
-
-        #tree-hud {
-            position: absolute;
-            top: 15px;
-            left: 25px;
-            right: 25px;
+        /* TIENDA CUÁNTICA Y REGISTRO DE LOGROS */
+        .shop-header {
+            width: 95%;
+            max-width: 1100px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            pointer-events: none;
-            z-index: 10;
-        }
-        #tree-hud > * { pointer-events: auto; }
-
-        #node-tooltip-card {
-            position: absolute;
-            top: 75px;
-            right: 25px;
-            width: 320px;
-            background: rgba(10, 13, 22, 0.96);
-            border: 2px solid var(--primary);
+            margin-bottom: 15px;
+            background: rgba(10, 14, 24, 0.9);
+            padding: 12px 24px;
             border-radius: 12px;
-            padding: 16px 20px;
-            box-shadow: 0 0 35px rgba(0, 255, 204, 0.3);
-            text-align: left;
-            z-index: 15;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            opacity: 0;
+            border: 1px solid rgba(0, 255, 204, 0.25);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
         }
-        #node-tooltip-card.visible { opacity: 1; }
+        .shop-crystals-badge {
+            font-size: 18px;
+            font-weight: 900;
+            color: #f1c40f;
+            background: rgba(0, 0, 0, 0.65);
+            padding: 6px 18px;
+            border-radius: 8px;
+            border: 1px solid rgba(241, 196, 15, 0.35);
+            box-shadow: 0 0 15px rgba(241, 196, 15, 0.15);
+        }
+        .shop-tabs {
+            display: flex;
+            gap: 12px;
+            width: 95%;
+            max-width: 1100px;
+            margin-bottom: 15px;
+        }
+        .shop-tab {
+            flex: 1;
+            padding: 12px;
+            background: rgba(14, 18, 30, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #8892b0;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .shop-tab:hover {
+            color: #fff;
+            border-color: var(--primary);
+            background: rgba(0, 255, 204, 0.08);
+        }
+        .shop-tab.active {
+            color: #030307;
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 25px var(--primary-glow);
+        }
+        .shop-content-panel {
+            width: 95%;
+            max-width: 1100px;
+            height: 65vh;
+            overflow-y: auto;
+            display: none;
+            padding-right: 8px;
+        }
+        .shop-content-panel.active {
+            display: block;
+        }
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 14px;
+        }
+        .shop-card {
+            background: rgba(11, 15, 26, 0.95);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+        .shop-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+            transform: translateY(-2px);
+        }
+        .shop-card-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .shop-card-icon {
+            font-size: 26px;
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 255, 204, 0.08);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            flex-shrink: 0;
+        }
+        .shop-card-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #fff;
+        }
+        .shop-card-level {
+            font-size: 12px;
+            color: var(--gold);
+            font-weight: 700;
+        }
+        .shop-card-desc {
+            font-size: 12.5px;
+            color: #a0aec0;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            min-height: 36px;
+        }
+        .shop-level-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        .shop-level-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #38bdf8);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+        .shop-buy-btn {
+            background: rgba(0, 255, 204, 0.12);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 13.5px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+        }
+        .shop-buy-btn:hover:not(:disabled) {
+            background: var(--primary);
+            color: #030307;
+            box-shadow: 0 0 16px var(--primary-glow);
+        }
+        .shop-buy-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: #4b5563;
+            color: #6b7280;
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .shop-chassis-view {
+            background: rgba(11, 15, 26, 0.95);
+            border: 2px solid var(--primary);
+            border-radius: 14px;
+            padding: 24px;
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            box-shadow: 0 0 35px rgba(0, 255, 204, 0.18);
+        }
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 12px;
+            width: 95%;
+            max-width: 1100px;
+            height: 65vh;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+        .ach-card {
+            background: rgba(11, 15, 26, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all 0.2s;
+        }
+        .ach-card.unlocked {
+            border-color: rgba(241, 196, 15, 0.45);
+            background: rgba(18, 22, 36, 0.96);
+            box-shadow: 0 0 15px rgba(241, 196, 15, 0.1);
+        }
+        .ach-card.claimed {
+            border-color: rgba(0, 255, 204, 0.35);
+            background: rgba(10, 18, 24, 0.9);
+            opacity: 0.88;
+        }
+        .ach-icon {
+            font-size: 28px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            flex-shrink: 0;
+        }
+        .ach-info {
+            flex: 1;
+        }
+        .ach-title {
+            font-size: 14.5px;
+            font-weight: 800;
+            color: #fff;
+        }
+        .ach-desc {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 2px;
+            line-height: 1.3;
+        }
+        .ach-reward {
+            font-size: 12px;
+            color: #f1c40f;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+        .ach-claim-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #030307;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: 900;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+            animation: pulseGlow 1.5s infinite;
+            white-space: nowrap;
+        }
+        .ach-claimed-badge {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--primary);
+            background: rgba(0, 255, 204, 0.1);
+            border: 1px solid var(--primary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(245, 158, 11, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.7); }
+        }
 
         /* AJUSTES */
         .settings-grid {
@@ -1075,7 +1299,7 @@
             <div class="steam-brand">
                 <span class="steam-status-dot"></span>
                 <span class="steam-brand-name">MEGABONK // ARENA</span>
-                <span class="steam-ver-tag">STEAM EDITION // v20.1</span>
+                <span class="steam-ver-tag">v22.0 ULTRA</span>
             </div>
             <div class="steam-top-stats">
                 <div class="steam-stat-chip">
@@ -1098,52 +1322,55 @@
         </header>
 
         <!-- Contenedor Principal Steam Deck -->
-        <div class="steam-main-deck">
-            <!-- Columna Izquierda: Botones de Acción Tácticos -->
+        <div class="steam-deck-layout">
+            <!-- Columna Izquierda: Acciones Tácticas -->
             <div class="steam-nav-column">
-                <div class="steam-hero-title">
-                    <div class="steam-kicker">DIMENSIONAL SURVIVOR ROGUELITE</div>
-                    <h1 class="steam-title">MEGABONK<span class="cyan-glow">ARENA</span></h1>
-                    <p class="steam-desc">Supervivencia táctica con 130 mejoras modulares, matriz neural fractal y combate sin cuartel.</p>
-                </div>
-
                 <div class="steam-action-list">
-                    <button class="steam-btn steam-btn-primary" onclick="openCharSelect()" onmouseenter="AudioSys.playBeep(520, 0.03)">
+                    <div class="steam-btn steam-btn-primary" onclick="openCharSelect()">
                         <div class="steam-btn-icon">⚔️</div>
                         <div class="steam-btn-text">
                             <div class="steam-btn-title">INICIAR INCURSIÓN</div>
-                            <div class="steam-btn-sub">Despliegue táctico en la arena // Selección de chasis</div>
+                            <div class="steam-btn-sub">Elige chasis e ingresa en combate</div>
                         </div>
-                        <div class="steam-btn-badge">JUGAR</div>
-                    </button>
+                        <span class="steam-btn-badge">JUGAR</span>
+                    </div>
 
-                    <button class="steam-btn steam-btn-gold" onclick="openSkillTree()" onmouseenter="AudioSys.playBeep(580, 0.03)">
-                        <div class="steam-btn-icon">🧠</div>
+                    <div class="steam-btn steam-btn-gold" onclick="openShop()">
+                        <div class="steam-btn-icon">🛒</div>
                         <div class="steam-btn-text">
-                            <div class="steam-btn-title">MATRIZ NEURAL INFINITA</div>
-                            <div class="steam-btn-sub">Árbol fractal de talentos persistentes y meta-progresión</div>
+                            <div class="steam-btn-title">TIENDA CUÁNTICA</div>
+                            <div class="steam-btn-sub">Mejoras de stats, armas y chasis NEXUS-9</div>
                         </div>
-                        <div class="steam-btn-badge gold">TALENTOS</div>
-                    </button>
+                        <span class="steam-btn-badge gold">MERCADO</span>
+                    </div>
 
-                    <button class="steam-btn" onclick="openOptions()" onmouseenter="AudioSys.playBeep(640, 0.03)">
+                    <div class="steam-btn" style="border-color: #f59e0b; box-shadow: 0 0 15px rgba(245, 158, 11, 0.15);" onclick="openAchievements()">
+                        <div class="steam-btn-icon">🏆</div>
+                        <div class="steam-btn-text">
+                            <div class="steam-btn-title">REGISTRO DE LOGROS</div>
+                            <div class="steam-btn-sub">Reclama recompensas en gemas por tus hazañas</div>
+                        </div>
+                        <span class="steam-btn-badge" style="background:#f59e0b; color:#030307;" id="main-menu-ach-badge">LOGROS</span>
+                    </div>
+
+                    <div class="steam-btn" onclick="openOptions()">
                         <div class="steam-btn-icon">⚙️</div>
                         <div class="steam-btn-text">
-                            <div class="steam-btn-title">CONFIGURACIÓN</div>
-                            <div class="steam-btn-sub">Opciones de audio, interfaz, DPS y controles</div>
+                            <div class="steam-btn-title">CONFIGURACIÓN DEL SISTEMA</div>
+                            <div class="steam-btn-sub">Velocidad x2, audio, DPS y controles</div>
                         </div>
-                        <div class="steam-btn-badge">AJUSTES</div>
-                    </button>
+                        <span class="steam-btn-badge">AJUSTES</span>
+                    </div>
                 </div>
 
-                <!-- Consola de Guardado en Nube / Respaldo -->
+                <!-- Consola de Nube Local / Código de Datos -->
                 <div class="steam-cloud-bar">
                     <div class="cloud-status">
                         <span class="cloud-icon">☁️</span>
                         <span>Nube Local: <b style="color:var(--primary);">Sincronizada</b></span>
                     </div>
                     <div class="cloud-inputs">
-                        <input type="text" id="save-code-input" class="steam-input" placeholder="Código o 'ferrvn'">
+                        <input type="text" id="save-code-input" class="steam-input" placeholder="Código de guardado">
                         <button class="steam-btn-tiny" onclick="loadCode()">Cargar</button>
                         <button class="steam-btn-tiny" onclick="exportCode()">Exportar</button>
                         <button class="steam-btn-tiny danger" onclick="hardReset()">Reset</button>
@@ -1155,41 +1382,41 @@
             <div class="steam-intel-column">
                 <div class="steam-intel-card">
                     <div class="intel-header">
-                        <div class="intel-title">📡 BOLETÍN DE MANDO // PARCHE v20.1</div>
+                        <div class="intel-title">📡 BOLETÍN DE MANDO // PARCHE v22.0</div>
                         <div class="intel-tag">EN VIVO</div>
                     </div>
                     <div class="intel-body">
                         <div class="intel-news-item">
-                            <div class="news-dot cyan"></div>
-                            <div>
-                                <b style="color:#38bdf8;">VENTANA DE ESTABILIZACIÓN (0:00 - 1:15):</b>
-                                <p>Los primeros 75 segundos no tienen escalado de HP/daño ni alertas de enjambre. Tómate el tiempo para elegir tus primeras cartas y posicionarte.</p>
-                            </div>
-                        </div>
-                        <div class="intel-news-item">
                             <div class="news-dot gold"></div>
                             <div>
-                                <b style="color:#f59e0b;">ALERTA DE ENJAMBRE CONVERGENTE:</b>
-                                <p>Tras el minuto 1:15, una sirena de combate avisará cada 30s de una formación circular de 16 a 24 enemigos que convergen a tu posición.</p>
+                                <b style="color:#f59e0b;">TIENDA CUÁNTICA PERMANENTE:</b>
+                                <p>Sustituto definitivo del árbol: invierte gemas en mejoras de stats, Cañón Mortero, Dron Láser, slots de armas y el chasis NEXUS-9.</p>
                             </div>
                         </div>
                         <div class="intel-news-item">
                             <div class="news-dot purple"></div>
                             <div>
-                                <b style="color:#a855f7;">CATÁLOGO MODULAR DE 130 MEJORAS:</b>
-                                <p>Filtro estricto de arsenal: las mejoras de armas solo se ofrecen si ya tienes el arma activa. Probabilidades equilibradas y sin stats rotos.</p>
+                                <b style="color:#a855f7;">REGISTRO DE 16 LOGROS:</b>
+                                <p>Supera desafíos tácticos en combate y reclama más de 18,000 gemas para gastar en el mercado cuántico.</p>
                             </div>
                         </div>
                         <div class="intel-news-item">
                             <div class="news-dot green"></div>
                             <div>
-                                <b style="color:#34d399;">ECONOMÍA ROGUELITE EQUILIBRADA:</b>
-                                <p>Una partida completa de 10 min derrotando al Titán genera ~2,500 - 4,500 cristales para compras permanentes.</p>
+                                <b style="color:#22c55e;">GUADAÑA ESPECTRAL REPARADA:</b>
+                                <p>Cada 50 bajas acumuladas desata un corte guadaña titánico de 500 de daño con barrido en toda la pantalla.</p>
+                            </div>
+                        </div>
+                        <div class="intel-news-item">
+                            <div class="news-dot cyan"></div>
+                            <div>
+                                <b style="color:#38bdf8;">JEFES RELATIVOS Y ALTA DENSIDAD:</b>
+                                <p>Jefes de Mundo a los 10m de cada mundo (10m, 20m, 30m). Desde el minuto 3:00 la arena se puebla intensamente y la XP progresa sin frenos.</p>
                             </div>
                         </div>
                     </div>
                     <div class="intel-footer">
-                        <span>💡 Consejo: El código <code>ferrvn</code> desbloquea acceso a todas las unidades.</span>
+                        <span>💡 Consejo: Visita el Registro de Logros en el menú principal para reclamar tus gemas acumuladas.</span>
                     </div>
                 </div>
             </div>
@@ -1209,38 +1436,72 @@
         </div>
     </div>
 
-    <!-- ÁRBOL DE HABILIDADES FRACTAL / INFINITO -->
-    <div id="screen-tree" class="screen">
-        <div id="tree-hud">
-            <div style="font-size: 20px; color: var(--primary); font-weight: 900; background: rgba(0,0,0,0.8); padding: 8px 16px; border-radius: 8px;">
-                Cristales: <span id="tree-crystals-count">0</span> 💎
+    <!-- TIENDA CUÁNTICA / MERCADO NEGRO PERMANENTE -->
+    <div id="screen-shop" class="screen">
+        <div class="shop-header">
+            <div class="shop-title-wrap">
+                <h1 style="font-size: 30px; margin: 0; text-align: left;">TIENDA CUÁNTICA</h1>
+                <div style="color: #94a3b8; font-size: 13px;">Mercado Negro Dimensional - Mejoras Permanentes</div>
+            </div>
+            <div class="shop-crystals-badge">
+                Cristales: <span id="shop-crystals-count">0</span> 💎
             </div>
             <div style="display: flex; gap: 10px;">
-                <button class="btn-small" style="border-color: var(--gold); color: var(--gold);" onclick="respecTree()">🔄 Reembolsar Puntos</button>
-                <button class="btn-small" onclick="closeSkillTree()">Aceptar</button>
+                <button class="btn-small" onclick="closeShop()">Volver al Menú</button>
             </div>
         </div>
 
-        <div id="tree-wrapper">
-            <canvas id="tree-canvas"></canvas>
-            <div id="node-tooltip-card">
-                <div id="tt-title" style="font-size: 17px; font-weight: 900; color: var(--primary); margin-bottom: 4px;">Habilidad</div>
-                <div id="tt-stat" style="font-size: 12px; color: var(--gold); font-weight: bold; text-transform: uppercase; margin-bottom: 6px;">ESTADÍSTICA</div>
-                <div id="tt-desc" style="font-size: 13px; color: #eee; margin-bottom: 8px; line-height: 1.4;">Descripción</div>
-                <div id="tt-cost" style="font-size: 13px; color: #38bdf8; font-weight: bold;">Coste: 0 💎</div>
-                <div id="tt-status" style="font-size: 11px; margin-top: 6px; font-weight: bold;">ESTADO</div>
-            </div>
+        <div class="shop-tabs">
+            <button class="shop-tab active" id="tab-btn-stats" onclick="switchShopTab('stats')">⚡ Matriz de Núcleo (Stats)</button>
+            <button class="shop-tab" id="tab-btn-arsenal" onclick="switchShopTab('arsenal')">🚀 Arsenal y Ranuras</button>
+            <button class="shop-tab" id="tab-btn-chassis" onclick="switchShopTab('chassis')">🤖 Chasis NEXUS-9</button>
         </div>
 
-        <div style="margin-top: 10px; font-size: 13px; color: #888;">
-            * Los nodos se organizan en sectores limpios sin solapamientos. Arrastra con el ratón y usa la rueda para zoom.
+        <div id="shop-tab-stats" class="shop-content-panel active">
+            <div id="shop-stats-grid" class="shop-grid"></div>
         </div>
+        <div id="shop-tab-arsenal" class="shop-content-panel">
+            <div id="shop-arsenal-grid" class="shop-grid"></div>
+        </div>
+        <div id="shop-tab-chassis" class="shop-content-panel">
+            <div id="shop-chassis-view" class="shop-chassis-view"></div>
+        </div>
+    </div>
+
+    <!-- REGISTRO DE LOGROS Y TROFEOS -->
+    <div id="screen-achievements" class="screen">
+        <div class="shop-header">
+            <div class="shop-title-wrap">
+                <h1 style="font-size: 30px; margin: 0; text-align: left;">REGISTRO DE LOGROS</h1>
+                <div style="color: #94a3b8; font-size: 13px;">Hazañas de Combate y Recompensas Cuánticas</div>
+            </div>
+            <div class="shop-crystals-badge">
+                Cristales: <span id="ach-crystals-count">0</span> 💎
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-small" onclick="closeAchievements()">Volver al Menú</button>
+            </div>
+        </div>
+        <div id="achievements-summary" style="margin-bottom: 12px; font-size: 14px; color: var(--gold); font-weight: 700; width: 95%; max-width: 1100px;"></div>
+        <div id="achievements-list" class="achievements-grid"></div>
     </div>
 
     <!-- OPCIONES -->
     <div id="screen-options" class="screen">
         <h1 style="font-size: 38px;">Ajustes de Sistema</h1>
         <div class="settings-grid">
+            <div class="settings-row">
+                <span>Velocidad de Juego:</span>
+                <select id="game-speed-select" class="steam-input" style="width: auto; padding: 4px 8px;">
+                    <option value="1.0">1.0x (Normal)</option>
+                    <option value="1.5">1.5x (Rápido)</option>
+                    <option value="2.0">2.0x (Turbo x2 🔥)</option>
+                </select>
+            </div>
+            <div class="settings-row">
+                <span>Indicadores Visuales de Área (AoE):</span>
+                <input type="checkbox" id="aoe-visuals-toggle" checked>
+            </div>
             <div class="settings-row">
                 <span>Volumen Efectos:</span>
                 <input type="range" id="sfx-vol" min="0" max="1" step="0.05" value="0.7" oninput="updateAudioSettings()">
@@ -1308,6 +1569,11 @@
         <h1 id="levelup-title" style="font-size: 38px;">Mejora Táctica de Sistemas</h1>
         <h2>Elige una modificación de armamento o núcleo</h2>
         <div id="cards-container"></div>
+        <div style="margin-top: 20px; display: flex; gap: 15px; justify-content: center; align-items: center;">
+            <button id="btn-reroll" class="btn-small" style="padding: 10px 24px; font-size: 14px; border-color: var(--gold); color: var(--gold); background: rgba(245, 158, 11, 0.12); font-weight: 800; border-radius: 8px; cursor: pointer;" onclick="rerollCards()">
+                🔄 Reroll Mejoras (<span id="reroll-count-display">4</span> restantes)
+            </button>
+        </div>
     </div>
 
     <!-- PANTALLA DE PAUSA -->
@@ -1688,6 +1954,62 @@
                     <rect x="40" y="40" width="40" height="40" fill="#ffff00" stroke="#000" stroke-width="4"/>
                 </svg>
             `),
+            char_zephyr: createImgFromSVG(`
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="60,10 110,60 90,110 60,85 30,110 10,60" fill="#0284c7" stroke="#38bdf8" stroke-width="5"/>
+                    <polygon points="60,25 95,65 60,80 25,65" fill="#38bdf8"/>
+                    <circle cx="60" cy="50" r="10" fill="#fff" stroke="#0284c7" stroke-width="3"/>
+                    <line x1="20" y1="30" x2="45" y2="45" stroke="#38bdf8" stroke-width="4"/>
+                    <line x1="100" y1="30" x2="75" y2="45" stroke="#38bdf8" stroke-width="4"/>
+                </svg>
+            `),
+            char_gauss: createImgFromSVG(`
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="60" cy="60" r="46" fill="#0f172a" stroke="#00ffcc" stroke-width="6"/>
+                    <path d="M40,30 L40,60 Q40,90 60,90 Q80,90 80,60 L80,30" fill="none" stroke="#ef4444" stroke-width="12" stroke-linecap="round"/>
+                    <rect x="34" y="22" width="12" height="16" fill="#94a3b8"/>
+                    <rect x="74" y="22" width="12" height="16" fill="#94a3b8"/>
+                    <circle cx="60" cy="60" r="12" fill="#00ffcc" opacity="0.85"/>
+                </svg>
+            `),
+            char_colossus: createImgFromSVG(`
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="20" y="20" width="80" height="80" rx="18" fill="#334155" stroke="#f97316" stroke-width="8"/>
+                    <rect x="35" y="35" width="50" height="50" rx="8" fill="#1e293b" stroke="#facc15" stroke-width="4"/>
+                    <circle cx="60" cy="60" r="14" fill="#ea580c"/>
+                    <circle cx="60" cy="60" r="6" fill="#fff"/>
+                </svg>
+            `),
+            char_kage: createImgFromSVG(`
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="60,8 108,45 88,112 60,92 32,112 12,45" fill="#09090b" stroke="#a855f7" stroke-width="6"/>
+                    <ellipse cx="60" cy="60" rx="28" ry="18" fill="#3b0764"/>
+                    <circle cx="48" cy="58" r="4" fill="#00ffcc"/>
+                    <circle cx="72" cy="58" r="4" fill="#00ffcc"/>
+                    <line x1="30" y1="40" x2="90" y2="40" stroke="#a855f7" stroke-width="3"/>
+                </svg>
+            `),
+            char_omni: createImgFromSVG(`
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="60" cy="60" r="48" fill="#0f172a" stroke="#fff" stroke-width="5"/>
+                    <circle cx="60" cy="28" r="10" fill="#38bdf8"/>
+                    <circle cx="92" cy="60" r="10" fill="#facc15"/>
+                    <circle cx="60" cy="92" r="10" fill="#a855f7"/>
+                    <circle cx="28" cy="60" r="10" fill="#ef4444"/>
+                    <circle cx="60" cy="60" r="14" fill="#00ffcc"/>
+                </svg>
+            `),
+            char_nexus: createImgFromSVG(`
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="60,8 108,36 108,84 60,112 12,84 12,36" fill="#090d16" stroke="#00ffea" stroke-width="5"/>
+                    <circle cx="60" cy="60" r="32" fill="#1e293b" stroke="#38bdf8" stroke-width="4"/>
+                    <rect x="40" y="52" width="40" height="15" rx="5" fill="#00ffea"/>
+                    <circle cx="60" cy="59" r="4" fill="#ffffff"/>
+                    <line x1="60" y1="12" x2="60" y2="28" stroke="#00ffea" stroke-width="4"/>
+                    <circle cx="34" cy="40" r="5" fill="#38bdf8"/>
+                    <circle cx="86" cy="40" r="5" fill="#38bdf8"/>
+                </svg>
+            `),
             enemy_scout: createImgFromSVG(`
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                     <polygon points="50,15 90,85 50,65 10,85" fill="#e11d48" stroke="#ffffff" stroke-width="4"/>
@@ -1757,28 +2079,73 @@
             { id: 'char_chronos', name: 'Chronos (Crononauta)', role: 'CONTROL TEMPORAL', desc: 'Manipulador de la física cuántica y tiempo.', passive: 'Al hacer DASH congela el tiempo un 70% durante 2.0 segundos.', icon: '⏳', sprite: sprites.char_chronos, stats: { hp: 80, spd: 7.2, dmg: 15, crit: 0.07, regen: 0, luck: 1.0 }, initWeapons: ['tesla'], cond: 'Alcanza el Mundo 2' },
             { id: 'char_berserk', name: 'Valkyria (Berserker)', role: 'BERSERKER FRENÉTICO', desc: 'Mayor daño y cadencia cuanto menor sea tu salud.', passive: 'A menos del 35% de vida: +60% daño y cura 4 HP cada 40 bajas.', icon: '⚡', sprite: sprites.char_berserk, stats: { hp: 95, spd: 7.2, dmg: 20, crit: 0.10, regen: 0, luck: 1.0 }, initWeapons: ['blaster'], cond: 'Desbloquea en Árbol de Talentos' },
             { id: 'char_lich', name: 'Cyber-Lich (Nigromante)', role: 'NIGROMANTE OSCURO', desc: 'Reanima los restos de enemigos caídos.', passive: '20% de probabilidad de generar un dron fantasma aliado al matar.', icon: '💀', sprite: sprites.char_lich, stats: { hp: 90, spd: 6.6, dmg: 15, crit: 0.05, regen: 0.4, luck: 1.0 }, initWeapons: ['tesla'], cond: 'Derrota a 2 Jefes' },
+            { id: 'char_zephyr', name: 'Zephyr (Vórtice)', role: 'ESPECIALISTA EN DASH', desc: 'Gran velocidad con Dash sónico continuo.', passive: 'Dash recarga en 0.9s, otorga +15% de esquiva innata y atraviesa causando daño.', icon: '🌪️', sprite: sprites.char_zephyr, stats: { hp: 75, spd: 8.8, dmg: 14, crit: 0.12, regen: 0, luck: 1.1 }, initWeapons: ['blades', 'blaster'], cond: 'Realiza 30 Dashes en una partida' },
+            { id: 'char_gauss', name: 'Dr. Gauss (Electrón)', role: 'AURA ELECTROSTÁTICA', desc: 'Control gravitatorio e inducción eléctrica.', passive: 'Aura electrostática activa desde el inicio (75px) y +80px de radio de imán.', icon: '🧲', sprite: sprites.char_gauss, stats: { hp: 90, spd: 6.4, dmg: 22, crit: 0.08, regen: 0, luck: 1.2 }, initWeapons: ['tesla', 'mines'], cond: 'Recolecta 1,500 gemas en una partida' },
+            { id: 'char_colossus', name: 'Artillero Coloso', role: 'DEMOLICIÓN PESADA', desc: 'Blindaje reforzado y artillería de minas.', passive: 'Inicia con +15% blindaje innato y lanza racimos dobles de minas de plasma.', icon: '🧱', sprite: sprites.char_colossus, stats: { hp: 150, spd: 5.2, dmg: 30, crit: 0.05, regen: 0.5, luck: 0.9 }, initWeapons: ['mines'], cond: 'Alcanza el nivel 20 en una partida' },
             { id: 'char_gambler', name: 'El Apostador (Secreto)', role: 'ALTO RIESGO Y SUERTE', desc: 'Azar cuántico extremo.', passive: '12% de probabilidad de JACKPOT (3.5x daño) y +60% de Suerte innata para rarezas.', icon: '🎲', sprite: sprites.char_gambler, stats: { hp: 75, spd: 7.4, dmg: 14, crit: 0.18, regen: 0, luck: 1.6 }, initWeapons: ['blaster', 'mines'], cond: 'Toca 7 veces el dado en el menú' },
-            { id: 'char_glitch', name: 'MissingNo (Anomalía)', role: 'ANOMALÍA CUÁNTICA', desc: 'Código corrupto y teletransporte caótico.', passive: 'Dispara salvas aleatorias y salta el espacio al recibir daño.', icon: '👾', sprite: sprites.char_glitch, stats: { hp: 120, spd: 8.0, dmg: 25, crit: 0.20, regen: 0.8, luck: 1.3 }, initWeapons: ['blaster', 'blades', 'tesla'], cond: 'Código secreto o anomalía' }
+            { id: 'char_kage', name: 'Kage (Sombra Oculta)', role: 'ASESINO CRÍTICO SECRETO', desc: 'Guerrero espectral oculto que danza al borde de la muerte.', passive: '35% de golpe crítico base. Los críticos tienen 40% de ejecutar enemigos normales.', icon: '🥷', sprite: sprites.char_kage, stats: { hp: 65, spd: 9.0, dmg: 26, crit: 0.35, regen: 0, luck: 1.4 }, initWeapons: ['blades', 'blaster'], cond: 'SECRETO: Sobrevive 45s con <25% HP', isSecret: true },
+            { id: 'char_omni', name: 'Archimago Cuántico', role: 'MAESTRO DEL ARSENAL', desc: 'Canalizador supremo de las cuatro armas.', passive: 'Inicia con las 4 armas activas desde el nivel 1 y +25% de cadencia global.', icon: '💠', sprite: sprites.char_omni, stats: { hp: 85, spd: 7.0, dmg: 18, crit: 0.10, regen: 0.2, luck: 1.5 }, initWeapons: ['blaster', 'blades', 'tesla', 'mines'], cond: 'SECRETO: Ten las 4 armas activas a la vez', isSecret: true },
+            { id: 'char_glitch', name: 'MissingNo (Anomalía)', role: 'ANOMALÍA CUÁNTICA', desc: 'Código corrupto y teletransporte caótico.', passive: 'Dispara salvas aleatorias y salta el espacio al recibir daño.', icon: '👾', sprite: sprites.char_glitch, stats: { hp: 120, spd: 8.0, dmg: 25, crit: 0.20, regen: 0.8, luck: 1.3 }, initWeapons: ['blaster', 'blades', 'tesla'], cond: 'Código secreto o anomalía' },
+            { id: 'char_nexus', name: 'NEXUS-9 (Androide)', role: 'ANDROIDE TÁCTICO', desc: 'Chasis cibernético con nanoblindaje y escudo iónico.', passive: 'Inicia con +25 HP de Escudo Ionizado auto-recargable, gran velocidad y pernos cargados.', icon: '🤖', sprite: sprites.char_nexus, stats: { hp: 125, spd: 7.2, dmg: 22, crit: 0.10, regen: 0.5, luck: 1.2 }, initWeapons: ['blaster', 'tesla'], cond: 'Desbloquear en Tienda Cuántica (3,500 💎)' }
         ];
 
         /* ==========================================================================
-           4. PERSISTENCIA Y MATRIZ NEURAL
+           4. PERSISTENCIA Y TIENDA CUÁNTICA
            ========================================================================== */
         let saveData = JSON.parse(localStorage.getItem('megabonk_ultra_data_v4')) || {
             esencias: 0,
-            unlockedNodes: ['core'],
-            dynamicNodes: [],
             unlockedChars: ['char_base'],
             bestTime: 0,
-            bestKills: 0
+            bestKills: 0,
+            shopUpgrades: {
+                hp: 0, dmg: 0, spd: 0, luck: 0, mag: 0, cdr: 0, rerolls: 0, revives: 0, extraSlots: 0,
+                mortar: false, laserDrone: false, nexusBought: false
+            },
+            achievements: {}
         };
+
+        // Migración y reembolso automático de puntos del antiguo árbol de talentos a cristales
+        if (saveData.unlockedNodes && Array.isArray(saveData.unlockedNodes)) {
+            let refund = 0;
+            saveData.unlockedNodes.forEach(nId => {
+                if (!nId || nId === 'core') return;
+                if (nId.includes('rev_tier_')) {
+                    refund += 4500;
+                } else if (nId.includes('_tier_')) {
+                    const num = parseInt(nId.split('_tier_')[1]) || 1;
+                    refund += num * 350;
+                } else {
+                    refund += 300;
+                }
+            });
+            if (refund > 0) {
+                saveData.esencias = (saveData.esencias || 0) + refund;
+            }
+            delete saveData.unlockedNodes;
+            delete saveData.dynamicNodes;
+        }
+
+        if (!saveData.shopUpgrades) {
+            saveData.shopUpgrades = {
+                hp: 0, dmg: 0, spd: 0, luck: 0, mag: 0, cdr: 0, rerolls: 0, revives: 0, extraSlots: 0,
+                mortar: false, laserDrone: false, nexusBought: false
+            };
+        }
+        if (!saveData.achievements) {
+            saveData.achievements = {};
+        }
+        if (saveData.shopUpgrades.nexusBought && !saveData.unlockedChars.includes('char_nexus')) {
+            saveData.unlockedChars.push('char_nexus');
+        }
 
         function saveGame() {
             localStorage.setItem('megabonk_ultra_data_v4', JSON.stringify(saveData));
             const cCount = document.getElementById('main-crystals-count');
             if (cCount) cCount.innerText = saveData.esencias.toLocaleString();
-            const tCount = document.getElementById('tree-crystals-count');
-            if (tCount) tCount.innerText = saveData.esencias.toLocaleString();
+            const sCount = document.getElementById('shop-crystals-count');
+            if (sCount) sCount.innerText = saveData.esencias.toLocaleString();
+            const aCount = document.getElementById('ach-crystals-count');
+            if (aCount) aCount.innerText = saveData.esencias.toLocaleString();
 
             const bTimeMin = Math.floor((saveData.bestTime || 0) / 60);
             const bTimeSec = Math.floor((saveData.bestTime || 0) % 60);
@@ -1786,6 +2153,8 @@
             if (bTimeEl) bTimeEl.innerText = `${String(bTimeMin).padStart(2, '0')}:${String(bTimeSec).padStart(2, '0')}`;
             const bKillsEl = document.getElementById('main-best-kills');
             if (bKillsEl) bKillsEl.innerText = (saveData.bestKills || 0).toLocaleString();
+
+            updateAchievementsBadge();
         }
 
         function hardReset() {
@@ -1805,9 +2174,12 @@
             if (input.toLowerCase() === 'ferrvn') {
                 saveData.esencias = 999999;
                 saveData.unlockedChars = charsData.map(c => c.id);
-                saveData.unlockedNodes = getAllNodes().map(s => s.id);
+                saveData.shopUpgrades = {
+                    hp: 10, dmg: 10, spd: 8, luck: 8, mag: 8, cdr: 8, rerolls: 4, revives: 2, extraSlots: 2,
+                    mortar: true, laserDrone: true, nexusBought: true
+                };
                 saveGame();
-                alert("¡MODO ADMINISTRADOR FERRVN ACTIVADO! Todo desbloqueado.");
+                alert("¡MODO ADMINISTRADOR FERRVN ACTIVADO! Todo desbloqueado y tienda completada.");
                 location.reload();
                 return;
             }
@@ -1850,323 +2222,411 @@
             }
         }
 
-        const STAT_DEFS = [
-            { sector: 0, statKey: 'dmg', name: 'Plasma Concentrado', stat: 'Daño Base Global', val: 5, sym: '', icon: 'D', color: '#ff0055' },
-            { sector: 1, statKey: 'spd', name: 'Propulsión Vectorial', stat: 'Velocidad de Movimiento', val: 2.5, sym: '%', icon: 'S', color: '#00ffcc' },
-            { sector: 2, statKey: 'mag', name: 'Campo Gravitatorio', stat: 'Radio Imán', val: 20, sym: 'px', icon: 'M', color: '#38bdf8' },
-            { sector: 3, statKey: 'arm', name: 'Blindaje Nanotec', stat: 'Salud Máxima', val: 12, sym: '', icon: 'A', color: '#f1c40f' },
-            { sector: 4, statKey: 'cri', name: 'Matriz de Precisión', stat: 'Probabilidad Crítica', val: 1.0, sym: '%', icon: 'C', color: '#a855f7' },
-            { sector: 5, statKey: 'cdr', name: 'Superconductores', stat: 'Vel. de Recarga', val: 2.5, sym: '%', icon: 'R', color: '#2ecc71' },
-            { sector: 6, statKey: 'reg', name: 'Nanocélulas Vivas', stat: 'Regeneración HP/s', val: 0.4, sym: '', icon: 'H', color: '#10b981' },
-            { sector: 7, statKey: 'xp',  name: 'Analizador Cuántico', stat: 'Multiplicador EXP', val: 15, sym: '%', icon: 'X', color: '#f59e0b' }
+        /* ==========================================================================
+           5. TIENDA CUÁNTICA: MATRIZ DE NÚCLEO, ARSENAL Y CHASIS NEXUS-9
+           ========================================================================== */
+        const SHOP_STATS_CONFIG = [
+            { key: 'hp', name: 'Blindaje de Titanio', stat: '+15 Salud Máxima / nivel', icon: '🛡️', maxLevel: 10, baseCost: 150, mult: 1.55, formatBonus: lvl => `+${lvl * 15} HP` },
+            { key: 'dmg', name: 'Inyectores de Plasma', stat: '+5% Daño Global / nivel', icon: '⚔️', maxLevel: 10, baseCost: 200, mult: 1.6, formatBonus: lvl => `+${lvl * 5}% Daño` },
+            { key: 'spd', name: 'Propulsores Iónicos', stat: '+3% Velocidad / nivel', icon: '⚡', maxLevel: 8, baseCost: 180, mult: 1.5, formatBonus: lvl => `+${lvl * 3}% Vel.` },
+            { key: 'luck', name: 'Algoritmo de Fortuna', stat: '+5% Suerte Cuántica / nivel', icon: '🍀', maxLevel: 8, baseCost: 250, mult: 1.6, formatBonus: lvl => `+${lvl * 5}% Suerte` },
+            { key: 'mag', name: 'Acelerador Gravitatorio', stat: '+25px Radio de Imán / nivel', icon: '🧲', maxLevel: 8, baseCost: 120, mult: 1.45, formatBonus: lvl => `+${lvl * 25}px Imán` },
+            { key: 'cdr', name: 'Superconductores', stat: '+4% Cadencia / Enfriamiento / nivel', icon: '⏱️', maxLevel: 8, baseCost: 280, mult: 1.6, formatBonus: lvl => `+${lvl * 4}% CDR` },
+            { key: 'rerolls', name: 'Recalibradores Cuánticos', stat: '+1 Reroll Inicial / nivel', icon: '🎲', maxLevel: 4, baseCost: 400, mult: 2.0, formatBonus: lvl => `+${lvl} Reroll(s)` },
+            { key: 'revives', name: 'Protocolo Lázaro', stat: '+1 Resurrección (50% HP) / nivel', icon: '♥', maxLevel: 2, baseCost: 2500, mult: 2.5, formatBonus: lvl => `+${lvl} Revive(s)` }
         ];
 
-        let baseTree = [
-            { id: 'core', name: 'Núcleo Cuántico', stat: 'Núcleo de Inicio', desc: 'Arranque del sistema neural.', cost: 0, x: 0, y: 0, req: [], icon: '⭐', tier: 0, statKey: 'core' }
-        ];
-
-        STAT_DEFS.forEach((branch, bIdx) => {
-            const angle = (Math.PI * 2 / STAT_DEFS.length) * bIdx;
-            let prevId = 'core';
-            for (let i = 1; i <= 3; i++) {
-                const id = `${branch.statKey}_init_${i}`;
-                baseTree.push({
-                    id: id,
-                    sector: branch.sector,
-                    name: `${branch.name} Tier ${i}`,
-                    stat: branch.stat,
-                    statKey: branch.statKey,
-                    val: branch.val * i,
-                    sym: branch.sym,
-                    desc: `+${(branch.val * i).toFixed(1)}${branch.sym} ${branch.stat}`,
-                    cost: Math.floor(120 * Math.pow(i, 1.8)),
-                    x: Math.cos(angle) * (150 * i),
-                    y: Math.sin(angle) * (150 * i),
-                    req: [prevId],
-                    icon: branch.icon,
-                    tier: i
-                });
-                prevId = id;
+        const SHOP_ITEMS_CONFIG = [
+            {
+                key: 'mortar',
+                name: 'Cañón Mortero de Vacío',
+                category: 'arsenal',
+                icon: '🚀',
+                cost: 2500,
+                desc: 'Desbloquea el Cañón Mortero para que pueda salir en todas tus partidas futuras. Lanza obuses parabólicos que causan implosiones masivas de área.',
+                isUnlocked: () => !!saveData.shopUpgrades.mortar,
+                unlock: () => { saveData.shopUpgrades.mortar = true; }
+            },
+            {
+                key: 'laserDrone',
+                name: 'Dron Láser Orbital',
+                category: 'arsenal',
+                icon: '🛸',
+                cost: 3000,
+                desc: 'Desbloquea el Dron Láser de escolta. Emite un haz continuo de plasma fundidor de élites y jefes.',
+                isUnlocked: () => !!saveData.shopUpgrades.laserDrone,
+                unlock: () => { saveData.shopUpgrades.laserDrone = true; }
+            },
+            {
+                key: 'extraSlot1',
+                name: 'Bahía de Armas Expandida (Slot 5)',
+                category: 'arsenal',
+                icon: '🎒',
+                cost: 3500,
+                desc: 'Permite equipar hasta 5 armas activas simultáneamente en combate (el límite base es 4).',
+                isUnlocked: () => (saveData.shopUpgrades.extraSlots || 0) >= 1,
+                unlock: () => { saveData.shopUpgrades.extraSlots = Math.max(saveData.shopUpgrades.extraSlots || 0, 1); }
+            },
+            {
+                key: 'extraSlot2',
+                name: 'Bahía de Armas Suprema (Slot 6)',
+                category: 'arsenal',
+                icon: '🔱',
+                cost: 6000,
+                desc: 'Permite equipar hasta 6 armas activas simultáneamente en combate para forjar arsenales incomparables.',
+                req: () => (saveData.shopUpgrades.extraSlots || 0) >= 1,
+                isUnlocked: () => (saveData.shopUpgrades.extraSlots || 0) >= 2,
+                unlock: () => { saveData.shopUpgrades.extraSlots = 2; }
             }
-        });
+        ];
 
-        let prevRev = 'core';
-        for (let i = 1; i <= 3; i++) {
-            baseTree.push({
-                id: `rev_init_${i}`,
-                sector: 8,
-                name: `Protocolo Lázaro v${i}.0`,
-                stat: 'Resurrección en Combate',
-                statKey: 'rev',
-                desc: `+1 Resurrección de Combate (Cura 50% HP)`,
-                cost: 3000 * Math.pow(4, i - 1),
-                x: 0,
-                y: -160 * i,
-                req: [prevRev],
-                icon: '♥',
-                tier: i
-            });
-            prevRev = `rev_init_${i}`;
+        let activeShopTab = 'stats';
+
+        function openShop() {
+            gameState = 'shop';
+            switchScreen('screen-shop');
+            renderShop();
         }
 
-        function getAllNodes() {
-            return [...baseTree, ...(saveData.dynamicNodes || [])];
+        function closeShop() {
+            gameState = 'menu';
+            switchScreen('screen-main');
         }
 
-        function getNodeById(id) {
-            return getAllNodes().find(n => n.id === id);
+        function switchShopTab(tab) {
+            activeShopTab = tab;
+            document.querySelectorAll('.shop-tab').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.shop-content-panel').forEach(p => p.classList.remove('active'));
+
+            const btn = document.getElementById(`tab-btn-${tab}`);
+            if (btn) btn.classList.add('active');
+            const panel = document.getElementById(`shop-tab-${tab}`);
+            if (panel) panel.classList.add('active');
+
+            renderShop();
         }
 
-        function expandSkillTree(purchasedNode) {
-            if (!saveData.dynamicNodes) saveData.dynamicNodes = [];
-            const all = getAllNodes();
-            const existingChildren = all.filter(n => n.req.includes(purchasedNode.id));
-            if (existingChildren.length >= 2) return;
+        function renderShop() {
+            const sCount = document.getElementById('shop-crystals-count');
+            if (sCount) sCount.innerText = (saveData.esencias || 0).toLocaleString();
 
-            const parentAngle = Math.atan2(purchasedNode.y, purchasedNode.x);
-            const nextTier = (purchasedNode.tier || 1) + 1;
-            const sectorIdx = purchasedNode.sector !== undefined ? purchasedNode.sector : Math.floor(((parentAngle + Math.PI * 2) % (Math.PI * 2)) / (Math.PI / 4));
-            const sectorCenterAngle = (Math.PI * 2 / 8) * sectorIdx;
-            const spreads = [-0.18, 0.18];
+            // 1. Stats Grid
+            const statsContainer = document.getElementById('shop-stats-grid');
+            if (statsContainer) {
+                statsContainer.innerHTML = '';
+                SHOP_STATS_CONFIG.forEach(item => {
+                    const curLvl = saveData.shopUpgrades[item.key] || 0;
+                    const isMax = curLvl >= item.maxLevel;
+                    const nextCost = isMax ? 0 : Math.round(item.baseCost * Math.pow(item.mult, curLvl));
+                    const canAfford = !isMax && (saveData.esencias >= nextCost);
 
-            spreads.forEach((spread, sIdx) => {
-                const targetAngle = sectorCenterAngle + spread;
-                let candDist = Math.hypot(purchasedNode.x, purchasedNode.y) + 150;
-                let candX = Math.cos(targetAngle) * candDist;
-                let candY = Math.sin(targetAngle) * candDist;
+                    const card = document.createElement('div');
+                    card.className = 'shop-card';
+                    card.innerHTML = `
+                        <div>
+                            <div class="shop-card-top">
+                                <div class="shop-card-icon">${item.icon}</div>
+                                <div>
+                                    <div class="shop-card-title">${item.name}</div>
+                                    <div class="shop-card-level">Nivel ${curLvl} / ${item.maxLevel} (${item.formatBonus(curLvl)})</div>
+                                </div>
+                            </div>
+                            <div class="shop-card-desc">${item.stat}</div>
+                            <div class="shop-level-bar">
+                                <div class="shop-level-fill" style="width: ${(curLvl / item.maxLevel) * 100}%"></div>
+                            </div>
+                        </div>
+                        <button class="shop-buy-btn" ${(!canAfford || isMax) ? 'disabled' : ''} onclick="buyShopStat('${item.key}')">
+                            ${isMax ? '✅ NIVEL MÁXIMO' : `💎 ${nextCost.toLocaleString()} MEJORAR`}
+                        </button>
+                    `;
+                    statsContainer.appendChild(card);
+                });
+            }
 
-                let tries = 0;
-                while (tries < 10) {
-                    const tooClose = all.some(n => Math.hypot(candX - n.x, candY - n.y) < 105);
-                    if (!tooClose) break;
-                    candDist += 60;
-                    candX = Math.cos(targetAngle) * candDist;
-                    candY = Math.sin(targetAngle) * candDist;
-                    tries++;
+            // 2. Arsenal Grid
+            const arsenalContainer = document.getElementById('shop-arsenal-grid');
+            if (arsenalContainer) {
+                arsenalContainer.innerHTML = '';
+                SHOP_ITEMS_CONFIG.forEach(item => {
+                    const unlocked = item.isUnlocked();
+                    const reqMet = item.req ? item.req() : true;
+                    const canAfford = !unlocked && reqMet && (saveData.esencias >= item.cost);
+
+                    const card = document.createElement('div');
+                    card.className = 'shop-card';
+                    card.innerHTML = `
+                        <div>
+                            <div class="shop-card-top">
+                                <div class="shop-card-icon">${item.icon}</div>
+                                <div>
+                                    <div class="shop-card-title">${item.name}</div>
+                                    <div class="shop-card-level" style="color:${unlocked ? 'var(--primary)' : 'var(--gold)'};">
+                                        ${unlocked ? '✅ ADQUIRIDO' : (reqMet ? `Coste: ${item.cost.toLocaleString()} 💎` : '🔒 REQUIERE MEJORA PREVIA')}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="shop-card-desc">${item.desc}</div>
+                        </div>
+                        <button class="shop-buy-btn" ${(!canAfford || unlocked || !reqMet) ? 'disabled' : ''} onclick="buyShopItem('${item.key}')">
+                            ${unlocked ? '✓ EN ARSENAL' : (!reqMet ? '🔒 BLOQUEADO' : `💎 ${item.cost.toLocaleString()} ADQUIRIR`)}
+                        </button>
+                    `;
+                    arsenalContainer.appendChild(card);
+                });
+            }
+
+            // 3. Chassis NEXUS-9 View
+            const chassisContainer = document.getElementById('shop-chassis-view');
+            if (chassisContainer) {
+                const bought = !!saveData.shopUpgrades.nexusBought;
+                const canAfford = !bought && (saveData.esencias >= 3500);
+                chassisContainer.innerHTML = `
+                    <div style="width: 140px; height: 140px; background: rgba(0, 255, 234, 0.08); border: 2px solid var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 25px rgba(0, 255, 234, 0.3);">
+                        <img src="${sprites.char_nexus.src}" style="width: 110px; height: 110px;" alt="NEXUS-9">
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 22px; font-weight: 900; color: #fff; display: flex; align-items: center; gap: 10px;">
+                            NEXUS-9 (Androide Táctico)
+                            <span style="font-size: 11px; background: var(--primary); color: #030307; padding: 2px 8px; border-radius: 4px; font-weight: 900;">EXCLUSIVO TIENDA</span>
+                        </div>
+                        <div style="color: var(--gold); font-size: 13px; font-weight: bold; margin: 4px 0 10px 0;">CHASIS CIBERNÉTICO PESADO</div>
+                        <div style="font-size: 13px; color: #cbd5e1; line-height: 1.5; margin-bottom: 15px;">
+                            Equipado con nanoblindaje auto-regenerativo. Inicia con <b>+25 HP de Escudo Ionizado</b> recargable, 125 HP base, 22 daño base y proyectiles ionizados de alta penetración. Armas iniciales: Plasma Blaster y Arco Tesla.
+                        </div>
+                        <div style="display: flex; gap: 20px; font-size: 13px; color: #94a3b8; margin-bottom: 18px;">
+                            <span>💖 HP: <b style="color:#fff;">125</b></span>
+                            <span>⚡ Vel: <b style="color:#fff;">7.2</b></span>
+                            <span>⚔️ Daño: <b style="color:#fff;">22</b></span>
+                            <span>🎯 Crítico: <b style="color:#fff;">10%</b></span>
+                            <span>🛡️ Escudo: <b style="color:#00ffea;">25 HP</b></span>
+                        </div>
+                        <button class="shop-buy-btn" style="max-width: 300px;" ${(!canAfford || bought) ? 'disabled' : ''} onclick="buyNexusChassis()">
+                            ${bought ? '✓ ADQUIRIDO (ELIGE EN INCURSIÓN)' : '💎 3,500 ADQUIRIR CHASIS'}
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function buyShopStat(key) {
+            const item = SHOP_STATS_CONFIG.find(s => s.key === key);
+            if (!item) return;
+            const curLvl = saveData.shopUpgrades[key] || 0;
+            if (curLvl >= item.maxLevel) return;
+            const cost = Math.round(item.baseCost * Math.pow(item.mult, curLvl));
+            if (saveData.esencias >= cost) {
+                saveData.esencias -= cost;
+                saveData.shopUpgrades[key] = curLvl + 1;
+                saveGame();
+                AudioSys.playLevelUp();
+                renderShop();
+            }
+        }
+
+        function buyShopItem(key) {
+            const item = SHOP_ITEMS_CONFIG.find(i => i.key === key);
+            if (!item || item.isUnlocked()) return;
+            if (item.req && !item.req()) return;
+            if (saveData.esencias >= item.cost) {
+                saveData.esencias -= item.cost;
+                item.unlock();
+                saveGame();
+                AudioSys.playLevelUp();
+                renderShop();
+            }
+        }
+
+        function buyNexusChassis() {
+            if (saveData.shopUpgrades.nexusBought) return;
+            if (saveData.esencias >= 3500) {
+                saveData.esencias -= 3500;
+                saveData.shopUpgrades.nexusBought = true;
+                if (!saveData.unlockedChars.includes('char_nexus')) {
+                    saveData.unlockedChars.push('char_nexus');
                 }
-
-                const branchDef = STAT_DEFS[sectorIdx % STAT_DEFS.length];
-                const newId = `dyn_${purchasedNode.id}_${sIdx + 1}_${Math.floor(Math.random() * 9000 + 1000)}`;
-
-                const newNode = {
-                    id: newId,
-                    sector: sectorIdx,
-                    name: `${branchDef.name} Tier ${nextTier}`,
-                    stat: branchDef.stat,
-                    statKey: branchDef.statKey,
-                    val: branchDef.val * nextTier,
-                    sym: branchDef.sym,
-                    desc: `+${(branchDef.val * nextTier).toFixed(1)}${branchDef.sym} ${branchDef.stat}`,
-                    cost: Math.floor(140 * Math.pow(nextTier, 1.9)),
-                    x: candX,
-                    y: candY,
-                    req: [purchasedNode.id],
-                    icon: branchDef.icon,
-                    tier: nextTier
-                };
-
-                saveData.dynamicNodes.push(newNode);
-                all.push(newNode);
-            });
+                saveGame();
+                AudioSys.playLevelUp();
+                renderShop();
+                alert("¡CHASIS NEXUS-9 ADQUIRIDO! Ya puedes seleccionarlo para desplegarlo en la arena.");
+            }
         }
 
-        function respecTree() {
-            if (saveData.unlockedNodes.length <= 1) return;
-            let refund = 0;
-            saveData.unlockedNodes.forEach(id => {
-                const node = getNodeById(id);
-                if (node && node.id !== 'core') refund += node.cost;
-            });
-            saveData.esencias += refund;
-            saveData.unlockedNodes = ['core'];
-            saveGame();
-            AudioSys.playLevelUp();
-            drawTree();
-            alert(`Puntos reembolsados con éxito. Has recuperado ${refund.toLocaleString()} Cristales.`);
+        function getActiveWeaponsCount(p) {
+            if (!p || !p.weapons) return 0;
+            let count = 0;
+            for (let k in p.weapons) {
+                if (p.weapons[k] && p.weapons[k].active) count++;
+            }
+            return count;
+        }
+
+        function getMaxWeaponsSlots(p) {
+            const extra = (saveData.shopUpgrades && saveData.shopUpgrades.extraSlots) ? saveData.shopUpgrades.extraSlots : 0;
+            return 4 + extra;
         }
 
         /* ==========================================================================
-           5. RENDERIZADO DEL ÁRBOL
+           LOGROS Y SISTEMA DE TROFEOS RECLAMABLES (16 LOGROS)
            ========================================================================== */
-        const treeCanvas = document.getElementById('tree-canvas');
-        const treeCtx = treeCanvas.getContext('2d');
-        let treeCam = { x: 0, y: 0, zoom: 0.85 };
-        let isDraggingTree = false;
-        let lastMousePos = { x: 0, y: 0 };
-        let hoveredNode = null;
+        const ACHIEVEMENTS_CONFIG = [
+            { id: 'ach_first_blood', name: 'Primera Sangre', icon: '🩸', desc: 'Elimina a tu primer enemigo en combate.', reward: 100, isMet: (s, run) => (run.kills || 0) >= 1 },
+            { id: 'ach_swarm_hunter', name: 'Cazador de Enjambres', icon: '⚡', desc: 'Elimina a 500 enemigos en una sola partida.', reward: 400, isMet: (s, run) => (run.kills || 0) >= 500 },
+            { id: 'ach_carnage', name: 'Carnicería Cibernética', icon: '💀', desc: 'Elimina a 1,500 enemigos en una sola partida.', reward: 800, isMet: (s, run) => (run.kills || 0) >= 1500 },
+            { id: 'ach_survivor_5', name: 'Superviviente Tenaz', icon: '⏱️', desc: 'Sobrevive 5 minutos en cualquier mundo.', reward: 300, isMet: (s, run) => (run.time || 0) >= 300 },
+            { id: 'ach_veteran_10', name: 'Veterano de la Arena', icon: '🛡️', desc: 'Sobrevive 10 minutos de asedio ininterrumpido.', reward: 600, isMet: (s, run) => (run.time || 0) >= 600 },
+            { id: 'ach_legend_20', name: 'Leyenda Viviente', icon: '👑', desc: 'Alcanza los 20 minutos de supervivencia dimensional.', reward: 1500, isMet: (s, run) => (run.time || 0) >= 1200 },
+            { id: 'ach_titan_slayer', name: 'Mata-Titanes', icon: '🏆', desc: 'Derrota al primer Titán de Mundo.', reward: 1200, isMet: (s, run) => (run.bosses || 0) >= 1 },
+            { id: 'ach_world_2', name: 'Salto Cuántico', icon: '🌀', desc: 'Atraviesa el portal y alcanza el Mundo 2.', reward: 1000, isMet: (s, run) => (run.world || 0) >= 1 },
+            { id: 'ach_world_3', name: 'Singularidad Absoluta', icon: '🌌', desc: 'Alcanza el Mundo 3: Singularity Void.', reward: 2000, isMet: (s, run) => (run.world || 0) >= 2 },
+            { id: 'ach_arsenal_4', name: 'Arsenal Completo', icon: '🔫', desc: 'Porta 4 o más armas activas simultáneamente.', reward: 500, isMet: (s, run) => (run.activeWeapons || 0) >= 4 },
+            { id: 'ach_divine_card', name: 'Toque de la Fortuna', icon: '✨', desc: 'Elige una mejora de rareza Divina.', reward: 800, isMet: (s, run) => !!run.gotDivine },
+            { id: 'ach_gambler_jackpot', name: 'Golpe de Suerte', icon: '🎲', desc: 'Consigue un JACKPOT crítico x3.5 con El Apostador.', reward: 500, isMet: (s, run) => !!run.gotJackpot },
+            { id: 'ach_dash_master', name: 'Danza Evasiva', icon: '💨', desc: 'Realiza 40 dashes tácticos en una partida.', reward: 400, isMet: (s, run) => (run.dashes || 0) >= 40 },
+            { id: 'ach_combo_god', name: 'Dios del Caos', icon: '🔥', desc: 'Alcanza una racha de combo de x100 bajas.', reward: 750, isMet: (s, run) => (run.maxCombo || 0) >= 100 },
+            { id: 'ach_level_25', name: 'Nivel Élite', icon: '⭐', desc: 'Alcanza el nivel 25 en una sola partida.', reward: 1000, isMet: (s, run) => (run.level || 0) >= 25 },
+            { id: 'ach_crystal_tycoon', name: 'Magnate de Esencias', icon: '💎', desc: 'Acumula 15,000 cristales en tu cuenta.', reward: 1500, isMet: (s, run) => (s.esencias || 0) >= 15000 }
+        ];
 
-        function initTreeEvents() {
-            const wrapper = document.getElementById('tree-wrapper');
-            wrapper.addEventListener('mousedown', e => {
-                isDraggingTree = true;
-                lastMousePos = { x: e.clientX, y: e.clientY };
-            });
-            window.addEventListener('mousemove', e => {
-                if (gameState !== 'skilltree') return;
-                if (isDraggingTree) {
-                    treeCam.x += (e.clientX - lastMousePos.x) / treeCam.zoom;
-                    treeCam.y += (e.clientY - lastMousePos.y) / treeCam.zoom;
-                    lastMousePos = { x: e.clientX, y: e.clientY };
-                    drawTree();
+        let maxComboThisRun = 0;
+        let gotDivineThisRun = false;
+        let gotJackpotThisRun = false;
+
+        function openAchievements() {
+            gameState = 'achievements';
+            switchScreen('screen-achievements');
+            renderAchievements();
+        }
+
+        function closeAchievements() {
+            gameState = 'menu';
+            switchScreen('screen-main');
+        }
+
+        function renderAchievements() {
+            const aCount = document.getElementById('ach-crystals-count');
+            if (aCount) aCount.innerText = (saveData.esencias || 0).toLocaleString();
+
+            const container = document.getElementById('achievements-list');
+            if (!container) return;
+            container.innerHTML = '';
+
+            let unlockedCount = 0;
+            let claimedCount = 0;
+
+            ACHIEVEMENTS_CONFIG.forEach(ach => {
+                const data = saveData.achievements[ach.id] || { unlocked: false, claimed: false };
+                if (data.unlocked) unlockedCount++;
+                if (data.claimed) claimedCount++;
+
+                const card = document.createElement('div');
+                card.className = `ach-card ${data.unlocked ? 'unlocked' : ''} ${data.claimed ? 'claimed' : ''}`;
+                
+                let actionBtnHTML = '';
+                if (data.claimed) {
+                    actionBtnHTML = `<span class="ach-claimed-badge">✓ RECLAMADO</span>`;
+                } else if (data.unlocked) {
+                    actionBtnHTML = `<button class="ach-claim-btn" onclick="claimAchievement('${ach.id}')">💎 RECLAMAR +${ach.reward}</button>`;
                 } else {
-                    checkHoverNode(e);
+                    actionBtnHTML = `<span style="font-size:11px; color:#64748b; font-weight:700;">BLOQUEADO</span>`;
                 }
-            });
-            window.addEventListener('mouseup', () => isDraggingTree = false);
-            wrapper.addEventListener('wheel', e => {
-                e.preventDefault();
-                const zoomFactor = e.deltaY < 0 ? 1.12 : 0.88;
-                treeCam.zoom = Math.max(0.25, Math.min(2.5, treeCam.zoom * zoomFactor));
-                drawTree();
-            });
-            wrapper.addEventListener('click', e => {
-                const rect = wrapper.getBoundingClientRect();
-                const clickX = (e.clientX - rect.left - wrapper.clientWidth / 2) / treeCam.zoom - treeCam.x;
-                const clickY = (e.clientY - rect.top - wrapper.clientHeight / 2) / treeCam.zoom - treeCam.y;
 
-                getAllNodes().forEach(skill => {
-                    if (Math.hypot(clickX - skill.x, clickY - skill.y) < 26) {
-                        const isUnlocked = saveData.unlockedNodes.includes(skill.id);
-                        const reqsMet = skill.req.every(r => saveData.unlockedNodes.includes(r));
-                        if (!isUnlocked && reqsMet && saveData.esencias >= skill.cost) {
-                            saveData.esencias -= skill.cost;
-                            saveData.unlockedNodes.push(skill.id);
-                            expandSkillTree(skill);
-                            saveGame();
-                            AudioSys.playLevelUp();
-                            drawTree();
-                            updateTooltip(skill);
-                        }
-                    }
-                });
+                card.innerHTML = `
+                    <div class="ach-icon">${ach.icon}</div>
+                    <div class="ach-info">
+                        <div class="ach-title">${ach.name}</div>
+                        <div class="ach-desc">${ach.desc}</div>
+                        <div class="ach-reward">+${ach.reward} 💎 Cristales</div>
+                    </div>
+                    <div>${actionBtnHTML}</div>
+                `;
+                container.appendChild(card);
             });
+
+            const summary = document.getElementById('achievements-summary');
+            if (summary) {
+                summary.innerHTML = `🏆 Progreso de Logros: <b>${unlockedCount} / ${ACHIEVEMENTS_CONFIG.length}</b> Desbloqueados (${claimedCount} Recompensas Reclamadas)`;
+            }
+
+            updateAchievementsBadge();
         }
 
-        function checkHoverNode(e) {
-            const wrapper = document.getElementById('tree-wrapper');
-            const rect = wrapper.getBoundingClientRect();
-            const mouseX = (e.clientX - rect.left - wrapper.clientWidth / 2) / treeCam.zoom - treeCam.x;
-            const mouseY = (e.clientY - rect.top - wrapper.clientHeight / 2) / treeCam.zoom - treeCam.y;
-
-            let found = null;
-            const all = getAllNodes();
-            for (let i = 0; i < all.length; i++) {
-                if (Math.hypot(mouseX - all[i].x, mouseY - all[i].y) < 26) {
-                    found = all[i];
-                    break;
-                }
-            }
-
-            if (found !== hoveredNode) {
-                hoveredNode = found;
-                updateTooltip(hoveredNode);
-                drawTree();
-            }
-        }
-
-        function updateTooltip(node) {
-            const card = document.getElementById('node-tooltip-card');
-            if (!node) {
-                card.classList.remove('visible');
-                return;
-            }
-
-            const isUnlocked = saveData.unlockedNodes.includes(node.id);
-            const reqsMet = node.req.every(r => saveData.unlockedNodes.includes(r));
-            const canAfford = saveData.esencias >= node.cost;
-
-            document.getElementById('tt-title').innerText = node.name;
-            document.getElementById('tt-stat').innerText = `MODIFICA: ${node.stat.toUpperCase()}`;
-            document.getElementById('tt-desc').innerText = node.desc;
-            document.getElementById('tt-cost').innerText = `Coste: ${node.cost.toLocaleString()} Cristales 💎`;
-
-            const statusEl = document.getElementById('tt-status');
-            if (isUnlocked) {
-                statusEl.innerText = '✅ INSTALADO Y OPERATIVO';
-                statusEl.style.color = '#00ffcc';
-            } else if (reqsMet && canAfford) {
-                statusEl.innerText = '⚡ DISPONIBLE (Haz Clic)';
-                statusEl.style.color = '#f1c40f';
-            } else if (reqsMet && !canAfford) {
-                statusEl.innerText = '❌ CRISTALES INSUFICIENTES';
-                statusEl.style.color = '#ff0055';
+        function updateAchievementsBadge() {
+            const badge = document.getElementById('main-menu-ach-badge');
+            if (!badge) return;
+            let claimableCount = 0;
+            ACHIEVEMENTS_CONFIG.forEach(ach => {
+                const data = saveData.achievements[ach.id];
+                if (data && data.unlocked && !data.claimed) claimableCount++;
+            });
+            if (claimableCount > 0) {
+                badge.innerText = `¡${claimableCount} POR RECLAMAR!`;
+                badge.style.background = '#f59e0b';
+                badge.style.color = '#000';
             } else {
-                statusEl.innerText = '🔒 BLOQUEADO (Requiere nodo previo)';
-                statusEl.style.color = '#888';
+                badge.innerText = 'LOGROS';
+                badge.style.background = 'rgba(255,255,255,0.1)';
+                badge.style.color = '#aaa';
             }
-
-            card.classList.add('visible');
         }
 
-        function drawTree() {
-            const w = treeCanvas.width = treeCanvas.parentElement.clientWidth;
-            const h = treeCanvas.height = treeCanvas.parentElement.clientHeight;
+        function claimAchievement(id) {
+            const ach = ACHIEVEMENTS_CONFIG.find(a => a.id === id);
+            if (!ach) return;
+            const data = saveData.achievements[id];
+            if (data && data.unlocked && !data.claimed) {
+                data.claimed = true;
+                saveData.esencias = (saveData.esencias || 0) + ach.reward;
+                saveGame();
+                AudioSys.playLevelUp();
+                renderAchievements();
+            }
+        }
 
-            treeCtx.fillStyle = '#04050a';
-            treeCtx.fillRect(0, 0, w, h);
+        function showAchievementToast(ach) {
+            let container = document.getElementById('achievement-toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'achievement-toast-container';
+                container.style.cssText = 'position: fixed; top: 25px; left: 50%; transform: translateX(-50%); z-index: 99999; display: flex; flex-direction: column; gap: 10px; pointer-events: none;';
+                document.body.appendChild(container);
+            }
+            const toast = document.createElement('div');
+            toast.style.cssText = 'background: rgba(10, 15, 28, 0.96); border: 2px solid #f1c40f; border-radius: 10px; padding: 12px 24px; color: #fff; display: flex; align-items: center; gap: 15px; box-shadow: 0 0 30px rgba(241, 196, 15, 0.5); font-weight: 800; font-size: 15px; letter-spacing: 1px; animation: fadeIn 0.3s ease-out;';
+            toast.innerHTML = `<span style="font-size:28px;">${ach.icon}</span><div><div style="color:#f1c40f; font-size:12px; text-transform:uppercase;">¡LOGRO DESBLOQUEADO!</div><div style="font-size:16px; color:#fff;">${ach.name} <span style="color:#38bdf8; font-size:13px;">(+${ach.reward} 💎)</span></div></div>`;
+            container.appendChild(toast);
+            AudioSys.playLevelUp();
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.5s ease-out';
+                setTimeout(() => toast.remove(), 500);
+            }, 4000);
+        }
 
-            treeCtx.save();
-            treeCtx.translate(w / 2, h / 2);
-            treeCtx.scale(treeCam.zoom, treeCam.zoom);
-            treeCtx.translate(treeCam.x, treeCam.y);
+        function checkAchievements() {
+            if (!player) return;
+            const runData = {
+                kills: kills,
+                time: gameTimeSeconds,
+                bosses: bossesDefeatedCount,
+                world: currentWorldIndex,
+                activeWeapons: getActiveWeaponsCount(player),
+                gotDivine: gotDivineThisRun,
+                gotJackpot: gotJackpotThisRun,
+                dashes: dashesCount,
+                maxCombo: maxComboThisRun,
+                level: player.level
+            };
 
-            const all = getAllNodes();
-
-            all.forEach(skill => {
-                skill.req.forEach(reqId => {
-                    const req = getNodeById(reqId);
-                    if (req) {
-                        const isUnlocked = saveData.unlockedNodes.includes(skill.id) && saveData.unlockedNodes.includes(reqId);
-                        treeCtx.beginPath();
-                        treeCtx.moveTo(req.x, req.y);
-                        treeCtx.lineTo(skill.x, skill.y);
-                        treeCtx.strokeStyle = isUnlocked ? '#00ffcc' : '#1e293b';
-                        treeCtx.lineWidth = isUnlocked ? 3.5 : 1.5;
-                        treeCtx.stroke();
+            ACHIEVEMENTS_CONFIG.forEach(ach => {
+                if (!saveData.achievements[ach.id]) {
+                    if (ach.isMet(saveData, runData)) {
+                        saveData.achievements[ach.id] = { unlocked: true, claimed: false };
+                        saveGame();
+                        showAchievementToast(ach);
                     }
-                });
-            });
-
-            all.forEach(skill => {
-                const isUnlocked = saveData.unlockedNodes.includes(skill.id);
-                const reqsMet = skill.req.every(r => saveData.unlockedNodes.includes(r));
-                const canAfford = saveData.esencias >= skill.cost;
-                const isHovered = hoveredNode === skill;
-
-                treeCtx.beginPath();
-                treeCtx.arc(skill.x, skill.y, isHovered ? 25 : 21, 0, Math.PI * 2);
-                if (isUnlocked) {
-                    treeCtx.fillStyle = '#065f46';
-                    treeCtx.strokeStyle = '#00ffcc';
-                    treeCtx.lineWidth = isHovered ? 4.5 : 2.5;
-                } else if (reqsMet && canAfford) {
-                    treeCtx.fillStyle = '#1e1b4b';
-                    treeCtx.strokeStyle = '#f1c40f';
-                    treeCtx.lineWidth = isHovered ? 4.5 : 2.5;
-                } else {
-                    treeCtx.fillStyle = '#0b0d14';
-                    treeCtx.strokeStyle = '#334155';
-                    treeCtx.lineWidth = 1.5;
-                }
-                treeCtx.fill();
-                treeCtx.stroke();
-
-                treeCtx.fillStyle = isUnlocked ? '#fff' : (reqsMet && canAfford ? '#f1c40f' : '#64748b');
-                treeCtx.font = 'bold 12px sans-serif';
-                treeCtx.textAlign = 'center';
-                treeCtx.textBaseline = 'middle';
-                treeCtx.fillText(skill.icon, skill.x, skill.y);
-
-                treeCtx.font = '10px sans-serif';
-                treeCtx.fillStyle = '#aaa';
-                treeCtx.fillText(skill.name, skill.x, skill.y + 30);
-                if (!isUnlocked) {
-                    treeCtx.fillStyle = canAfford ? '#f1c40f' : '#ef4444';
-                    treeCtx.fillText(`${skill.cost.toLocaleString()} 💎`, skill.x, skill.y + 42);
                 }
             });
-
-            treeCtx.restore();
         }
 
         /* ==========================================================================
@@ -2179,7 +2639,9 @@
             blaster: { id: 'blaster', name: 'Plasma Blaster', icon: '🔫', desc: 'Pernos de plasma autoguiados de alta precisión.' },
             blades:  { id: 'blades',  name: 'Sierras Orbitales', icon: '⚔️', desc: 'Cuchillas protectoras giratorias de corto alcance.' },
             tesla:   { id: 'tesla',   name: 'Arco Tesla', icon: '⚡', desc: 'Descargas eléctricas continuas en cadena.' },
-            mines:   { id: 'mines',   name: 'Minas Plasma', icon: '💣', desc: 'Minas explosivas tácticas de gran área de impacto.' }
+            mines:   { id: 'mines',   name: 'Minas Plasma', icon: '💣', desc: 'Minas explosivas tácticas de gran área de impacto.' },
+            mortar:  { id: 'mortar',  name: 'Cañón Mortero', icon: '🚀', desc: 'Obuses parabólicos de vacío con gran detonación en área.' },
+            laserDrone: { id: 'laserDrone', name: 'Dron Láser Orbital', icon: '🛸', desc: 'Haz de plasma continuo de alta fusión.' }
         };
 
         const RARITIES = {
@@ -2231,22 +2693,38 @@
         };
 
         function unlockWeapon(player, weaponId) {
+            if (!player.weapons[weaponId]) {
+                player.weapons[weaponId] = { active: false, level: 1 };
+            }
             if (!player.weapons[weaponId].active) {
                 player.weapons[weaponId].active = true;
                 player.weapons[weaponId].level = 1;
+                spawnFloatingText(player.x, player.y - 45, `¡${WEAPONS_DEF[weaponId].name.toUpperCase()} INSTALADA!`, '0, 255, 204', 18);
             } else {
                 player.weapons[weaponId].level++;
-                player.weapons[weaponId].damage = (player.weapons[weaponId].damage || 15) * 1.12;
+                if (player.weapons[weaponId].damage) {
+                    player.weapons[weaponId].damage *= 1.15;
+                }
             }
             updateWeaponsHUD();
         }
 
         const ALL_UPGRADES_CATALOG = [
-            // --- 1. DESBLOQUEOS DE ARSENAL (Requiere no tener el arma) ---
-            { id: 'w_unlock_blaster', rarity: 'rare', category: 'weapon_unlock', icon: '🔫', name: 'Desbloquear Plasma Blaster', badge: 'NUEVA ARMA', desc: 'Instala pernos de plasma que rastrean y eliminan a enemigos lejanos.', canOffer: p => !p.weapons.blaster.active, apply: p => unlockWeapon(p, 'blaster') },
-            { id: 'w_unlock_blades', rarity: 'rare', category: 'weapon_unlock', icon: '⚔️', name: 'Desbloquear Sierras Orbitales', badge: 'NUEVA ARMA', desc: 'Despliega cuchillas giratorias protectoras en torno a tu chasis.', canOffer: p => !p.weapons.blades.active, apply: p => unlockWeapon(p, 'blades') },
-            { id: 'w_unlock_tesla', rarity: 'rare', category: 'weapon_unlock', icon: '⚡', name: 'Desbloquear Arco Tesla', badge: 'NUEVA ARMA', desc: 'Emite potentes relámpagos automáticos que saltan entre múltiples enemigos.', canOffer: p => !p.weapons.tesla.active, apply: p => unlockWeapon(p, 'tesla') },
-            { id: 'w_unlock_mines', rarity: 'rare', category: 'weapon_unlock', icon: '💣', name: 'Desbloquear Minas Plasma', badge: 'NUEVA ARMA', desc: 'Deposita minas periódicas que detonan en devastadoras explosiones.', canOffer: p => !p.weapons.mines.active, apply: p => unlockWeapon(p, 'mines') },
+            // --- 1. DESBLOQUEOS DE ARSENAL (Respetan límite de ranuras y desbloqueo de tienda) ---
+            { id: 'w_unlock_blaster', rarity: 'rare', category: 'weapon_unlock', icon: '🔫', name: 'Desbloquear Plasma Blaster', badge: 'NUEVA ARMA', desc: 'Instala pernos de plasma que rastrean y eliminan a enemigos lejanos.', canOffer: p => !p.weapons.blaster.active && getActiveWeaponsCount(p) < getMaxWeaponsSlots(p), apply: p => unlockWeapon(p, 'blaster') },
+            { id: 'w_unlock_blades', rarity: 'rare', category: 'weapon_unlock', icon: '⚔️', name: 'Desbloquear Sierras Orbitales', badge: 'NUEVA ARMA', desc: 'Despliega cuchillas giratorias protectoras en torno a tu chasis.', canOffer: p => !p.weapons.blades.active && getActiveWeaponsCount(p) < getMaxWeaponsSlots(p), apply: p => unlockWeapon(p, 'blades') },
+            { id: 'w_unlock_tesla', rarity: 'rare', category: 'weapon_unlock', icon: '⚡', name: 'Desbloquear Arco Tesla', badge: 'NUEVA ARMA', desc: 'Emite potentes relámpagos automáticos que saltan entre múltiples enemigos.', canOffer: p => !p.weapons.tesla.active && getActiveWeaponsCount(p) < getMaxWeaponsSlots(p), apply: p => unlockWeapon(p, 'tesla') },
+            { id: 'w_unlock_mines', rarity: 'rare', category: 'weapon_unlock', icon: '💣', name: 'Desbloquear Minas Plasma', badge: 'NUEVA ARMA', desc: 'Deposita minas periódicas que detonan en devastadoras explosiones.', canOffer: p => !p.weapons.mines.active && getActiveWeaponsCount(p) < getMaxWeaponsSlots(p), apply: p => unlockWeapon(p, 'mines') },
+            { id: 'w_unlock_mortar', rarity: 'rare', category: 'weapon_unlock', icon: '🚀', name: 'Desbloquear Cañón Mortero', badge: 'NUEVA ARMA DE TIENDA', desc: 'Lanza obuses parabólicos de vacío con devastadora detonación de área masiva.', canOffer: p => (!p.weapons.mortar || !p.weapons.mortar.active) && getActiveWeaponsCount(p) < getMaxWeaponsSlots(p) && !!(saveData.shopUpgrades && saveData.shopUpgrades.mortar), apply: p => unlockWeapon(p, 'mortar') },
+            { id: 'w_unlock_laser_drone', rarity: 'rare', category: 'weapon_unlock', icon: '🛸', name: 'Desbloquear Dron Láser', badge: 'NUEVA ARMA DE TIENDA', desc: 'Despliega un dron de escolta orbital con haz continuo de plasma fundidor.', canOffer: p => (!p.weapons.laserDrone || !p.weapons.laserDrone.active) && getActiveWeaponsCount(p) < getMaxWeaponsSlots(p) && !!(saveData.shopUpgrades && saveData.shopUpgrades.laserDrone), apply: p => unlockWeapon(p, 'laserDrone') },
+
+            // Mejoras para Cañón Mortero
+            { id: 'mortar_dmg_r', rarity: 'rare', category: 'weapon', weaponReq: 'mortar', icon: '💥', name: 'Ojiva de Vacío Concentrada', badge: '+25% Daño y +15% Área Mortero', desc: 'Aumenta el rendimiento detonante y el radio de choque del Mortero.', apply: p => { p.weapons.mortar.level++; p.weapons.mortar.damage *= 1.25; p.weapons.mortar.radius *= 1.15; } },
+            { id: 'mortar_rate_e', rarity: 'epic', category: 'weapon', weaponReq: 'mortar', icon: '🚀', name: 'Cargador Rápido de Mortero', badge: '+25% Cadencia Mortero', desc: 'Reduce el enfriamiento entre disparos de obuses.', apply: p => { p.weapons.mortar.baseCooldown = Math.max(22, Math.round(p.weapons.mortar.baseCooldown * 0.75)); } },
+
+            // Mejoras para Dron Láser Orbital
+            { id: 'laser_drone_dmg_r', rarity: 'rare', category: 'weapon', weaponReq: 'laserDrone', icon: '⚡', name: 'Emisor de Plasma Térmico', badge: '+30% Daño Dron Láser', desc: 'Incrementa la potencia del haz continuo de fusión.', apply: p => { p.weapons.laserDrone.level++; p.weapons.laserDrone.damage *= 1.30; } },
+            { id: 'laser_drone_rate_e', rarity: 'epic', category: 'weapon', weaponReq: 'laserDrone', icon: '🛸', name: 'Sobrealimentador del Dron', badge: '+35% Frecuencia de Haz', desc: 'Acelera drásticamente los pulsos del haz continuo.', apply: p => { p.weapons.laserDrone.baseCooldown = Math.max(5, Math.round(p.weapons.laserDrone.baseCooldown * 0.65)); } },
 
             // --- 2. BALÍSTICA Y PROYECTILES GENERALES (15) ---
             { id: 'bal_velo_c', rarity: 'common', category: 'ballistics', icon: '🚀', name: 'Impulsor de Vuelo I', badge: '+10% Vel. Proyectil', desc: 'Acelera la velocidad de avance de todos tus proyectiles disparados.', apply: p => { p.projSpeedBonus = (p.projSpeedBonus || 0) + 0.10; } },
@@ -2385,7 +2863,7 @@
             // --- 12. PERKS LEGENDARIOS ÚNICOS (8 - ~1.4% prob, nunca repetidos) ---
             { id: 'leg_phoenix', rarity: 'legendary', category: 'unique', icon: '🔥', name: 'Protocolo Fénix', badge: '1 RESURRECCIÓN (60% HP)', desc: 'Si sufres daño letal, revives inmediatamente con 60% HP y destruyes enemigos cercanos.', canOffer: p => !p.hasPhoenixRevive, apply: p => { p.hasPhoenixRevive = true; p.phoenixUsed = false; } },
             { id: 'leg_frost', rarity: 'legendary', category: 'unique', icon: '❄️', name: 'Criogénesis de Vacío', badge: 'CONGELAMIENTO 50%', desc: 'Tus ataques ralentizan un 50% la velocidad enemiga y reducen su daño.', canOffer: p => !p.hasFrost, apply: p => { p.hasFrost = true; } },
-            { id: 'leg_death_scythe', rarity: 'legendary', category: 'unique', icon: '💀', name: 'Guadaña Espectral', badge: 'ONDA MORTAL CADA 50 BAJAS', desc: 'Cada 50 eliminaciones desata una guadaña gigante que barre la pantalla.', canOffer: p => !p.hasDeathScythe, apply: p => { p.hasDeathScythe = true; } },
+            { id: 'leg_death_scythe', rarity: 'legendary', category: 'unique', icon: '💀', name: 'Guadaña Espectral', badge: 'ONDA MORTAL CADA 50 BAJAS', desc: 'Cada 50 eliminaciones desata una guadaña gigante que barre la pantalla.', canOffer: p => !p.hasDeathScythe, apply: p => { p.hasDeathScythe = true; p.scytheKills = 0; } },
             { id: 'leg_nova_battery', rarity: 'legendary', category: 'unique', icon: '⚡', name: 'Batería Nova', badge: 'PULSO DESTRUCTOR CADA 6s', desc: 'Libera una onda expansiva devastadora de plasma cada 6 segundos automáticamente.', canOffer: p => !p.hasNovaBattery, apply: p => { p.hasNovaBattery = true; } },
             { id: 'leg_prism', rarity: 'legendary', category: 'unique', icon: '💎', name: 'Prisma de Fragmentación', badge: 'GEMAS DISPARAN ESQUIRLAS', desc: 'Recoger gemas de experiencia dispara esquirlas guiadas que atacan enemigos.', canOffer: p => !p.hasFragmentPrism, apply: p => { p.hasFragmentPrism = true; } },
             { id: 'leg_orbital_barrier', rarity: 'legendary', category: 'unique', weaponReq: 'blades', icon: '🛡️', name: 'Barrera Orbital Reflejante', badge: 'SIERRAS BLOQUEAN DISPAROS', desc: 'Tus Sierras Orbitales pulverizan proyectiles enemigos menores al contacto.', canOffer: p => p.weapons.blades.active && !p.hasBladeBarrier, apply: p => { p.hasBladeBarrier = true; } },
@@ -2393,10 +2871,10 @@
             { id: 'leg_tesla_storm', rarity: 'legendary', category: 'unique', weaponReq: 'tesla', icon: '🌩️', name: 'Tormenta de Tesla Continua', badge: 'RAYOS CADA 2s SIN APUNTAR', desc: 'Relámpagos automáticos golpean a 2 enemigos lejanos continuamente.', canOffer: p => p.weapons.tesla.active && !p.hasTeslaStorm, apply: p => { p.hasTeslaStorm = true; } },
 
             // --- 13. MEJORAS DIVINAS SUPREMAS (4 - 0.1% normal, Slot 0 en Titán 10 min) ---
-            { id: 'divine_singularity', rarity: 'divine', category: 'divine', icon: '🌌', name: 'Singularidad Gravitatoria', badge: 'DAÑO x1.50 / +60 HP', desc: '¡DIVINO! Daño global multiplicado por x1.50 y +60 HP Máx, a cambio de que los enemigos avancen un 10% más rápido.', apply: p => { p.globalDamageMultiplier *= 1.50; p.maxHp += 60; p.hp += 60; } },
-            { id: 'divine_fission', rarity: 'divine', category: 'divine', icon: '⚛️', name: 'Fisión Cuántica Divina', badge: 'CRÍTICOS TIENEN 25% DE DAÑO x3', desc: '¡DIVINO! Los impactos críticos tienen un 25% de probabilidad de multiplicar su daño x3.', canOffer: p => !p.hasQuantumFission, apply: p => { p.hasQuantumFission = true; } },
-            { id: 'divine_void_overcharge', rarity: 'divine', category: 'divine', icon: '⚡', name: 'Sobrecarga del Vacío', badge: '+25% CADENCIA GLOBAL', desc: '¡DIVINO! +25% Cadencia de Fuego global (con límite seguro anti-cuelgues).', apply: p => { p.attackSpeedMult = Math.min(3.0, p.attackSpeedMult + 0.25); } },
-            { id: 'divine_omnipresence', rarity: 'divine', category: 'divine', icon: '🌀', name: 'Omnipresencia Cuántica', badge: '+25% VEL. / +100px IMÁN / DASH SEGURO', desc: '¡DIVINO! +25% Velocidad, +100px Imán, y el Dash anula proyectiles en su trayectoria.', canOffer: p => !p.hasOmnipresence, apply: p => { p.speed = Math.min(12, p.speed * 1.25); p.magnet = Math.min(500, p.magnet + 100); p.hasOmnipresence = true; } }
+            { id: 'divine_singularity', rarity: 'divine', category: 'divine', icon: '🌌', name: 'Singularidad Gravitatoria', badge: 'DAÑO x1.50 / +60 HP', desc: '¡DIVINO! Daño global multiplicado por x1.50 y +60 HP Máx, a cambio de que los enemigos avancen un 10% más rápido.', apply: p => { p.globalDamageMultiplier *= 1.50; p.maxHp += 60; p.hp += 60; gotDivineThisRun = true; checkAchievements(); } },
+            { id: 'divine_fission', rarity: 'divine', category: 'divine', icon: '⚛️', name: 'Fisión Cuántica Divina', badge: 'CRÍTICOS TIENEN 25% DE DAÑO x3', desc: '¡DIVINO! Los impactos críticos tienen un 25% de probabilidad de multiplicar su daño x3.', canOffer: p => !p.hasQuantumFission, apply: p => { p.hasQuantumFission = true; gotDivineThisRun = true; checkAchievements(); } },
+            { id: 'divine_void_overcharge', rarity: 'divine', category: 'divine', icon: '⚡', name: 'Sobrecarga del Vacío', badge: '+25% CADENCIA GLOBAL', desc: '¡DIVINO! +25% Cadencia de Fuego global (con límite seguro anti-cuelgues).', apply: p => { p.attackSpeedMult = Math.min(3.0, p.attackSpeedMult + 0.25); gotDivineThisRun = true; checkAchievements(); } },
+            { id: 'divine_omnipresence', rarity: 'divine', category: 'divine', icon: '🌀', name: 'Omnipresencia Cuántica', badge: '+25% VEL. / +100px IMÁN / DASH SEGURO', desc: '¡DIVINO! +25% Velocidad, +100px Imán, y el Dash anula proyectiles en su trayectoria.', canOffer: p => !p.hasOmnipresence, apply: p => { p.speed = Math.min(12, p.speed * 1.25); p.magnet = Math.min(500, p.magnet + 100); p.hasOmnipresence = true; gotDivineThisRun = true; checkAchievements(); } }
         ];
 
         // GENERADOR DE CARTAS CON SUERTE EQUILIBRADA, REQUISITOS ESTRICTOS Y ANTI-REPETICIÓN
@@ -2495,9 +2973,9 @@
            7. SISTEMA DE MUNDOS Y PORTAL DIMENSIONAL (SOLO TRAS BOSS DE 10 MIN)
            ========================================================================== */
         const WORLDS = [
-            { id: 1, name: 'Arena Confinada (Mundo 1)', gridColor: '#121424', borderColor: '#00ffcc', bgGradient: ['#030307', '#080c16'], crystalMult: 1.0, hpScale: 1.0, bossSprite: sprites.boss_world1, bossHp: 16000 },
-            { id: 2, name: 'Purgatorio de Silicio (Mundo 2)', gridColor: '#2b1008', borderColor: '#ea580c', bgGradient: ['#0c0503', '#1c0a06'], crystalMult: 1.8, hpScale: 2.2, bossSprite: sprites.boss_world2, bossHp: 42000 },
-            { id: 3, name: 'Singularity Void (Mundo 3)', gridColor: '#260938', borderColor: '#a855f7', bgGradient: ['#09030e', '#19062b'], crystalMult: 3.0, hpScale: 4.5, bossSprite: sprites.boss_world3, bossHp: 95000 }
+            { id: 1, name: 'Arena Confinada (Mundo 1)', gridColor: '#121424', borderColor: '#00ffcc', bgGradient: ['#030307', '#080c16'], crystalMult: 1.0, hpScale: 0.85, bossSprite: sprites.boss_world1, bossHp: 12000 },
+            { id: 2, name: 'Purgatorio de Silicio (Mundo 2)', gridColor: '#2b1008', borderColor: '#ea580c', bgGradient: ['#0c0503', '#1c0a06'], crystalMult: 1.8, hpScale: 1.6, bossSprite: sprites.boss_world2, bossHp: 28000 },
+            { id: 3, name: 'Singularity Void (Mundo 3)', gridColor: '#260938', borderColor: '#a855f7', bgGradient: ['#09030e', '#19062b'], crystalMult: 3.0, hpScale: 2.8, bossSprite: sprites.boss_world3, bossHp: 60000 }
         ];
 
         let currentWorldIndex = 0;
@@ -2538,6 +3016,7 @@
             runCrystals += bonus;
             saveData.esencias += bonus;
             saveGame();
+            if (typeof checkCharacterUnlocks === 'function') checkCharacterUnlocks();
 
             enemiesPool.forEach(e => e.active = false);
             player.hp = player.maxHp;
@@ -2592,6 +3071,12 @@
         let screenShake = 0;
         let lastFrameTime = performance.now();
 
+        let dashesCount = 0;
+        let gemsCollectedCount = 0;
+        let bossesDefeatedCount = 0;
+        let lowHpSurvivalTimer = 0;
+        let rerollsLeft = 4;
+
         let damageHistory = [];
         let currentDPS = 0;
         let peakDPS = 0;
@@ -2635,11 +3120,44 @@
             player.dashCooldownTimer = player.dashCooldownMax;
             player.isDashing = true;
             player.dashTimer = 0.22;
+            dashesCount++;
             AudioSys.playDash();
 
             if (selectedCharId === 'char_chronos') {
                 player.timeDistortionTimer = 2.0;
                 spawnFloatingText(player.x, player.y - 40, '⏳ DILATACIÓN TEMPORAL', '56, 189, 248', 16);
+            }
+
+            // Perk: Campo de Minas por Dash (leg_minefield)
+            if (player.hasDashMines) {
+                spawnMine(player.x - 15, player.y, 90 * player.globalDamageMultiplier, 85, '#ff0055');
+                spawnMine(player.x + 15, player.y, 90 * player.globalDamageMultiplier, 85, '#ff0055');
+            }
+
+            // Perk: Postquemadores (afterburner_r)
+            if (player.hasAfterburner) {
+                player.afterburnerTimer = 1.5;
+                spawnFloatingText(player.x, player.y - 35, '🚀 POSTQUEMADORES', '56, 189, 248', 13);
+            }
+
+            // Perk: Onda Expulsiva de Dash (dash_shockwave_r)
+            if (player.hasDashShockwave) {
+                shakeScreen(8);
+                let shockwaveHits = 0;
+                for (let i = 0; i < enemiesPool.length; i++) {
+                    const e = enemiesPool[i];
+                    if (e.active && Math.hypot(e.x - player.x, e.y - player.y) < 180) {
+                        damageEnemy(e, 40 * player.globalDamageMultiplier);
+                        const kAng = Math.atan2(e.y - player.y, e.x - player.x);
+                        e.x += Math.cos(kAng) * 30;
+                        e.y += Math.sin(kAng) * 30;
+                        shockwaveHits++;
+                        if (shockwaveHits >= 20) break;
+                    }
+                }
+                for (let k = 0; k < 12; k++) {
+                    spawnParticle(player.x, player.y, (Math.random()-0.5)*8, (Math.random()-0.5)*8, '#38bdf8', 14);
+                }
             }
 
             for (let i = 0; i < 10; i++) {
@@ -2666,7 +3184,10 @@
             currentWorldIndex = 0;
             dimensionalPortal.active = false;
             isEntropyActive = false;
-            tenMinuteBossSpawned = false;
+            worldStartTime = 0;
+            currentWorldBossSpawned = false;
+            miniboss1Spawned = false;
+            miniboss2Spawned = false;
             document.getElementById('entropy-vignette').classList.remove('active');
 
             const charDef = charsData.find(c => c.id === selectedCharId);
@@ -2675,24 +3196,20 @@
             let bDmg = charDef.stats.dmg;
             let bCrit = charDef.stats.crit;
             let bRegen = charDef.stats.regen;
+            let bLuck = charDef.stats.luck || 1.0;
             let bMag = 110;
             let bCdr = 1.0;
             let bXpMult = 1.0;
-            revivesLeft = 0;
 
-            saveData.unlockedNodes.forEach(id => {
-                const node = getNodeById(id);
-                if (!node || node.id === 'core') return;
-                if (node.statKey === 'arm') bHp += node.val;
-                if (node.statKey === 'spd') bSpd *= (1 + node.val / 100);
-                if (node.statKey === 'dmg') bDmg += node.val;
-                if (node.statKey === 'mag') bMag += node.val;
-                if (node.statKey === 'cri') bCrit += (node.val / 100);
-                if (node.statKey === 'cdr') bCdr *= Math.max(0.4, 1 - (node.val / 100));
-                if (node.statKey === 'reg') bRegen += node.val;
-                if (node.statKey === 'xp')  bXpMult += (node.val / 100);
-                if (node.statKey === 'rev') revivesLeft++;
-            });
+            const u = saveData.shopUpgrades || {};
+            bHp += (u.hp || 0) * 15;
+            bDmg *= (1 + (u.dmg || 0) * 0.05);
+            bSpd *= (1 + (u.spd || 0) * 0.03);
+            bLuck += (u.luck || 0) * 0.05;
+            bMag += (u.mag || 0) * 25;
+            bCdr *= Math.max(0.4, 1 - (u.cdr || 0) * 0.04);
+            rerollsLeft = 2 + (u.rerolls || 0);
+            revivesLeft = (u.revives || 0);
 
             player = {
                 x: 0, y: 0,
@@ -2703,7 +3220,7 @@
                 angle: 0,
                 level: 1, xp: 0, maxXp: 18,
                 magnet: bMag,
-                luck: charDef.stats.luck || 1.0,
+                luck: bLuck,
                 attackSpeedMult: 1.0,
                 cooldownReduction: bCdr,
                 critChance: bCrit,
@@ -2712,8 +3229,8 @@
                 lifesteal: 0,
                 knockbackMult: 1.0,
                 areaMult: 1.0,
-                maxShield: 0,
-                currentShield: 0,
+                maxShield: (selectedCharId === 'char_nexus' ? 25 : 0),
+                currentShield: (selectedCharId === 'char_nexus' ? 25 : 0),
                 shieldRechargeTimer: 0,
                 xpMult: bXpMult,
                 crystalMult: 1.0,
@@ -2730,7 +3247,14 @@
                 hasOmnipresence: false,
                 hasPhoenixRevive: false,
                 phoenixUsed: false,
-                dashCooldownMax: Math.max(0.45, 2.4 * bCdr),
+                hasDashTrail: false,
+                hasDashShockwave: false,
+                hasAfterburner: false,
+                afterburnerTimer: 0,
+                hasDashMines: false,
+                hasStaticAura: false,
+                dodgeChance: (selectedCharId === 'char_zephyr' ? 0.15 : 0),
+                dashCooldownMax: Math.max(0.45, (selectedCharId === 'char_zephyr' ? 0.9 : 2.4) * bCdr),
                 dashCooldownTimer: 0,
                 isDashing: false,
                 dashTimer: 0,
@@ -2738,27 +3262,51 @@
                 tankShockwaveCooldown: 0,
                 weapons: {
                     blaster: { active: false, level: 1, timer: 0, baseCooldown: 22, multishot: 1, bounces: 0, pierce: 0, cluster: false },
-                    blades:  { active: false, level: 1, count: 1, orbitRadius: 100, angle: 0, speed: 0.05, damage: 14 },
-                    tesla:   { active: false, level: 1, timer: 0, baseCooldown: 50, chains: 2, damage: 32 },
-                    mines:   { active: false, level: 1, timer: 0, baseCooldown: 80, radius: 85, damage: 55 }
+                    blades:  { active: false, level: 1, count: 1, orbitRadius: 110, angle: 0, speed: 0.05, damage: 32 },
+                    tesla:   { active: false, level: 1, timer: 0, baseCooldown: 38, chains: 3, damage: 46 },
+                    mines:   { active: false, level: 1, timer: 0, baseCooldown: 52, radius: 95, damage: 95 },
+                    mortar:  { active: false, level: 1, timer: 0, baseCooldown: 65, radius: 140, damage: 130 },
+                    laserDrone: { active: false, level: 1, timer: 0, baseCooldown: 8, damage: 20, angle: 0 }
                 }
             };
 
             charDef.initWeapons.forEach(wId => {
-                player.weapons[wId].active = true;
+                if (player.weapons[wId]) player.weapons[wId].active = true;
             });
+
+            // Passives innatos de nuevos personajes
+            if (selectedCharId === 'char_gauss') {
+                player.magnet += 80;
+                player.hasStaticAura = true;
+            }
+            if (selectedCharId === 'char_colossus') {
+                player.armor += 0.15;
+            }
+            if (selectedCharId === 'char_omni') {
+                player.attackSpeedMult += 0.25;
+            }
 
             camera = { x: 0, y: 0 };
             frames = 0;
             kills = 0;
             gameTimeSeconds = 0;
             runCrystals = 0;
+            dashesCount = 0;
+            gemsCollectedCount = 0;
+            bossesDefeatedCount = 0;
+            lowHpSurvivalTimer = 0;
             screenShake = 0;
             damageHistory = [];
             currentDPS = 0;
             peakDPS = 0;
             comboCount = 0;
             comboTimer = 0;
+            maxComboThisRun = 0;
+            gotDivineThisRun = false;
+            gotJackpotThisRun = false;
+            mortarShells = [];
+            activeScytheSwings = [];
+            laserDroneBeam = null;
 
             for (let i = 0; i < 5; i++) spawnExplosiveBeacon();
 
@@ -2817,6 +3365,64 @@
             b.y = (Math.random() - 0.5) * (WORLD_SIZE - 400);
             b.hp = 120;
             b.radius = 26;
+        }
+
+        function launchMortarShell(startX, startY, targetX, targetY, damage, radius) {
+            mortarShells.push({
+                startX: startX,
+                startY: startY,
+                targetX: targetX,
+                targetY: targetY,
+                x: startX,
+                y: startY,
+                arcY: 0,
+                progress: 0,
+                speed: 0.024,
+                damage: damage,
+                radius: radius,
+                maxArcHeight: 110
+            });
+        }
+
+        function launchSpectralScythe() {
+            shakeScreen(16);
+            AudioSys.playExplosion();
+            spawnFloatingText(player.x, player.y - 60, '💀 ¡GUADAÑA ESPECTRAL!', '34, 197, 94', 24);
+
+            const scytheRadius = 380 * player.areaMult;
+            const scytheDmg = 500 * player.globalDamageMultiplier;
+
+            activeScytheSwings.push({
+                x: player.x,
+                y: player.y,
+                currentAngle: player.angle,
+                radius: scytheRadius,
+                timer: 45,
+                maxTimer: 45,
+                damage: scytheDmg
+            });
+
+            // Daño masivo instantáneo a todos los enemigos en el área de corte
+            let enemiesSlashed = 0;
+            for (let i = 0; i < enemiesPool.length; i++) {
+                const e = enemiesPool[i];
+                if (e.active) {
+                    const dist = Math.hypot(e.x - player.x, e.y - player.y);
+                    if (dist <= scytheRadius + e.radius) {
+                        damageEnemy(e, scytheDmg, true);
+                        spawnParticle(e.x, e.y, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 8, '#10b981', 16, 0.04);
+                        enemiesSlashed++;
+                        if (enemiesSlashed >= 65) break;
+                    }
+                }
+            }
+
+            // Anillo de partículas espectrales
+            for (let k = 0; k < 28; k++) {
+                const pAng = (Math.PI * 2 * k) / 28;
+                const pSpeed = 6 + Math.random() * 4;
+                spawnParticle(player.x, player.y, Math.cos(pAng) * pSpeed, Math.sin(pAng) * pSpeed, '#22c55e', 14, 0.03);
+            }
         }
 
         /* ==========================================================================
@@ -2913,6 +3519,12 @@
             }
 
             if (player.timeDistortionTimer > 0) player.timeDistortionTimer -= dt;
+            if (player.afterburnerTimer > 0) player.afterburnerTimer -= dt;
+
+            // Registro de supervivencia a baja vida para desbloquear a Kage (Secreto)
+            if (player.hp < player.maxHp * 0.25) {
+                lowHpSurvivalTimer += dt;
+            }
 
             // Movimiento
             let dx = 0, dy = 0;
@@ -2923,13 +3535,20 @@
 
             if (dx !== 0 || dy !== 0) {
                 const len = Math.hypot(dx, dy);
-                const currentSpd = (player.isDashing ? player.speed * 3.2 : player.speed) * dt60;
+                let moveSpd = player.isDashing ? player.speed * 3.2 : player.speed;
+                if (player.afterburnerTimer > 0) moveSpd *= 1.35;
+                const currentSpd = moveSpd * dt60;
                 player.x += (dx / len) * currentSpd;
                 player.y += (dy / len) * currentSpd;
                 player.angle = Math.atan2(dy, dx) + Math.PI / 2;
 
                 if (player.isDashing && frames % 2 === 0) {
                     spawnParticle(player.x, player.y, 0, 0, '#00ffcc', 14, 0.4);
+                }
+
+                // Perk: Estela Térmica (dash_trail_r)
+                if (player.isDashing && player.hasDashTrail && frames % 3 === 0) {
+                    spawnMine(player.x, player.y, 25 * player.globalDamageMultiplier, 35, '#f97316');
                 }
 
                 if (selectedCharId === 'char_pyro' && frames % 4 === 0) {
@@ -2943,10 +3562,27 @@
             camera.x = player.x - canvas.width / 2;
             camera.y = player.y - canvas.height / 2;
 
-            // APARICIÓN DEL TITÁN DE LOS 10 MINUTOS (600s)
+            // Aura Electrostática Pasiva (Dr. Gauss o mejora static_aura_r)
+            if (player.hasStaticAura && frames % 12 === 0) {
+                const auraRadius = 85 * player.areaMult;
+                let auraHits = 0;
+                for (let j = 0; j < enemiesPool.length; j++) {
+                    const e = enemiesPool[j];
+                    if (e.active && Math.hypot(player.x - e.x, player.y - e.y) < auraRadius + e.radius) {
+                        damageEnemy(e, 8.5 * player.globalDamageMultiplier);
+                        e.slowTimer = 0.5;
+                        spawnParticle(e.x, e.y, (Math.random()-0.5)*3, (Math.random()-0.5)*3, '#00ffcc', 6, 0.08);
+                        auraHits++;
+                        if (auraHits >= 15) break;
+                    }
+                }
+            }
+
+            // APARICIÓN DEL TITÁN DE CADA MUNDO (Al minuto 10 de cada mundo: 10m en M1, 20m en M2, 30m en M3)
             const currentW = WORLDS[currentWorldIndex];
-            if (gameTimeSeconds >= 600 && !tenMinuteBossSpawned) {
-                tenMinuteBossSpawned = true;
+            const worldElapsed = gameTimeSeconds - worldStartTime;
+            if (worldElapsed >= 600 && !currentWorldBossSpawned) {
+                currentWorldBossSpawned = true;
                 spawnTenMinuteBoss(currentW);
             }
 
@@ -3005,17 +3641,16 @@
                             }
                         }
                         AudioSys.playShoot();
-                        // HARD CAP DE SEGURIDAD: Mínimo 5 frames (~83ms = máx 12 disparos/s) para evitar colapsar el juego
+                        // HARD CAP DE SEGURIDAD: Mínimo 5 frames (~83ms = máx 12 disparos/s)
                         const safeBlasterCooldown = Math.max(5, Math.round(wpBlaster.baseCooldown * player.cooldownReduction / Math.min(3.5, player.attackSpeedMult)));
                         wpBlaster.timer = safeBlasterCooldown;
                     }
                 }
             }
 
-            // ARMAS: 2. Cuchillas Orbitales
+            // ARMAS: 2. Cuchillas Orbitales (REDISEÑADAS: Daño por ticks directos de corte con cooldown propio)
             const wpBlades = player.weapons.blades;
             if (wpBlades.active) {
-                // HARD CAP: Velocidad angular máxima capada a 0.18 rad/frame
                 const safeBladeSpeed = Math.min(0.18, wpBlades.speed * (1 + (player.attackSpeedMult - 1) * 0.45));
                 wpBlades.angle += safeBladeSpeed * dt60;
                 const step = (Math.PI * 2) / wpBlades.count;
@@ -3029,14 +3664,25 @@
                         const e = enemiesPool[j];
                         if (!e.active) continue;
                         const distSq = Math.pow(bx - e.x, 2) + Math.pow(by - e.y, 2);
-                        if (distSq < Math.pow(18 + e.radius, 2)) {
-                            let bladeDmg = wpBlades.damage * player.globalDamageMultiplier;
-                            if (player.hasBerserker) {
-                                const missingHpPct = Math.max(0, 1 - (player.hp / player.maxHp));
-                                bladeDmg *= (1 + missingHpPct * 0.80);
+                        if (distSq < Math.pow(22 + e.radius, 2)) {
+                            if (!e.bladeHitTimer || e.bladeHitTimer <= 0) {
+                                e.bladeHitTimer = 0.20; // 5 cortes por segundo por enemigo
+                                let bladeDmg = wpBlades.damage * player.globalDamageMultiplier;
+                                if (player.hasBerserker) {
+                                    const missingHpPct = Math.max(0, 1 - (player.hp / player.maxHp));
+                                    bladeDmg *= (1 + missingHpPct * 0.80);
+                                }
+                                const isCrit = Math.random() < (player.critChance + (player.luck - 1) * 0.03);
+                                if (isCrit) bladeDmg *= player.critMult;
+                                damageEnemy(e, bladeDmg, isCrit);
+                                AudioSys.playHit(false);
+                                const kAng = Math.atan2(e.y - player.y, e.x - player.x);
+                                e.x += Math.cos(kAng) * 6;
+                                e.y += Math.sin(kAng) * 6;
+                                for (let p = 0; p < 3; p++) {
+                                    spawnParticle(bx, by, (Math.random()-0.5)*4, (Math.random()-0.5)*4, '#f1c40f', 7);
+                                }
                             }
-                            damageEnemy(e, bladeDmg * dt);
-                            if (frames % 5 === 0) spawnParticle(bx, by, (Math.random()-0.5)*3, (Math.random()-0.5)*3, '#f1c40f', 6);
                         }
                     }
                 }
@@ -3056,7 +3702,7 @@
                         }
                         zapTeslaChain(player, firstTarget, wpTesla.chains, teslaDmg);
                         AudioSys.playHit(true);
-                        // HARD CAP DE SEGURIDAD: Mínimo 13 frames (~216ms = máx 4.6 descargas/s)
+                        // HARD CAP DE SEGURIDAD: Mínimo 13 frames
                         const safeTeslaCooldown = Math.max(13, Math.round(wpTesla.baseCooldown * player.cooldownReduction / Math.min(3.5, player.attackSpeedMult)));
                         wpTesla.timer = safeTeslaCooldown;
                     }
@@ -3075,7 +3721,7 @@
                     }
                     const blastRadius = wpMines.radius * player.areaMult;
                     spawnMine(player.x, player.y, mineDmg, blastRadius, '#ff0055');
-                    // HARD CAP DE SEGURIDAD: Mínimo 20 frames (~333ms = máx 3 minas/s)
+                    // HARD CAP DE SEGURIDAD: Mínimo 20 frames
                     const safeMinesCooldown = Math.max(20, Math.round(wpMines.baseCooldown * player.cooldownReduction / Math.min(3.5, player.attackSpeedMult)));
                     wpMines.timer = safeMinesCooldown;
                 }
@@ -3119,6 +3765,92 @@
                     for (let k = 0; k < 10; k++) {
                         spawnParticle(m.x, m.y, (Math.random() - 0.5) * 5, (Math.random() - 0.5) * 5, m.color, 16);
                     }
+                }
+            }
+
+            // ARMAS: 5. Cañón Mortero de Vacío
+            const wpMortar = player.weapons.mortar;
+            if (wpMortar && wpMortar.active) {
+                wpMortar.timer -= dt60;
+                if (wpMortar.timer <= 0) {
+                    const target = getClosestEnemy(player.x, player.y, wpMortar.range);
+                    if (target) {
+                        let mDmg = wpMortar.damage * player.globalDamageMultiplier;
+                        if (player.hasBerserker) {
+                            const missingHpPct = Math.max(0, 1 - (player.hp / player.maxHp));
+                            mDmg *= (1 + missingHpPct * 0.80);
+                        }
+                        const blastR = wpMortar.blastRadius * player.areaMult;
+                        launchMortarShell(player.x, player.y, target.x, target.y, mDmg, blastR);
+                        AudioSys.playShoot();
+                        const safeMortarCd = Math.max(30, Math.round(wpMortar.baseCooldown * player.cooldownReduction / Math.min(3.0, player.attackSpeedMult)));
+                        wpMortar.timer = safeMortarCd;
+                    }
+                }
+            }
+
+            // Proyectiles de Mortero en Vuelo y Detonación
+            for (let i = mortarShells.length - 1; i >= 0; i--) {
+                const s = mortarShells[i];
+                s.progress += s.speed * dt60;
+                s.x = s.startX + (s.targetX - s.startX) * s.progress;
+                s.y = s.startY + (s.targetY - s.startY) * s.progress;
+                s.arcY = -Math.sin(s.progress * Math.PI) * s.maxArcHeight;
+
+                if (s.progress >= 1.0) {
+                    mortarShells.splice(i, 1);
+                    shakeScreen(9);
+                    AudioSys.playHit(true);
+                    let hitCount = 0;
+                    for (let j = 0; j < enemiesPool.length; j++) {
+                        const e = enemiesPool[j];
+                        if (e.active) {
+                            const dsq = Math.pow(s.targetX - e.x, 2) + Math.pow(s.targetY - e.y, 2);
+                            if (dsq < Math.pow(s.radius + e.radius, 2)) {
+                                damageEnemy(e, s.damage);
+                                hitCount++;
+                                if (hitCount >= 40) break;
+                            }
+                        }
+                    }
+                    for (let k = 0; k < 18; k++) {
+                        spawnParticle(s.targetX, s.targetY, (Math.random() - 0.5) * 6, (Math.random() - 0.5) * 6, '#8b5cf6', 15);
+                    }
+                }
+            }
+
+            // ARMAS: 6. Dron Láser Orbital
+            const wpDrone = player.weapons.laserDrone;
+            laserDroneBeam = null;
+            if (wpDrone && wpDrone.active) {
+                wpDrone.angle += 0.05 * dt60;
+                const droneX = player.x + Math.cos(wpDrone.angle) * wpDrone.orbitRadius;
+                const droneY = player.y + Math.sin(wpDrone.angle) * wpDrone.orbitRadius;
+                wpDrone.timer -= dt60;
+                const target = getClosestEnemy(droneX, droneY, 460);
+                if (target) {
+                    laserDroneBeam = { sx: droneX, sy: droneY, tx: target.x, ty: target.y };
+                    if (wpDrone.timer <= 0) {
+                        let lDmg = wpDrone.damage * player.globalDamageMultiplier;
+                        damageEnemy(target, lDmg);
+                        AudioSys.playHit(false);
+                        spawnParticle(target.x, target.y, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4, '#00e5ff', 8);
+                        const safeDroneCd = Math.max(8, Math.round(wpDrone.baseCooldown * player.cooldownReduction / Math.min(3.0, player.attackSpeedMult)));
+                        wpDrone.timer = safeDroneCd;
+                    }
+                }
+            }
+
+            // Barrido de la Guadaña Espectral
+            for (let i = activeScytheSwings.length - 1; i >= 0; i--) {
+                const sc = activeScytheSwings[i];
+                sc.timer -= dt60;
+                sc.currentAngle += 0.22 * dt60;
+                sc.x = player.x;
+                sc.y = player.y;
+
+                if (sc.timer <= 0) {
+                    activeScytheSwings.splice(i, 1);
                 }
             }
 
@@ -3204,17 +3936,43 @@
                 }
             }
 
-            // SPAWN CON PERÍODO DE GRACIA INICIAL (HASTA 2:00 / 120s) Y ESCALADO COMPUESTO
+            // SPAWN CON ESCALADO DINÁMICO: GRACIA (0-2m), TRANSICIÓN (2-3m) Y ALTA DENSIDAD CONTINUA (3m+)
             const effectiveTimeMin = Math.max(0, (gameTimeSeconds - 120) / 60);
-            const spawnRate = isEntropyActive ? 1 : (gameTimeSeconds < 120 ? 35 : Math.max(2, Math.floor(16 - effectiveTimeMin * 1.6)));
-            if (frames % spawnRate === 0) spawnEnemy(false, currentW);
+            let spawnRate;
+            if (isEntropyActive) {
+                spawnRate = 1;
+            } else if (gameTimeSeconds < 120) {
+                spawnRate = 35;
+            } else if (gameTimeSeconds < 180) {
+                spawnRate = Math.max(14, Math.floor(18 - effectiveTimeMin * 2));
+            } else {
+                // A partir del minuto 3 (180s): gran densidad de enemigos para el resto de la partida
+                spawnRate = Math.max(4, Math.floor(9 - effectiveTimeMin * 0.8));
+            }
 
-            // Cada 30 segundos (1800 frames): Alerta de Enjambre Convergente (solo tras min 2:00 / 120s)
-            if (frames > 0 && frames % 1800 === 0 && gameTimeSeconds >= 120) {
+            if (frames % spawnRate === 0) {
+                spawnEnemy(false, currentW);
+                // Si han transcurrido 3 minutos o más, spawns en ráfagas para llenar la arena
+                if (gameTimeSeconds >= 180) {
+                    const extraSpawns = gameTimeSeconds >= 360 ? 2 : 1;
+                    for (let s = 0; s < extraSpawns; s++) {
+                        if (Math.random() < 0.75) spawnEnemy(false, currentW);
+                    }
+                }
+            }
+
+            // Cada 90 segundos (5400 frames = 1:30 min): Alerta de Enjambre Convergente (solo tras min 2:00 / 120s)
+            if (frames > 0 && frames % 5400 === 0 && gameTimeSeconds >= 120) {
                 triggerSwarmAlert(currentW);
             }
 
-            if (frames > 0 && (frames === 10800 || frames === 21600)) {
+            // Minibosses relativos a cada mundo (+3 min y +6 min de cada mundo)
+            if (worldElapsed >= 180 && !miniboss1Spawned) {
+                miniboss1Spawned = true;
+                spawnMiniboss(currentW);
+            }
+            if (worldElapsed >= 360 && !miniboss2Spawned) {
+                miniboss2Spawned = true;
                 spawnMiniboss(currentW);
             }
 
@@ -3222,6 +3980,8 @@
             for (let i = 0; i < enemiesPool.length; i++) {
                 const e = enemiesPool[i];
                 if (!e.active) continue;
+
+                if (e.bladeHitTimer > 0) e.bladeHitTimer -= dt;
 
                 let spd = e.speed * timeScale;
                 if (e.slowTimer > 0) {
@@ -3236,8 +3996,14 @@
 
                 const distSq = Math.pow(player.x - e.x, 2) + Math.pow(player.y - e.y, 2);
                 if (!player.isDashing && distSq < Math.pow(player.radius + e.radius - 4, 2)) {
-                    // Daño dinámico escalado con el tiempo transcurrido
-                    const timeDamageMult = Math.pow(1.15, effectiveTimeMin);
+                    // Probabilidad de Esquiva (Matriz de Esquiva y Zephyr)
+                    if (player.dodgeChance > 0 && Math.random() < player.dodgeChance) {
+                        spawnFloatingText(player.x, player.y - 30, '¡ESQUIVADO!', '56, 189, 248', 16);
+                        continue;
+                    }
+
+                    // Daño dinámico escalado con el tiempo transcurrido (suavizado a +10% por minuto)
+                    const timeDamageMult = Math.pow(1.10, effectiveTimeMin);
                     let dmg = (e.type === 'boss' ? (e.isTenMinuteBoss ? 35 : 20) : (e.type === 'elite' ? 8 : 3.0)) * currentW.hpScale * timeDamageMult;
                     if (isEntropyActive) dmg *= 2.2;
                     if (selectedCharId === 'char_tank') dmg *= 0.75;
@@ -3303,6 +4069,8 @@
 
             if (frames % 60 === 0) {
                 mergeNearbyGems();
+                if (typeof checkCharacterUnlocks === 'function') checkCharacterUnlocks();
+                if (typeof updateRecords === 'function') updateRecords();
             }
 
             const magnetSq = Math.pow(player.magnet, 2);
@@ -3318,6 +4086,7 @@
                     g.y += Math.sin(ang) * pullSpd;
 
                     if (distSq < Math.pow(player.radius + g.radius, 2)) {
+                        gemsCollectedCount++;
                         if (g.isChest) {
                             const chestCrystals = g.esencias;
                             runCrystals += chestCrystals;
@@ -3343,10 +4112,11 @@
             if (player.xp >= player.maxXp && gameState === 'playing') {
                 player.level++;
                 player.xp -= player.maxXp;
-                player.maxXp = Math.floor(player.maxXp * 1.45);
+                player.maxXp = Math.floor(player.maxXp * 1.18 + 10);
                 document.getElementById('level-display').innerText = `Nivel ${player.level}`;
                 document.getElementById('xp-bar-fill').style.width = `${(player.xp / player.maxXp) * 100}%`;
                 AudioSys.playLevelUp();
+                if (typeof checkAchievements === 'function') checkAchievements();
                 triggerLevelUp(false);
             } else {
                 document.getElementById('xp-bar-fill').style.width = `${(player.xp / player.maxXp) * 100}%`;
@@ -3500,9 +4270,13 @@
                 e.active = false;
                 kills++;
                 document.getElementById('kills-display').innerText = `Bajas: ${kills}`;
+                if (e.type === 'boss') {
+                    bossesDefeatedCount++;
+                }
                 shakeScreen(e.type === 'boss' ? 20 : 2.5);
 
                 comboCount++;
+                if (comboCount > maxComboThisRun) maxComboThisRun = comboCount;
                 comboTimer = 2.5;
                 const comboEl = document.getElementById('combo-container');
                 comboEl.classList.add('active');
@@ -3511,6 +4285,15 @@
                 if (comboCount >= 60) comboWord = "¡CARNICERÍA!";
                 if (comboCount >= 100) comboWord = "¡DIOS DEL CAOS!";
                 document.getElementById('combo-title').innerText = `${comboWord} x${comboCount}`;
+
+                // Guadaña Espectral (leg_death_scythe): Cada 50 bajas lanza un corte gigante
+                if (player.hasDeathScythe) {
+                    player.scytheKills = (player.scytheKills || 0) + 1;
+                    if (player.scytheKills >= 50) {
+                        player.scytheKills = 0;
+                        launchSpectralScythe();
+                    }
+                }
 
                 // Fiebre del Oro Midas
                 if (player.hasMidasTouch && Math.random() < 0.12) {
@@ -3554,6 +4337,10 @@
                 if (e.isTenMinuteBoss && !dimensionalPortal.active) {
                     openDimensionalPortal(e.x, e.y);
                 }
+
+                if (typeof checkAchievements === 'function') checkAchievements();
+                if (typeof checkCharacterUnlocks === 'function') checkCharacterUnlocks();
+                if (typeof updateRecords === 'function') updateRecords();
             }
         }
 
@@ -3567,12 +4354,11 @@
             }
         }
 
-        
-        // ALERTA DE ENJAMBRE PERIÓDICO (SOLO TRAS EL MINUTO 2:00 / 120s - 16-24 ENEMIGOS CONVERGIENTES)
+        // ALERTA DE ENJAMBRE PERIÓDICO (CADA 1:30 TRAS MIN 2:00 / 120s - 14-20 ENEMIGOS CONVERGIENTES)
         function triggerSwarmAlert(worldDef) {
             if (gameTimeSeconds < 120) return; // Período de gracia inicial (0:00 a 2:00 sin enjambres)
             const effectiveTimeMin = Math.max(0, (gameTimeSeconds - 120) / 60);
-            const swarmCount = Math.min(24, 16 + Math.floor(effectiveTimeMin * 1.5));
+            const swarmCount = Math.min(20, 14 + Math.floor(effectiveTimeMin * 1.2));
             AudioSys.playBossAlarm();
             const warn = document.getElementById('warning');
             if (warn) {
@@ -3590,12 +4376,13 @@
                 e.y = player.y + Math.sin(angle) * dist;
                 e.slowTimer = 0;
                 e.flashTimer = 0;
+                e.bladeHitTimer = 0;
                 e.isTenMinuteBoss = false;
-                const dynamicHp = Math.pow(1.22, effectiveTimeMin) * worldDef.hpScale;
-                const dynamicSpd = Math.min(2.0, Math.pow(1.04, effectiveTimeMin));
+                const dynamicHp = Math.pow(1.15, effectiveTimeMin) * worldDef.hpScale;
+                const dynamicSpd = Math.min(1.8, Math.pow(1.03, effectiveTimeMin));
                 e.radius = 22;
-                e.speed = 4.2 * dynamicSpd;
-                e.hp = 35 * dynamicHp;
+                e.speed = 3.8 * dynamicSpd;
+                e.hp = 28 * dynamicHp;
                 e.maxHp = e.hp;
                 e.type = 'normal';
                 e.img = sprites.enemy_scout;
@@ -3611,9 +4398,10 @@
             e.x = player.x + Math.cos(angle) * 700;
             e.y = player.y + Math.sin(angle) * 700;
             e.radius = 55;
-            e.speed = 3.2;
-            e.hp = 3200 * worldDef.hpScale * (1 + timeMin * 0.2);
+            e.speed = 3.0;
+            e.hp = 2600 * worldDef.hpScale * (1 + timeMin * 0.15);
             e.maxHp = e.hp;
+            e.bladeHitTimer = 0;
             e.type = 'boss';
             e.isTenMinuteBoss = false;
             e.img = sprites.enemy_elite;
@@ -3631,9 +4419,10 @@
             e.x = player.x + Math.cos(angle) * 800;
             e.y = player.y + Math.sin(angle) * 800;
             e.radius = 80;
-            e.speed = 3.3;
+            e.speed = 3.1;
             e.hp = worldDef.bossHp;
             e.maxHp = e.hp;
+            e.bladeHitTimer = 0;
             e.type = 'boss';
             e.isTenMinuteBoss = true;
             e.img = worldDef.bossSprite;
@@ -3643,7 +4432,7 @@
             setTimeout(() => document.getElementById('warning').style.opacity = 0, 4500);
         }
 
-        // ESCALADO CONTINUO CON PERÍODO DE GRACIA (0:00 A 2:00 SIN ESCALADO, LUEGO +22% HP/min, +15% DMG/min)
+        // ESCALADO SUAVIZADO CON PERÍODO DE GRACIA (0:00 A 2:00 SIN ESCALADO, LUEGO +15% HP/min, +10% DMG/min)
         function spawnEnemy(isBoss = false, worldDef) {
             // Límite de enemigos en pantalla antes del minuto 2:00 (máximo 20 activos)
             if (gameTimeSeconds < 120) {
@@ -3665,33 +4454,34 @@
 
             // Período de gracia: Hasta el minuto 2:00 (120s) no escala HP ni velocidad
             const effectiveTimeMin = Math.max(0, (gameTimeSeconds - 120) / 60);
-            let dynamicHp = Math.pow(1.22, effectiveTimeMin) * worldDef.hpScale;
-            let dynamicSpd = Math.min(2.0, Math.pow(1.04, effectiveTimeMin));
+            let dynamicHp = Math.pow(1.15, effectiveTimeMin) * worldDef.hpScale;
+            let dynamicSpd = Math.min(1.8, Math.pow(1.03, effectiveTimeMin));
 
             if (isEntropyActive) {
-                dynamicHp *= Math.pow(1.25, Math.max(1, effectiveTimeMin - 8));
-                dynamicSpd *= 1.35;
+                dynamicHp *= Math.pow(1.20, Math.max(1, effectiveTimeMin - 8));
+                dynamicSpd *= 1.30;
             }
 
             e.active = true;
             e.x = ex; e.y = ey;
             e.slowTimer = 0;
             e.flashTimer = 0;
+            e.bladeHitTimer = 0;
             e.isTenMinuteBoss = false;
 
             const isElite = Math.random() < Math.min(0.25, 0.03 + effectiveTimeMin * 0.02);
             if (isElite) {
                 e.radius = 38;
-                e.speed = 3.4 * dynamicSpd;
-                e.hp = 300 * dynamicHp;
+                e.speed = 3.2 * dynamicSpd;
+                e.hp = 240 * dynamicHp;
                 e.maxHp = e.hp;
                 e.type = 'elite';
                 e.img = sprites.enemy_elite;
             } else {
                 const types = [
-                    { radius: 22, spd: 4.0, hp: 45, img: sprites.enemy_scout },
-                    { radius: 26, spd: 2.8, hp: 120, img: sprites.enemy_tank },
-                    { radius: 20, spd: 4.8, hp: 40, img: sprites.enemy_stalker }
+                    { radius: 22, spd: 3.8, hp: 40, img: sprites.enemy_scout },
+                    { radius: 26, spd: 2.6, hp: 110, img: sprites.enemy_tank },
+                    { radius: 20, spd: 4.4, hp: 36, img: sprites.enemy_stalker }
                 ];
                 const chosen = types[Math.floor(Math.random() * types.length)];
                 e.radius = chosen.radius;
@@ -3703,7 +4493,7 @@
             }
         }
 
-        // ECONOMÍA DE CRISTALES Y XP EQUILIBRADA (FASE 20.0: ~2.5k - 4.5k CRISTALES EN RUN DE 10 MIN)
+        // ECONOMÍA DE CRISTALES Y XP EQUILIBRADA (ESCALADO DINÁMICO DE XP POR MINUTO Y MUNDO)
         function spawnGem(x, y, type, isTenMinuteBoss = false) {
             const g = getFreeObj(gemsPool);
             if (!g) return;
@@ -3714,27 +4504,28 @@
             const timeMin = gameTimeSeconds / 60;
             const currentW = WORLDS[currentWorldIndex];
             const luckBonus = 1 + ((player.luck || 1.0) - 1) * 0.20;
+            const worldXpMult = 1 + currentWorldIndex * 0.5;
 
             if (type === 'boss') {
                 g.radius = 28; g.color = '#f1c40f'; g.isChest = true;
                 if (isTenMinuteBoss) {
-                    // TITÁN DE 10 MIN: RECOMPENSA CULMINANTE (2,000 cristales base)
-                    g.xp = 12000;
+                    // TITÁN DE 10 MIN: RECOMPENSA CULMINANTE (2,000 cristales base + 25k XP)
+                    g.xp = Math.round(25000 * worldXpMult);
                     g.esencias = Math.round(2000 * currentW.crystalMult * luckBonus);
                 } else {
-                    // Miniboss de 3 / 6 minutos (250 - 400 cristales base)
-                    g.xp = Math.round(800 * (1 + timeMin * 0.4));
+                    // Miniboss de 3 / 6 minutos (250 - 400 cristales base + 2500+ XP)
+                    g.xp = Math.round((2500 + timeMin * 350) * worldXpMult);
                     g.esencias = Math.round((250 + timeMin * 25) * currentW.crystalMult * luckBonus);
                 }
             } else if (type === 'elite') {
                 g.radius = 12; g.color = '#00ffcc'; g.isChest = false;
-                g.xp = Math.round(30 * (1 + timeMin * 0.8));
+                g.xp = Math.round((50 + timeMin * 15) * worldXpMult);
                 // Mobs de élite: 8 a 18 cristales
                 const extraBounty = (player.hasBountyBonus ? 10 : 0);
                 g.esencias = Math.round((8 + timeMin * 1.0 + extraBounty) * currentW.crystalMult * luckBonus);
             } else {
                 g.radius = 6; g.color = '#34db84'; g.isChest = false;
-                g.xp = Math.round(2 * (1 + timeMin * 0.5));
+                g.xp = Math.max(3, Math.round((4 + timeMin * 2.2) * worldXpMult));
                 // Mobs comunes: ~12% de soltar 1 cristal (con cap de suerte y pepita Midas)
                 const dropChance = Math.min(0.25, 0.12 * Math.min(1.5, player.luck || 1.0));
                 const crystalPerMob = 1 + Math.floor(timeMin / 5);
@@ -3797,6 +4588,15 @@
             document.getElementById('screen-levelup').classList.add('active');
             document.getElementById('levelup-title').innerText = isBossChest ? (isTenMinuteReward ? "¡CÁPSULA SUPREMA TITÁNICA!" : "Cápsula de Jefe") : "Sistemas Actualizables";
 
+            const rerollDisplay = document.getElementById('reroll-count-display');
+            if (rerollDisplay) rerollDisplay.innerText = rerollsLeft;
+            const rerollBtn = document.getElementById('btn-reroll');
+            if (rerollBtn) {
+                rerollBtn.disabled = rerollsLeft <= 0;
+                rerollBtn.style.opacity = rerollsLeft <= 0 ? '0.5' : '1';
+                rerollBtn.onclick = () => rerollCards(isBossChest, isTenMinuteReward);
+            }
+
             const container = document.getElementById('cards-container');
             container.innerHTML = '';
 
@@ -3828,6 +4628,15 @@
                 };
                 container.appendChild(card);
             });
+        }
+
+        function rerollCards(isBossChest = false, isTenMinuteReward = false) {
+            if (rerollsLeft <= 0) return;
+            rerollsLeft--;
+            const rerollDisplay = document.getElementById('reroll-count-display');
+            if (rerollDisplay) rerollDisplay.innerText = rerollsLeft;
+            AudioSys.playShoot();
+            triggerLevelUp(isBossChest, isTenMinuteReward);
         }
 
         /* ==========================================================================
@@ -3949,12 +4758,25 @@
             for (let i = 0; i < minesPool.length; i++) {
                 const m = minesPool[i];
                 if (m.active) {
+                    const showAoE = document.getElementById('aoe-toggle') ? document.getElementById('aoe-toggle').checked : true;
+                    if (showAoE) {
+                        ctx.beginPath();
+                        ctx.arc(m.x, m.y, m.radius, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(255, 0, 85, 0.08)';
+                        ctx.fill();
+                        ctx.strokeStyle = 'rgba(255, 0, 85, 0.35)';
+                        ctx.setLineDash([6, 6]);
+                        ctx.lineWidth = 1.5;
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+                    }
                     ctx.beginPath();
                     ctx.arc(m.x, m.y, 15, 0, Math.PI * 2);
                     ctx.fillStyle = m.color;
                     ctx.shadowBlur = 18; ctx.shadowColor = m.color;
                     ctx.fill();
                     ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5; ctx.stroke();
+                    ctx.shadowBlur = 0;
                 }
             }
 
@@ -4023,16 +4845,131 @@
             const wpBlades = player.weapons.blades;
             if (wpBlades.active) {
                 const step = (Math.PI * 2) / wpBlades.count;
+                const bOrbit = wpBlades.orbitRadius * player.areaMult;
                 for (let i = 0; i < wpBlades.count; i++) {
-                    const bx = player.x + Math.cos(wpBlades.angle + step * i) * wpBlades.orbitRadius;
-                    const by = player.y + Math.sin(wpBlades.angle + step * i) * wpBlades.orbitRadius;
+                    const bx = player.x + Math.cos(wpBlades.angle + step * i) * bOrbit;
+                    const by = player.y + Math.sin(wpBlades.angle + step * i) * bOrbit;
                     ctx.beginPath();
-                    ctx.arc(bx, by, 13, 0, Math.PI * 2);
+                    ctx.arc(bx, by, 15, 0, Math.PI * 2);
                     ctx.fillStyle = '#f1c40f';
-                    ctx.shadowBlur = 22; ctx.shadowColor = '#f1c40f';
+                    ctx.shadowBlur = 24; ctx.shadowColor = '#f1c40f';
                     ctx.fill();
-                    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2.5; ctx.stroke();
+                    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3; ctx.stroke();
+                    ctx.shadowBlur = 0;
                 }
+            }
+
+            // Render de proyectiles de Mortero
+            for (let i = 0; i < mortarShells.length; i++) {
+                const s = mortarShells[i];
+                ctx.beginPath();
+                ctx.ellipse(s.x, s.y, Math.max(2, 10 * (1 - s.progress * 0.3)), Math.max(1, 5 * (1 - s.progress * 0.3)), 0, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+                ctx.fill();
+
+                const showAoE = document.getElementById('aoe-toggle') ? document.getElementById('aoe-toggle').checked : true;
+                if (showAoE) {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(s.targetX, s.targetY, s.radius, 0, Math.PI * 2);
+                    ctx.strokeStyle = 'rgba(139, 92, 246, 0.35)';
+                    ctx.setLineDash([4, 4]);
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+                    ctx.restore();
+                }
+
+                ctx.save();
+                ctx.translate(s.x, s.y + s.arcY);
+                ctx.beginPath();
+                ctx.arc(0, 0, 8, 0, Math.PI * 2);
+                ctx.fillStyle = '#a855f7';
+                ctx.shadowBlur = 18;
+                ctx.shadowColor = '#8b5cf6';
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // Render de Dron Láser Orbital
+            const wpDroneDraw = player.weapons.laserDrone;
+            if (wpDroneDraw && wpDroneDraw.active) {
+                const droneX = player.x + Math.cos(wpDroneDraw.angle) * wpDroneDraw.orbitRadius;
+                const droneY = player.y + Math.sin(wpDroneDraw.angle) * wpDroneDraw.orbitRadius;
+
+                if (laserDroneBeam) {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.moveTo(laserDroneBeam.sx, laserDroneBeam.sy);
+                    ctx.lineTo(laserDroneBeam.tx, laserDroneBeam.ty);
+                    ctx.strokeStyle = '#00e5ff';
+                    ctx.lineWidth = 4;
+                    ctx.shadowBlur = 20;
+                    ctx.shadowColor = '#00e5ff';
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.moveTo(laserDroneBeam.sx, laserDroneBeam.sy);
+                    ctx.lineTo(laserDroneBeam.tx, laserDroneBeam.ty);
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+                    ctx.restore();
+                }
+
+                ctx.save();
+                ctx.translate(droneX, droneY);
+                ctx.rotate(wpDroneDraw.angle + Math.PI / 2);
+                ctx.beginPath();
+                ctx.arc(0, 0, 9, 0, Math.PI * 2);
+                ctx.fillStyle = '#06b6d4';
+                ctx.shadowBlur = 16;
+                ctx.shadowColor = '#00e5ff';
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.arc(0, 0, 3.5, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // Render de Guadaña Espectral gigante
+            for (let i = 0; i < activeScytheSwings.length; i++) {
+                const sc = activeScytheSwings[i];
+                const alpha = Math.max(0, sc.timer / sc.maxTimer);
+                ctx.save();
+                ctx.translate(sc.x, sc.y);
+                ctx.rotate(sc.currentAngle);
+                ctx.globalAlpha = alpha;
+
+                ctx.beginPath();
+                ctx.arc(0, 0, sc.radius, -0.6, 0.6, false);
+                ctx.strokeStyle = '#22c55e';
+                ctx.lineWidth = 24;
+                ctx.shadowBlur = 35;
+                ctx.shadowColor = '#00ffcc';
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.arc(0, 0, sc.radius, -0.5, 0.5, false);
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 8;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(Math.cos(-0.1) * sc.radius, Math.sin(-0.1) * sc.radius);
+                ctx.strokeStyle = 'rgba(16, 185, 129, 0.6)';
+                ctx.lineWidth = 4;
+                ctx.stroke();
+
+                ctx.restore();
             }
 
             for (let i = 0; i < ghostsPool.length; i++) {
@@ -4055,6 +4992,26 @@
                     ctx.beginPath();
                     ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
                     ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            // Visualizador de Área Electrostática
+            if (player.hasStaticAura) {
+                const showAoE = document.getElementById('aoe-toggle') ? document.getElementById('aoe-toggle').checked : true;
+                if (showAoE) {
+                    const auraRadius = 85 * player.areaMult;
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(player.x, player.y, auraRadius, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(0, 255, 204, 0.05)';
+                    ctx.fill();
+                    ctx.strokeStyle = 'rgba(0, 255, 204, 0.45)';
+                    ctx.setLineDash([8, 8]);
+                    ctx.lineWidth = 2;
+                    ctx.shadowBlur = 14;
+                    ctx.shadowColor = '#00ffcc';
+                    ctx.stroke();
                     ctx.restore();
                 }
             }
@@ -4134,7 +5091,9 @@
            14. BUCLE PRINCIPAL CON DELTA TIME
            ========================================================================== */
         function gameLoop(timestamp) {
-            const dt = Math.min((timestamp - lastFrameTime) / 1000, 0.1);
+            const speedSelect = document.getElementById('game-speed-select');
+            const speedMult = speedSelect ? parseFloat(speedSelect.value || '1.0') : 1.0;
+            const dt = Math.min((timestamp - lastFrameTime) / 1000, 0.1) * speedMult;
             const dt60 = dt * 60;
             lastFrameTime = timestamp;
 
@@ -4184,14 +5143,15 @@
             charsData.forEach(c => {
                 const isUnlocked = saveData.unlockedChars.includes(c.id);
                 const isSelected = c.id === selectedCharId && isUnlocked;
+                const isSecretLocked = !isUnlocked && c.isSecret;
                 const div = document.createElement('div');
                 div.className = `char-card ${isUnlocked ? '' : 'locked'} ${isSelected ? 'selected' : ''}`;
 
                 let statsHtml = '<div class="char-stats-grid">';
                 statLabels.forEach(s => {
-                    const val = c.stats[s.key] || 0;
-                    const pct = Math.min(100, Math.round((val / s.max) * 100));
-                    const displayVal = s.isPct ? `${Math.round(val * 100)}%` : val;
+                    const val = isSecretLocked ? '??' : (c.stats[s.key] || 0);
+                    const pct = isSecretLocked ? 0 : Math.min(100, Math.round((val / s.max) * 100));
+                    const displayVal = isSecretLocked ? '??' : (s.isPct ? `${Math.round(val * 100)}%` : val);
                     statsHtml += `
                         <div class="stat-row">
                             <span class="stat-name">${s.label}</span>
@@ -4205,21 +5165,32 @@
                 statsHtml += '</div>';
 
                 let weaponsHtml = '<div class="char-weapons-row">';
-                (c.initWeapons || []).forEach(wId => {
-                    weaponsHtml += `<span class="char-weapon-chip">${weaponNames[wId] || wId}</span>`;
-                });
+                if (isSecretLocked) {
+                    weaponsHtml += `<span class="char-weapon-chip">❓ Desconocido</span>`;
+                } else {
+                    (c.initWeapons || []).forEach(wId => {
+                        weaponsHtml += `<span class="char-weapon-chip">${weaponNames[wId] || wId}</span>`;
+                    });
+                }
                 weaponsHtml += '</div>';
 
+                const displayName = isSecretLocked ? '??? (PERSONAJE SECRETO)' : c.name;
+                const displayRole = isSecretLocked ? 'CLASIFICADO' : (c.role || 'COMBATIENTE');
+                const displayDesc = isSecretLocked ? 'Requisitos ocultos en el cosmos cuántico.' : c.desc;
+                const displayPassive = isSecretLocked ? 'Pasiva oculta hasta su descubrimiento.' : c.passive;
+                const displayCond = isSecretLocked ? '🔒 OBJETIVO SECRETO' : `🔒 ${c.cond}`;
+                const displayIcon = isSecretLocked ? '❓' : c.icon;
+
                 div.innerHTML = `
-                    <div class="avatar-circle">${c.icon}</div>
-                    <div class="char-name">${c.name}</div>
-                    <div class="char-role">${c.role || 'COMBATIENTE'}</div>
-                    <div class="char-desc">${c.desc}</div>
-                    <div class="char-passive-box">⚡ ${c.passive}</div>
+                    <div class="avatar-circle">${displayIcon}</div>
+                    <div class="char-name">${displayName}</div>
+                    <div class="char-role">${displayRole}</div>
+                    <div class="char-desc">${displayDesc}</div>
+                    <div class="char-passive-box">⚡ ${displayPassive}</div>
                     ${weaponsHtml}
                     ${statsHtml}
                     ${isSelected ? '<span class="char-active-badge">✓ SELECCIONADO</span>' : ''}
-                    ${!isUnlocked ? `<div style="font-size: 11px; color: #ef4444; margin-top: 8px; font-weight: 700;">🔒 ${c.cond}</div>` : ''}
+                    ${!isUnlocked ? `<div style="font-size: 11px; color: #ef4444; margin-top: 8px; font-weight: 700;">${displayCond}</div>` : ''}
                 `;
 
                 if (isUnlocked) {
@@ -4279,11 +5250,71 @@
             triggerGameOver(true);
         }
 
-        function triggerGameOver(aborted = false) {
-            if (gameTimeSeconds >= 300 && !saveData.unlockedChars.includes('char_tank')) {
-                saveData.unlockedChars.push('char_tank');
-                alert("¡NUEVO CHASIS DESBLOQUEADO: JUGGERNAUT! (Sobreviviste 5 minutos)");
+        function updateRecords() {
+            let changed = false;
+            const curTime = Math.floor(gameTimeSeconds);
+            if (curTime > (saveData.bestTime || 0)) {
+                saveData.bestTime = curTime;
+                changed = true;
             }
+            if (kills > (saveData.bestKills || 0)) {
+                saveData.bestKills = kills;
+                changed = true;
+            }
+            if (changed) saveGame();
+        }
+
+        function checkCharacterUnlocks() {
+            if (!player) return;
+            let newlyUnlocked = [];
+
+            function tryUnlock(charId, name) {
+                if (!saveData.unlockedChars.includes(charId)) {
+                    saveData.unlockedChars.push(charId);
+                    newlyUnlocked.push(name);
+                    spawnFloatingText(player.x, player.y - 70, `🎉 ¡DESBLOQUEADO: ${name}!`, '52, 219, 132', 20);
+                }
+            }
+
+            // Ignis (Piromante): 500 bajas
+            if (kills >= 500) tryUnlock('char_pyro', 'Ignis (Piromante)');
+
+            // Juggernaut (Tanque): Sobrevive 5 minutos
+            if (gameTimeSeconds >= 300) tryUnlock('char_tank', 'Juggernaut Acorazado');
+
+            // Chronos: Alcanza el Mundo 2
+            if (currentWorldIndex >= 1) tryUnlock('char_chronos', 'Chronos (Crononauta)');
+
+            // Cyber-Lich: Derrota a 2 Jefes
+            if (bossesDefeatedCount >= 2) tryUnlock('char_lich', 'Cyber-Lich (Nigromante)');
+
+            // Zephyr: Realiza 30 dashes
+            if (dashesCount >= 30) tryUnlock('char_zephyr', 'Zephyr (Vórtice)');
+
+            // Dr. Gauss: Recolecta 1,500 gemas
+            if (gemsCollectedCount >= 1500) tryUnlock('char_gauss', 'Dr. Gauss (Electrón)');
+
+            // Artillero Coloso: Nivel 20
+            if (player.level >= 20) tryUnlock('char_colossus', 'Artillero Coloso');
+
+            // Kage (Secreto): Sobrevive 45s con <25% HP
+            if (lowHpSurvivalTimer >= 45) tryUnlock('char_kage', 'Kage (Sombra Oculta)');
+
+            // Archimago Cuántico (Secreto): Ten las 4 armas activas a la vez
+            let activeWpCount = 0;
+            for (let w in player.weapons) {
+                if (player.weapons[w].active) activeWpCount++;
+            }
+            if (activeWpCount >= 4) tryUnlock('char_omni', 'Archimago Cuántico');
+
+            if (newlyUnlocked.length > 0) {
+                saveGame();
+            }
+        }
+
+        function triggerGameOver(aborted = false) {
+            updateRecords();
+            checkCharacterUnlocks();
 
             if (!aborted && revivesLeft > 0) {
                 gameState = 'gameover';
@@ -4303,8 +5334,8 @@
             document.getElementById('gameover-title').innerText = isEntropyActive ? "Consumido por el Colapso" : "Misión Finalizada";
             document.getElementById('gameover-stats').innerHTML = `
                 Mundo Alcanzado: <span style="color:var(--gold);">${WORLDS[currentWorldIndex].name}</span><br>
-                Tiempo Sobrevivido: <b>${m}m ${s}s</b><br>
-                Enemigos Eliminados: <b>${kills.toLocaleString()}</b><br>
+                Tiempo Sobrevivido: <b>${m}m ${s}s</b> (Récord: <b>${Math.floor(saveData.bestTime/60)}m ${saveData.bestTime%60}s</b>)<br>
+                Enemigos Eliminados: <b>${kills.toLocaleString()}</b> (Récord: <b>${saveData.bestKills.toLocaleString()}</b>)<br>
                 Pico de DPS: <b style="color:#38bdf8;">${peakDPS.toLocaleString()}</b><br>
                 Racha Máxima Combo: <b style="color:var(--gold);">x${comboCount}</b><br>
                 Cristales Ganados en la Run: <b style="color:var(--primary);">${runCrystals.toLocaleString()} 💎</b>
@@ -4328,7 +5359,7 @@
             document.getElementById('hud').classList.add('active');
         }
 
-        initTreeEvents();
+        if (typeof updateAchievementsBadge === 'function') updateAchievementsBadge();
         saveGame();
         requestAnimationFrame(gameLoop);
     </script>
