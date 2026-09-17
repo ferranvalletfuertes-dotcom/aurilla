@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Megabonk Ultra: Arena Dimensional (Fase 18.0 - Escalado Dinámico)</title>
+    <title>QUANTUM BREACH: SURVIVORS - Arena Dimensional</title>
     <style>
         :root {
             --primary: #00ffcc;
@@ -862,7 +862,9 @@
            STEAM-TIER MAIN MENU STYLING (FASE 20.1)
            ========================================================================== */
         #screen-main {
-            padding: 0 !important;
+            padding: 20px 0 !important;
+            justify-content: flex-start !important;
+            overflow-y: auto !important;
             background: radial-gradient(circle at 50% 30%, rgba(10, 18, 36, 0.88), rgba(3, 5, 10, 0.98)) !important;
         }
 
@@ -1284,9 +1286,191 @@
             border-radius: 3px;
         }
 
+        /* CONTROLES TÁCTILES MÓVILES (BRAWL STARS STYLE) */
+        #mobile-joystick-container {
+            display: none;
+            position: fixed;
+            pointer-events: none;
+            z-index: 90;
+            transform: translate(-50%, -50%);
+            touch-action: none;
+        }
+        #joystick-base {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: rgba(0, 255, 204, 0.08);
+            border: 2px solid rgba(0, 255, 204, 0.45);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        #joystick-stick {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #5eead4, #0d9488);
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.6);
+            border: 2px solid #ffffff;
+            position: absolute;
+            transition: transform 0.03s linear;
+        }
+        #mobile-dash-btn {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: rgba(14, 20, 36, 0.9);
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.35);
+            z-index: 95;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            touch-action: none;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        #mobile-dash-btn:active {
+            transform: scale(0.92);
+            background: var(--primary);
+        }
+        #mobile-dash-btn:active span {
+            color: #030307 !important;
+        }
+
+        /* PROTOCOLO DIARIO Y SUMINISTROS */
+        .daily-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .daily-card {
+            background: rgba(11, 16, 28, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 14px 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            transition: all 0.2s;
+        }
+        .daily-card.claimed {
+            opacity: 0.6;
+            border-color: rgba(16, 185, 129, 0.4);
+            background: rgba(6, 22, 16, 0.85);
+        }
+        .daily-card.today {
+            border-color: var(--primary);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.3);
+            transform: translateY(-4px);
+            background: rgba(10, 26, 36, 0.95);
+        }
+        .daily-card.day7 {
+            border-color: #f59e0b;
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.35);
+        }
+        .daily-day-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: #94a3b8;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+        .daily-card.today .daily-day-label {
+            color: var(--primary);
+        }
+        .daily-reward-icon {
+            font-size: 32px;
+            margin: 6px 0;
+        }
+        .daily-reward-val {
+            font-size: 13px;
+            font-weight: 900;
+            color: #fbbf24;
+        }
+
+        /* RANKING ONLINE GLOBAL */
+        .lb-table-container {
+            width: 96%;
+            max-width: 1050px;
+            height: 60vh;
+            overflow-y: auto;
+            background: rgba(10, 14, 26, 0.9);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 12px;
+            padding: 10px;
+            box-shadow: inset 0 0 25px rgba(0,0,0,0.6);
+        }
+        .lb-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+        .lb-table th {
+            padding: 10px 14px;
+            background: rgba(14, 20, 36, 0.95);
+            color: #94a3b8;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 11px;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            border-bottom: 1px solid rgba(0, 255, 204, 0.3);
+        }
+        .lb-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+        }
+        .lb-table tr:hover {
+            background: rgba(0, 255, 204, 0.05);
+        }
+        .lb-table tr.lb-player-row {
+            background: rgba(0, 255, 204, 0.15) !important;
+            font-weight: bold;
+            border: 1px solid var(--primary);
+        }
+        .lb-rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            font-weight: 900;
+            font-size: 12px;
+        }
+        .lb-rank-1 { background: #f59e0b; color: #000; box-shadow: 0 0 12px #f59e0b; }
+        .lb-rank-2 { background: #94a3b8; color: #000; box-shadow: 0 0 10px #94a3b8; }
+        .lb-rank-3 { background: #b45309; color: #fff; box-shadow: 0 0 10px #b45309; }
+        .lb-rank-other { background: rgba(255, 255, 255, 0.08); color: #cbd5e1; }
+
     </style>
 </head>
 <body>
+    <!-- BOTÓN FLOTANTE PERMANENTE ARRIBA A LA IZQUIERDA (PC / MÓVIL) -->
+    <div id="floating-device-btn" onclick="toggleDeviceMode()" title="Cambiar Controles: Modo PC o Móvil" style="position: fixed; top: 18px; left: 24px; z-index: 999999; display: flex; align-items: center; gap: 10px; background: rgba(11, 16, 28, 0.94); border: 2px solid var(--primary); box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); border-radius: 30px; padding: 8px 18px; cursor: pointer; user-select: none; backdrop-filter: blur(10px); transition: all 0.2s;">
+        <span id="floating-device-icon" style="font-size: 20px;">🖥️</span>
+        <span id="floating-device-text" style="font-size: 13px; font-weight: 900; color: var(--primary); letter-spacing: 1px;">MODO: PC</span>
+    </div>
+
     <div id="damage-vignette"></div>
     <div id="entropy-vignette"></div>
     <div id="warning">¡LEVIATÁN OMEGA DETECTADO!</div>
@@ -1298,8 +1482,8 @@
         <header class="steam-top-bar">
             <div class="steam-brand">
                 <span class="steam-status-dot"></span>
-                <span class="steam-brand-name">MEGABONK // ARENA</span>
-                <span class="steam-ver-tag">v22.0 ULTRA</span>
+                <span class="steam-brand-name">QUANTUM BREACH // SURVIVORS</span>
+                <span class="steam-ver-tag">v23.0 OMNIVERSE</span>
             </div>
             <div class="steam-top-stats">
                 <div class="steam-stat-chip">
@@ -1317,6 +1501,7 @@
                     <span class="stat-num" id="main-best-kills">0</span>
                     <span class="stat-unit">BAJAS</span>
                 </div>
+                <div id="device-toggle-btn" class="steam-stat-chip" style="cursor:pointer; border-color:var(--primary); font-weight:800; color:var(--primary);" onclick="toggleDeviceMode()" title="Cambiar modo PC / Móvil">🖥️ PC</div>
                 <div id="secret-gambler" class="steam-dice-btn" onclick="clickGamblerSecret()" title="Cálculo Cuántico">🎲</div>
             </div>
         </header>
@@ -1325,6 +1510,12 @@
         <div class="steam-deck-layout">
             <!-- Columna Izquierda: Acciones Tácticas -->
             <div class="steam-nav-column">
+                <div class="steam-hero-title">
+                    <div class="steam-kicker">ARENA ROGUELITE DIMENSIONAL</div>
+                    <div class="steam-title">QUANTUM<span class="cyan-glow">BREACH</span></div>
+                    <div class="steam-desc">Sobrevive a la brecha cuántica, forja tu arsenal de plasma y trasciende al Vacío Infinito.</div>
+                </div>
+
                 <div class="steam-action-list">
                     <div class="steam-btn steam-btn-primary" onclick="openCharSelect()">
                         <div class="steam-btn-icon">⚔️</div>
@@ -1335,13 +1526,40 @@
                         <span class="steam-btn-badge">JUGAR</span>
                     </div>
 
+                    <div class="steam-btn" id="menu-device-action-btn" style="border-color: #06b6d4; box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);" onclick="toggleDeviceMode()">
+                        <div class="steam-btn-icon" id="menu-device-icon">🖥️</div>
+                        <div class="steam-btn-text">
+                            <div class="steam-btn-title" id="menu-device-title">CONTROLES: MODO PC</div>
+                            <div class="steam-btn-sub" id="menu-device-sub">WASD + Espacio. Clic para cambiar a Joystick táctil de Móvil</div>
+                        </div>
+                        <span class="steam-btn-badge" style="background:#06b6d4; color:#030307;" id="menu-device-badge">PC</span>
+                    </div>
+
                     <div class="steam-btn steam-btn-gold" onclick="openShop()">
                         <div class="steam-btn-icon">🛒</div>
                         <div class="steam-btn-text">
                             <div class="steam-btn-title">TIENDA CUÁNTICA</div>
-                            <div class="steam-btn-sub">Mejoras de stats, armas y chasis NEXUS-9</div>
+                            <div class="steam-btn-sub">Mejoras de XP, stats, armas y chasis NEXUS-9</div>
                         </div>
                         <span class="steam-btn-badge gold">MERCADO</span>
+                    </div>
+
+                    <div class="steam-btn" style="border-color: #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.18);" onclick="openDailyScreen()">
+                        <div class="steam-btn-icon">📅</div>
+                        <div class="steam-btn-text">
+                            <div class="steam-btn-title">PROTOCOLO DIARIO</div>
+                            <div class="steam-btn-sub">Suministros de 7 días y contratos cuánticos</div>
+                        </div>
+                        <span class="steam-btn-badge" style="background:#10b981; color:#030307;" id="daily-notification-badge">DIARIO</span>
+                    </div>
+
+                    <div class="steam-btn" style="border-color: #38bdf8; box-shadow: 0 0 15px rgba(56, 189, 248, 0.18);" onclick="openLeaderboard()">
+                        <div class="steam-btn-icon">🌐</div>
+                        <div class="steam-btn-text">
+                            <div class="steam-btn-title">RANKING GLOBAL ONLINE</div>
+                            <div class="steam-btn-sub">Top mejores runs y magnates de cristales</div>
+                        </div>
+                        <span class="steam-btn-badge" style="background:#38bdf8; color:#030307;">RANKING</span>
                     </div>
 
                     <div class="steam-btn" style="border-color: #f59e0b; box-shadow: 0 0 15px rgba(245, 158, 11, 0.15);" onclick="openAchievements()">
@@ -1382,41 +1600,41 @@
             <div class="steam-intel-column">
                 <div class="steam-intel-card">
                     <div class="intel-header">
-                        <div class="intel-title">📡 BOLETÍN DE MANDO // PARCHE v22.0</div>
+                        <div class="intel-title">📡 BOLETÍN // PARCHE v23.0 OMNIVERSE</div>
                         <div class="intel-tag">EN VIVO</div>
                     </div>
                     <div class="intel-body">
                         <div class="intel-news-item">
                             <div class="news-dot gold"></div>
                             <div>
-                                <b style="color:#f59e0b;">TIENDA CUÁNTICA PERMANENTE:</b>
-                                <p>Sustituto definitivo del árbol: invierte gemas en mejoras de stats, Cañón Mortero, Dron Láser, slots de armas y el chasis NEXUS-9.</p>
+                                <b style="color:#f59e0b;">PROGRESIÓN A 30 MIN Y MODO SIN FIN:</b>
+                                <p>Jefes a los 10m (M1), 20m (M2) y 30m (Jefe Final M3). ¡Derrótalo para alcanzar la Victoria o trascender al Modo Sin Fin infinito!</p>
                             </div>
                         </div>
                         <div class="intel-news-item">
                             <div class="news-dot purple"></div>
                             <div>
-                                <b style="color:#a855f7;">REGISTRO DE 16 LOGROS:</b>
-                                <p>Supera desafíos tácticos en combate y reclama más de 18,000 gemas para gastar en el mercado cuántico.</p>
+                                <b style="color:#a855f7;">ENEMIGOS ÚNICOS POR MUNDO:</b>
+                                <p>Nuevos enemigos exclusivos en Mundo 2 (llamas, ácido, micro-dash) y Mundo 3 (teletransporte, escudos cuánticos y orbes de vacío).</p>
                             </div>
                         </div>
                         <div class="intel-news-item">
                             <div class="news-dot green"></div>
                             <div>
-                                <b style="color:#22c55e;">GUADAÑA ESPECTRAL REPARADA:</b>
-                                <p>Cada 50 bajas acumuladas desata un corte guadaña titánico de 500 de daño con barrido en toda la pantalla.</p>
+                                <b style="color:#22c55e;">XP CHETADA Y MEJORAS DE TIENDA:</b>
+                                <p>Nueva mejora permanente de XP en tienda, cartas de XP con hasta +60% y orbes de almas esmeralda para la Guadaña Espectral.</p>
                             </div>
                         </div>
                         <div class="intel-news-item">
                             <div class="news-dot cyan"></div>
                             <div>
-                                <b style="color:#38bdf8;">JEFES RELATIVOS Y ALTA DENSIDAD:</b>
-                                <p>Jefes de Mundo a los 10m de cada mundo (10m, 20m, 30m). Desde el minuto 3:00 la arena se puebla intensamente y la XP progresa sin frenos.</p>
+                                <b style="color:#38bdf8;">PRIORIDAD DE ARMAS DE TIENDA:</b>
+                                <p>El Cañón Mortero y Dron Láser adquiridos en tienda aparecen garantizados en tus primeros niveles de run.</p>
                             </div>
                         </div>
                     </div>
                     <div class="intel-footer">
-                        <span>💡 Consejo: Visita el Registro de Logros en el menú principal para reclamar tus gemas acumuladas.</span>
+                        <span>💡 Consejo: Sobrevive los 30 minutos para desbloquear la Victoria Suprema y el acceso a la Singularidad Infinita.</span>
                     </div>
                 </div>
             </div>
@@ -1486,6 +1704,83 @@
         <div id="achievements-list" class="achievements-grid"></div>
     </div>
 
+    <!-- PROTOCOLO DIARIO: SUMINISTROS Y CONTRATOS -->
+    <div id="screen-daily" class="screen">
+        <div class="shop-header">
+            <div class="shop-title-wrap">
+                <h1 style="font-size: 28px; margin: 0; text-align: left;">PROTOCOLO DIARIO</h1>
+                <div style="color: #94a3b8; font-size: 13px;">Suministros de 7 Días y Contratos Cuánticos</div>
+            </div>
+            <div class="shop-crystals-badge">
+                Cristales: <span id="daily-crystals-count">0</span> 💎
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-small" onclick="closeDailyScreen()">Volver al Menú</button>
+            </div>
+        </div>
+
+        <div style="width: 95%; max-width: 1050px; height: 65vh; overflow-y: auto; padding-right: 8px;">
+            <div style="background: rgba(14, 20, 36, 0.9); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <div style="font-size: 18px; font-weight: 900; color: #10b981;">CALENDARIO DE SUMINISTROS DE 7 DÍAS</div>
+                        <div style="font-size: 12px; color: #94a3b8;">Inicia sesión cada día para desbloquear recompensas masivas acumulativas</div>
+                    </div>
+                    <div id="daily-countdown" style="font-size: 13px; font-weight: 800; color: var(--gold); background: rgba(0,0,0,0.5); padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(241, 196, 15, 0.3);">
+                        Próximo suministro en: --:--:--
+                    </div>
+                </div>
+                <div id="daily-calendar-grid" class="daily-grid"></div>
+                <div style="text-align: center; margin-top: 10px;">
+                    <button id="btn-claim-daily" class="btn" style="border-color: #10b981; color: #000; background: linear-gradient(135deg, #10b981, #34d399); font-weight: 900; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);" onclick="claimDailyReward()">
+                        🎁 RECLAMAR SUMINISTRO DE HOY
+                    </button>
+                </div>
+            </div>
+
+            <!-- CONTRATOS CUÁNTICOS DIARIOS -->
+            <div style="background: rgba(14, 20, 36, 0.9); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px; padding: 18px;">
+                <div style="font-size: 18px; font-weight: 900; color: #38bdf8; margin-bottom: 4px;">CONTRATOS CUÁNTICOS DEL DÍA</div>
+                <div style="font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Completa misiones tácticas en tus incursiones para recolectar bonificaciones en gemas</div>
+                <div id="daily-contracts-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RANKING DE TUS INCURSIONES -->
+    <div id="screen-leaderboard" class="screen">
+        <div class="shop-header">
+            <div class="shop-title-wrap">
+                <h1 style="font-size: 28px; margin: 0; text-align: left;">RANKING DE TUS INCURSIONES</h1>
+                <div style="color: #94a3b8; font-size: 13px;">Tus Récords Reales de Supervivencia, Bajas y Puntuación</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.5); padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(0,255,204,0.3);">
+                    <span style="font-size: 12px; color: #94a3b8;">Piloto:</span>
+                    <input type="text" id="pilot-name-input" class="steam-input" style="width: 130px; padding: 4px 8px;" maxlength="14" placeholder="Tu Nickname">
+                    <button class="steam-btn-tiny" onclick="savePilotName()">Guardar</button>
+                </div>
+                <button class="btn-small" onclick="closeLeaderboard()">Volver al Menú</button>
+            </div>
+        </div>
+
+        <div class="shop-tabs" style="max-width: 1050px; margin-bottom: 12px;">
+            <button class="shop-tab active" id="tab-lb-runs" onclick="switchLeaderboardTab('runs')">⚔️ Mejores Incursiones (Puntuación)</button>
+            <button class="shop-tab" id="tab-lb-rich" onclick="switchLeaderboardTab('rich')">💎 Récords de Bajas y Cristales</button>
+        </div>
+
+        <div class="lb-table-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 10px 10px 10px; font-size: 12px; color: #94a3b8;">
+                <span id="lb-sync-status">🟢 Récords de Piloto: Guardados en local</span>
+                <button class="steam-btn-tiny" onclick="refreshLeaderboard()">🔄 Actualizar Tabla</button>
+            </div>
+            <table class="lb-table">
+                <thead id="lb-table-head"></thead>
+                <tbody id="lb-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
     <!-- OPCIONES -->
     <div id="screen-options" class="screen">
         <h1 style="font-size: 38px;">Ajustes de Sistema</h1>
@@ -1523,7 +1818,7 @@
                 <input type="checkbox" id="dmg-numbers-toggle" checked>
             </div>
         </div>
-        <button class="btn" onclick="switchScreen('screen-main')">Cerrar</button>
+        <button class="btn" onclick="closeOptions()">Cerrar</button>
     </div>
 
     <!-- HUD EN COMBATE -->
@@ -1544,7 +1839,10 @@
             <div class="hud-panel" style="text-align: right;">
                 <div style="font-size: 13px; color: #aaa;">Dash [Espacio / Clic Dcho]</div>
                 <div id="dash-bar-container"><div id="dash-bar-fill"></div></div>
-                <button id="pause-btn" style="background: none; border: 1px solid var(--primary); color: var(--primary); padding: 4px 10px; border-radius: 4px; margin-top: 8px; cursor: pointer; pointer-events: auto; font-weight: bold;" onclick="togglePause()">II Pausa</button>
+                <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center; margin-top: 8px;">
+                    <button id="hud-device-toggle-btn" style="background: none; border: 1px solid #38bdf8; color: #38bdf8; padding: 4px 8px; border-radius: 4px; cursor: pointer; pointer-events: auto; font-weight: bold; font-size: 11px;" onclick="toggleDeviceMode()">🖥️ PC</button>
+                    <button id="pause-btn" style="background: none; border: 1px solid var(--primary); color: var(--primary); padding: 4px 10px; border-radius: 4px; margin-top: 0; cursor: pointer; pointer-events: auto; font-weight: bold;" onclick="togglePause()">II Pausa</button>
+                </div>
             </div>
         </div>
 
@@ -1562,6 +1860,17 @@
 
         <div id="weapons-hud"></div>
         <div id="minimap-container"><canvas id="minimapCanvas" width="190" height="190"></canvas></div>
+    </div>
+
+    <!-- CONTROLES TÁCTILES MÓVILES (BRAWL STARS STYLE) -->
+    <div id="mobile-joystick-container">
+        <div id="joystick-base">
+            <div id="joystick-stick"></div>
+        </div>
+    </div>
+    <div id="mobile-dash-btn" onclick="performDash()">
+        <span style="font-size: 26px;">⚡</span>
+        <span style="font-size: 10px; font-weight: 900; color: var(--primary); letter-spacing: 1px;">DASH</span>
     </div>
 
     <!-- PANTALLA DE SUBIDA DE NIVEL -->
@@ -1597,6 +1906,18 @@
         <div style="display: flex; gap: 15px; margin-top: 25px;">
             <button id="btn-revive" class="btn" style="display:none; border-color: #34db84; color: #34db84;" onclick="useRevive()">Protocolo Lázaro (Revivir)</button>
             <button class="btn" onclick="switchScreen('screen-main')">Volver a la Base</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE VICTORIA DIMENSIONAL -->
+    <div id="screen-victory" class="screen">
+        <div style="font-size: 58px; margin-bottom: 5px;">🏆</div>
+        <h1 style="color: #00ffea; font-size: 44px; margin: 0 0 10px 0; text-shadow: 0 0 30px rgba(0, 255, 234, 0.6); font-family: 'Space Grotesk', sans-serif;">¡VICTORIA DIMENSIONAL!</h1>
+        <div style="color: #facc15; font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 18px;">Has derrotado al Titán del Vacío y conquistado el Quantum Breach</div>
+        <h2 id="victory-stats" style="max-width: 620px; line-height: 1.7; font-size: 15px; color: #cbd5e1; background: rgba(2, 6, 23, 0.7); border: 1px solid rgba(0, 255, 234, 0.3); border-radius: 12px; padding: 18px 24px; margin-bottom: 25px;"></h2>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
+            <button class="btn" style="border-color: #f59e0b; color: #000; background: linear-gradient(135deg, #f59e0b, #fbbf24); font-weight: 900; box-shadow: 0 0 25px rgba(245, 158, 11, 0.5);" onclick="claimVictory()">💎 RECLAMAR VICTORIA (+25,000 💎)</button>
+            <button class="btn" style="border-color: #a855f7; color: #fff; background: linear-gradient(135deg, #7c3aed, #9333ea); font-weight: 900; box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);" onclick="startEndlessMode()">🌌 MODO SIN FIN (SINGULARIDAD)</button>
         </div>
     </div>
 
@@ -2066,6 +2387,82 @@
                     <ellipse cx="110" cy="110" rx="100" ry="30" fill="none" stroke="#38bdf8" stroke-width="5" transform="rotate(35 110 110)"/>
                     <ellipse cx="110" cy="110" rx="100" ry="30" fill="none" stroke="#f43f5e" stroke-width="5" transform="rotate(-35 110 110)"/>
                 </svg>
+            `),
+            // Enemigos únicos de Mundo 2: Purgatorio de Silicio
+            enemy_pyro_crawler: createImgFromSVG(`
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="50,12 88,34 88,78 50,96 12,78 12,34" fill="#7c2d12" stroke="#ea580c" stroke-width="5"/>
+                    <circle cx="50" cy="50" r="16" fill="#f97316"/>
+                    <circle cx="50" cy="50" r="8" fill="#fef08a"/>
+                    <circle cx="34" cy="40" r="4" fill="#ffedd5"/>
+                    <circle cx="66" cy="40" r="4" fill="#ffedd5"/>
+                </svg>
+            `),
+            enemy_acid_spitter: createImgFromSVG(`
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="50,8 90,45 74,90 26,90 10,45" fill="#854d0e" stroke="#eab308" stroke-width="5"/>
+                    <circle cx="50" cy="52" r="18" fill="#a3e635" stroke="#facc15" stroke-width="3"/>
+                    <circle cx="50" cy="52" r="7" fill="#14532d"/>
+                </svg>
+            `),
+            enemy_magma_spectre: createImgFromSVG(`
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50,10 Q85,40 75,85 Q50,65 25,85 Q15,40 50,10 Z" fill="#991b1b" stroke="#f87171" stroke-width="5"/>
+                    <circle cx="40" cy="44" r="5" fill="#fef08a"/>
+                    <circle cx="60" cy="44" r="5" fill="#fef08a"/>
+                    <polygon points="50,55 58,70 42,70" fill="#f97316"/>
+                </svg>
+            `),
+            enemy_magma_elite: createImgFromSVG(`
+                <svg viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="65,10 115,35 125,95 65,120 5,95 15,35" fill="#451a03" stroke="#f97316" stroke-width="7"/>
+                    <circle cx="65" cy="65" r="30" fill="#ea580c" stroke="#fef08a" stroke-width="5"/>
+                    <circle cx="65" cy="65" r="14" fill="#ffffff"/>
+                    <line x1="25" y1="40" x2="105" y2="90" stroke="#f97316" stroke-width="4"/>
+                    <line x1="105" y1="40" x2="25" y2="90" stroke="#f97316" stroke-width="4"/>
+                </svg>
+            `),
+            // Enemigos únicos de Mundo 3: Singularity Void
+            enemy_void_blinker: createImgFromSVG(`
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="50,8 92,50 50,92 8,50" fill="#1e1b4b" stroke="#818cf8" stroke-width="6"/>
+                    <circle cx="50" cy="50" r="16" fill="#4338ca" stroke="#00ffea" stroke-width="3"/>
+                    <circle cx="50" cy="50" r="6" fill="#00ffea"/>
+                </svg>
+            `),
+            enemy_void_suppressor: createImgFromSVG(`
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="38" fill="#311042" stroke="#d946ef" stroke-width="6"/>
+                    <ellipse cx="50" cy="50" rx="44" ry="14" fill="none" stroke="#a855f7" stroke-width="3"/>
+                    <circle cx="50" cy="50" r="14" fill="#09090b" stroke="#ffffff" stroke-width="2"/>
+                </svg>
+            `),
+            enemy_void_leech: createImgFromSVG(`
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="50,6 78,35 88,85 50,96 12,85 22,35" fill="#09090b" stroke="#c084fc" stroke-width="5"/>
+                    <circle cx="50" cy="40" r="10" fill="#a855f7"/>
+                    <circle cx="50" cy="70" r="8" fill="#e879f9"/>
+                    <polygon points="50,22 56,34 44,34" fill="#ffffff"/>
+                </svg>
+            `),
+            enemy_void_watcher: createImgFromSVG(`
+                <svg viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="65" cy="65" r="54" fill="#09030e" stroke="#c026d3" stroke-width="8"/>
+                    <ellipse cx="65" cy="65" rx="42" ry="24" fill="#581c87" stroke="#e879f9" stroke-width="4"/>
+                    <circle cx="65" cy="65" r="16" fill="#00ffea" stroke="#ffffff" stroke-width="3"/>
+                    <circle cx="65" cy="65" r="7" fill="#030307"/>
+                </svg>
+            `),
+            // Jefe Cósmico de Modo Sin Fin
+            boss_cosmic: createImgFromSVG(`
+                <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="120,10 215,65 215,175 120,230 25,175 25,65" fill="#0f051d" stroke="#00ffea" stroke-width="9"/>
+                    <circle cx="120" cy="120" r="70" fill="#2e1065" stroke="#f43f5e" stroke-width="6"/>
+                    <circle cx="120" cy="120" r="35" fill="#09090b" stroke="#facc15" stroke-width="5"/>
+                    <ellipse cx="120" cy="120" rx="110" ry="35" fill="none" stroke="#38bdf8" stroke-width="4" transform="rotate(25 120 120)"/>
+                    <ellipse cx="120" cy="120" rx="110" ry="35" fill="none" stroke="#a855f7" stroke-width="4" transform="rotate(-25 120 120)"/>
+                    <circle cx="120" cy="120" r="14" fill="#00ffea"/>
+                </svg>
             `)
         };
 
@@ -2098,7 +2495,7 @@
             bestTime: 0,
             bestKills: 0,
             shopUpgrades: {
-                hp: 0, dmg: 0, spd: 0, luck: 0, mag: 0, cdr: 0, rerolls: 0, revives: 0, extraSlots: 0,
+                hp: 0, dmg: 0, spd: 0, luck: 0, mag: 0, cdr: 0, xp: 0, rerolls: 0, revives: 0, extraSlots: 0,
                 mortar: false, laserDrone: false, nexusBought: false
             },
             achievements: {}
@@ -2127,7 +2524,7 @@
 
         if (!saveData.shopUpgrades) {
             saveData.shopUpgrades = {
-                hp: 0, dmg: 0, spd: 0, luck: 0, mag: 0, cdr: 0, rerolls: 0, revives: 0, extraSlots: 0,
+                hp: 0, dmg: 0, spd: 0, luck: 0, mag: 0, cdr: 0, xp: 0, rerolls: 0, revives: 0, extraSlots: 0,
                 mortar: false, laserDrone: false, nexusBought: false
             };
         }
@@ -2136,6 +2533,31 @@
         }
         if (saveData.shopUpgrades.nexusBought && !saveData.unlockedChars.includes('char_nexus')) {
             saveData.unlockedChars.push('char_nexus');
+        }
+        if (!saveData.playerName) {
+            saveData.playerName = 'Comandante Cuántico';
+        }
+        if (!saveData.controlMode) {
+            const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth <= 768);
+            saveData.controlMode = isTouch ? 'mobile' : 'pc';
+        }
+        if (!saveData.gameSpeed) {
+            saveData.gameSpeed = '1.0';
+        }
+        if (!saveData.daily) {
+            saveData.daily = {
+                lastClaimDate: null,
+                streak: 0,
+                contractsDate: null,
+                contracts: []
+            };
+        }
+        if (!saveData.leaderboardRuns || !Array.isArray(saveData.leaderboardRuns)) {
+            saveData.leaderboardRuns = [];
+        } else {
+            // Eliminar cualquier bot o jugador ficticio predeterminado: solo partidas reales del jugador
+            const fakeNames = ['Sora_Apex', 'Valkyrie_9', 'Zero_Void', 'Kaelen_Star', 'Glitch_Master', 'Nova_Runner', 'Titan_Slayer', 'Aethelgard_X', 'Kage_Shinobi', 'Cipher_Ghost'];
+            saveData.leaderboardRuns = saveData.leaderboardRuns.filter(r => r.isPlayer === true && !fakeNames.includes(r.name));
         }
 
         function saveGame() {
@@ -2146,6 +2568,8 @@
             if (sCount) sCount.innerText = saveData.esencias.toLocaleString();
             const aCount = document.getElementById('ach-crystals-count');
             if (aCount) aCount.innerText = saveData.esencias.toLocaleString();
+            const dCount = document.getElementById('daily-crystals-count');
+            if (dCount) dCount.innerText = saveData.esencias.toLocaleString();
 
             const bTimeMin = Math.floor((saveData.bestTime || 0) / 60);
             const bTimeSec = Math.floor((saveData.bestTime || 0) % 60);
@@ -2154,7 +2578,8 @@
             const bKillsEl = document.getElementById('main-best-kills');
             if (bKillsEl) bKillsEl.innerText = (saveData.bestKills || 0).toLocaleString();
 
-            updateAchievementsBadge();
+            if (typeof updateAchievementsBadge === 'function') updateAchievementsBadge();
+            if (typeof updateDailyNotificationBadge === 'function') updateDailyNotificationBadge();
         }
 
         function hardReset() {
@@ -2175,7 +2600,7 @@
                 saveData.esencias = 999999;
                 saveData.unlockedChars = charsData.map(c => c.id);
                 saveData.shopUpgrades = {
-                    hp: 10, dmg: 10, spd: 8, luck: 8, mag: 8, cdr: 8, rerolls: 4, revives: 2, extraSlots: 2,
+                    hp: 10, dmg: 10, spd: 8, luck: 8, mag: 8, cdr: 8, xp: 8, rerolls: 4, revives: 2, extraSlots: 2,
                     mortar: true, laserDrone: true, nexusBought: true
                 };
                 saveGame();
@@ -2232,6 +2657,7 @@
             { key: 'luck', name: 'Algoritmo de Fortuna', stat: '+5% Suerte Cuántica / nivel', icon: '🍀', maxLevel: 8, baseCost: 250, mult: 1.6, formatBonus: lvl => `+${lvl * 5}% Suerte` },
             { key: 'mag', name: 'Acelerador Gravitatorio', stat: '+25px Radio de Imán / nivel', icon: '🧲', maxLevel: 8, baseCost: 120, mult: 1.45, formatBonus: lvl => `+${lvl * 25}px Imán` },
             { key: 'cdr', name: 'Superconductores', stat: '+4% Cadencia / Enfriamiento / nivel', icon: '⏱️', maxLevel: 8, baseCost: 280, mult: 1.6, formatBonus: lvl => `+${lvl * 4}% CDR` },
+            { key: 'xp', name: 'Matriz de Aprendizaje', stat: '+8% Ganancia XP / nivel', icon: '📖', maxLevel: 8, baseCost: 160, mult: 1.5, formatBonus: lvl => `+${lvl * 8}% XP` },
             { key: 'rerolls', name: 'Recalibradores Cuánticos', stat: '+1 Reroll Inicial / nivel', icon: '🎲', maxLevel: 4, baseCost: 400, mult: 2.0, formatBonus: lvl => `+${lvl} Reroll(s)` },
             { key: 'revives', name: 'Protocolo Lázaro', stat: '+1 Resurrección (50% HP) / nivel', icon: '♥', maxLevel: 2, baseCost: 2500, mult: 2.5, formatBonus: lvl => `+${lvl} Revive(s)` }
         ];
@@ -2826,9 +3252,9 @@
             { id: 'magnet_c', rarity: 'common', category: 'aoe', icon: '🧲', name: 'Bobina Magnética I', badge: '+30px Imán de Gemas', desc: 'Atracción magnética que jala las gemas caídas desde más lejos.', apply: p => { p.magnet = Math.min(500, p.magnet + 30); } },
             { id: 'magnet_r', rarity: 'rare', category: 'aoe', icon: '🧲', name: 'Bobina Magnética II', badge: '+60px Imán de Gemas', desc: 'Radio potente para recolectar gemas y esencias sin arriesgar tu posición.', apply: p => { p.magnet = Math.min(500, p.magnet + 60); } },
             { id: 'magnet_e', rarity: 'epic', category: 'aoe', icon: '🧲', name: 'Vórtice Magnético', badge: '+110px Imán de Gemas', desc: 'Campo de gravedad masivo que absorbe todo el botín de la pantalla.', apply: p => { p.magnet = Math.min(500, p.magnet + 110); } },
-            { id: 'exp_c', rarity: 'common', category: 'aoe', icon: '📖', name: 'Antena Analizadora I', badge: '+10% Ganancia XP', desc: 'Extrae más conocimiento de cada gema de experiencia recolectada.', apply: p => { p.xpMult = Math.min(3.0, p.xpMult + 0.10); } },
-            { id: 'exp_r', rarity: 'rare', category: 'aoe', icon: '📖', name: 'Antena Analizadora II', badge: '+18% Ganancia XP', desc: 'Acelera notablemente la frecuencia con la que subes de nivel.', apply: p => { p.xpMult = Math.min(3.0, p.xpMult + 0.18); } },
-            { id: 'exp_e', rarity: 'epic', category: 'aoe', icon: '📖', name: 'Matriz Cognitiva', badge: '+30% Ganancia XP', desc: 'Multiplica la recolección de experiencia para desbloquear mejoras más rápido.', apply: p => { p.xpMult = Math.min(3.0, p.xpMult + 0.30); } },
+            { id: 'exp_c', rarity: 'common', category: 'aoe', icon: '📖', name: 'Antena Analizadora I', badge: '+20% Ganancia XP', desc: 'Extrae sustancialmente más conocimiento de cada gema de experiencia recolectada.', apply: p => { p.xpMult = Math.min(6.0, p.xpMult + 0.20); } },
+            { id: 'exp_r', rarity: 'rare', category: 'aoe', icon: '📖', name: 'Antena Analizadora II', badge: '+35% Ganancia XP', desc: 'Acelera vertiginosamente la frecuencia con la que subes de nivel y te equipas.', apply: p => { p.xpMult = Math.min(6.0, p.xpMult + 0.35); } },
+            { id: 'exp_e', rarity: 'epic', category: 'aoe', icon: '📖', name: 'Matriz Cognitiva', badge: '+60% Ganancia XP', desc: 'Sobrecarga masiva que catapulta la absorción de experiencia a niveles críticos.', apply: p => { p.xpMult = Math.min(6.0, p.xpMult + 0.60); } },
             { id: 'area_c', rarity: 'common', category: 'aoe', icon: '📡', name: 'Amplificador de Onda I', badge: '+8% Área de Efecto', desc: 'Aumenta el radio de explosiones, sierras orbitales y efectos de zona.', apply: p => { p.areaMult = Math.min(2.5, p.areaMult + 0.08); } },
             { id: 'area_r', rarity: 'rare', category: 'aoe', icon: '📡', name: 'Amplificador de Onda II', badge: '+16% Área de Efecto', desc: 'Cobertura espacial extendida para todas tus armas y detonaciones.', apply: p => { p.areaMult = Math.min(2.5, p.areaMult + 0.16); } },
             { id: 'cdr_c', rarity: 'common', category: 'aoe', icon: '⏱️', name: 'Disipador Térmico Global I', badge: '-6% Recarga de Armas', desc: 'Optimiza el enfriamiento sincronizado de todo tu arsenal.', apply: p => { p.cooldownReduction = Math.max(0.40, p.cooldownReduction * 0.94); } },
@@ -2860,10 +3286,11 @@
             { id: 'gambler_dice_r', rarity: 'rare', category: 'economy', icon: '🎲', name: 'Dado del Apostador', badge: '+30 Cristales Inmediatos', desc: 'Otorga una inyección directa de 30 cristales a tus reservas de run.', apply: p => { runCrystals += 30; saveData.esencias += 30; saveGame(); spawnFloatingText(p.x, p.y - 30, '+30 💎', '241, 196, 15', 16); } },
             { id: 'fortune_shield_r', rarity: 'rare', category: 'economy', icon: '🛡️', name: 'Escudo de la Fortuna', badge: '10% Salvar de Golpe Fatal', desc: 'Probabilidad cuántica de evitar la muerte quedando a 1 HP al recibir daño mortal.', apply: p => { p.hasFortuneSave = true; } },
 
-            // --- 12. PERKS LEGENDARIOS ÚNICOS (8 - ~1.4% prob, nunca repetidos) ---
+            // --- 12. PERKS LEGENDARIOS ÚNICOS (9 - ~1.4% prob, nunca repetidos) ---
             { id: 'leg_phoenix', rarity: 'legendary', category: 'unique', icon: '🔥', name: 'Protocolo Fénix', badge: '1 RESURRECCIÓN (60% HP)', desc: 'Si sufres daño letal, revives inmediatamente con 60% HP y destruyes enemigos cercanos.', canOffer: p => !p.hasPhoenixRevive, apply: p => { p.hasPhoenixRevive = true; p.phoenixUsed = false; } },
             { id: 'leg_frost', rarity: 'legendary', category: 'unique', icon: '❄️', name: 'Criogénesis de Vacío', badge: 'CONGELAMIENTO 50%', desc: 'Tus ataques ralentizan un 50% la velocidad enemiga y reducen su daño.', canOffer: p => !p.hasFrost, apply: p => { p.hasFrost = true; } },
             { id: 'leg_death_scythe', rarity: 'legendary', category: 'unique', icon: '💀', name: 'Guadaña Espectral', badge: 'ONDA MORTAL CADA 50 BAJAS', desc: 'Cada 50 eliminaciones desata una guadaña gigante que barre la pantalla.', canOffer: p => !p.hasDeathScythe, apply: p => { p.hasDeathScythe = true; p.scytheKills = 0; } },
+            { id: 'leg_quantum_learning', rarity: 'legendary', category: 'unique', icon: '🌌', name: 'Sobrecarga Cognitiva Cuántica', badge: '+100% GANANCIA XP', desc: 'Duplica toda la experiencia absorbida por tu núcleo para una progresión vertiginosa.', canOffer: p => !p.hasQuantumLearning, apply: p => { p.hasQuantumLearning = true; p.xpMult = Math.min(6.0, p.xpMult + 1.0); } },
             { id: 'leg_nova_battery', rarity: 'legendary', category: 'unique', icon: '⚡', name: 'Batería Nova', badge: 'PULSO DESTRUCTOR CADA 6s', desc: 'Libera una onda expansiva devastadora de plasma cada 6 segundos automáticamente.', canOffer: p => !p.hasNovaBattery, apply: p => { p.hasNovaBattery = true; } },
             { id: 'leg_prism', rarity: 'legendary', category: 'unique', icon: '💎', name: 'Prisma de Fragmentación', badge: 'GEMAS DISPARAN ESQUIRLAS', desc: 'Recoger gemas de experiencia dispara esquirlas guiadas que atacan enemigos.', canOffer: p => !p.hasFragmentPrism, apply: p => { p.hasFragmentPrism = true; } },
             { id: 'leg_orbital_barrier', rarity: 'legendary', category: 'unique', weaponReq: 'blades', icon: '🛡️', name: 'Barrera Orbital Reflejante', badge: 'SIERRAS BLOQUEAN DISPAROS', desc: 'Tus Sierras Orbitales pulverizan proyectiles enemigos menores al contacto.', canOffer: p => p.weapons.blades.active && !p.hasBladeBarrier, apply: p => { p.hasBladeBarrier = true; } },
@@ -2884,7 +3311,34 @@
             const playerLuck = player.luck || 1.0;
             const targetSlots = 4;
 
-            for (let slot = 0; slot < targetSlots; slot++) {
+            // PRIORIDAD GARANTIZADA DE ARMAS DE TIENDA: Si el jugador compró Cañón Mortero o Dron Láser
+            // y tiene ranuras libres de armas, garantizar que se ofrezca en los primeros niveles (Lv 2-8).
+            if (!isBossChest && !isTenMinuteReward && getActiveWeaponsCount(player) < getMaxWeaponsSlots(player)) {
+                const pendingShopWeapons = [];
+                if (saveData.shopUpgrades && saveData.shopUpgrades.mortar && (!player.weapons.mortar || !player.weapons.mortar.active)) {
+                    const mCard = ALL_UPGRADES_CATALOG.find(u => u.id === 'w_unlock_mortar');
+                    if (mCard) pendingShopWeapons.push(mCard);
+                }
+                if (saveData.shopUpgrades && saveData.shopUpgrades.laserDrone && (!player.weapons.laserDrone || !player.weapons.laserDrone.active)) {
+                    const dCard = ALL_UPGRADES_CATALOG.find(u => u.id === 'w_unlock_laser_drone');
+                    if (dCard) pendingShopWeapons.push(dCard);
+                }
+                if (pendingShopWeapons.length > 0 && (player.level <= 8 || Math.random() < 0.85)) {
+                    const pickedShopWeapon = pendingShopWeapons[Math.floor(Math.random() * pendingShopWeapons.length)];
+                    usedIds.add(pickedShopWeapon.id);
+                    chosenCards.push({
+                        id: pickedShopWeapon.id,
+                        rarity: RARITIES[pickedShopWeapon.rarity] || RARITIES.rare,
+                        name: pickedShopWeapon.name,
+                        icon: pickedShopWeapon.icon,
+                        badge: typeof pickedShopWeapon.badge === 'function' ? pickedShopWeapon.badge(player) : pickedShopWeapon.badge,
+                        desc: typeof pickedShopWeapon.desc === 'function' ? pickedShopWeapon.desc(player) : pickedShopWeapon.desc,
+                        apply: pickedShopWeapon.apply
+                    });
+                }
+            }
+
+            for (let slot = chosenCards.length; slot < targetSlots; slot++) {
                 let targetRarity = 'common';
 
                 if (isTenMinuteReward) {
@@ -2997,7 +3451,10 @@
         function enterNextWorld() {
             if (currentWorldIndex < WORLDS.length - 1) {
                 currentWorldIndex++;
-                tenMinuteBossSpawned = false;
+                worldStartTime = gameTimeSeconds;
+                currentWorldBossSpawned = false;
+                miniboss1Spawned = false;
+                miniboss2Spawned = false;
             } else {
                 currentWorldIndex = 2;
                 isEntropyActive = true;
@@ -3026,6 +3483,88 @@
             document.getElementById('world-indicator').style.color = WORLDS[currentWorldIndex].borderColor;
         }
 
+        function triggerVictory() {
+            gameState = 'victory';
+            updateRecords();
+            checkCharacterUnlocks();
+            if (typeof submitRunToLeaderboard === 'function') submitRunToLeaderboard();
+
+            const victoryBonus = 25000;
+            runCrystals += victoryBonus;
+            saveData.esencias += victoryBonus;
+            saveGame();
+
+            AudioSys.playLevelUp();
+            shakeScreen(25);
+
+            const m = Math.floor(gameTimeSeconds / 60);
+            const s = Math.floor(gameTimeSeconds % 60);
+
+            const vStats = document.getElementById('victory-stats');
+            if (vStats) {
+                vStats.innerHTML = `
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; text-align: left;">
+                        <div>⏱️ Tiempo Total: <b style="color:#00ffea;">${m}m ${s}s</b></div>
+                        <div>💀 Bajas Totales: <b style="color:#f43f5e;">${kills.toLocaleString()}</b></div>
+                        <div>⚡ Pico de DPS: <b style="color:#38bdf8;">${peakDPS.toLocaleString()}</b></div>
+                        <div>🔥 Racha de Combo: <b style="color:#f59e0b;">x${maxComboThisRun}</b></div>
+                        <div>🌀 Mundos Superados: <b style="color:#a855f7;">M1, M2 y M3 (100%)</b></div>
+                        <div>💎 Bono Victoria: <b style="color:#10b981;">+${victoryBonus.toLocaleString()} 💎</b></div>
+                    </div>
+                `;
+            }
+
+            switchScreen('screen-victory');
+        }
+
+        function claimVictory() {
+            gameState = 'menu';
+            switchScreen('screen-main');
+            saveGame();
+        }
+
+        function startEndlessMode() {
+            isEndlessMode = true;
+            endlessWave = 0;
+            gameState = 'playing';
+            switchScreen(null);
+            document.getElementById('hud').classList.add('active');
+            AudioSys.playPortalWarp();
+            shakeScreen(20);
+            spawnFloatingText(player.x, player.y - 60, '🌌 ¡MODO SIN FIN ACTIVADO! ¡SOBREVIVE!', '0, 255, 234', 24);
+            const banner = document.getElementById('dimension-banner');
+            if (banner) {
+                banner.innerText = "🌌 MODO SIN FIN: SINGULARIDAD INFINITA";
+                banner.style.opacity = 1;
+                setTimeout(() => banner.style.opacity = 0, 5000);
+            }
+        }
+
+        function spawnCosmicTitan() {
+            const e = getFreeObj(enemiesPool);
+            if (!e) return;
+            const angle = Math.random() * Math.PI * 2;
+            e.active = true;
+            e.x = player.x + Math.cos(angle) * 850;
+            e.y = player.y + Math.sin(angle) * 850;
+            e.radius = 85;
+            e.speed = 3.2;
+            e.hp = Math.round(75000 * Math.pow(1.20, endlessWave));
+            e.maxHp = e.hp;
+            e.bladeHitTimer = 0;
+            e.type = 'boss';
+            e.isTenMinuteBoss = true;
+            e.img = sprites.boss_cosmic;
+            AudioSys.playBossAlarm();
+            shakeScreen(22);
+            const wEl = document.getElementById('warning');
+            if (wEl) {
+                wEl.innerText = `⚠️ ¡TITÁN CÓSMICO: OLEADA ${endlessWave}! ⚠️`;
+                wEl.style.opacity = 1;
+                setTimeout(() => wEl.style.opacity = 0, 4500);
+            }
+        }
+
         /* ==========================================================================
            8. MOTOR DE JUEGO Y POOLS
            ========================================================================== */
@@ -3039,7 +3578,7 @@
 
         const MAX_ENEMIES = 280;
         const MAX_PROJECTILES = 400;
-        const MAX_GEMS = 300;
+        const MAX_GEMS = 500;
         const MAX_PARTICLES = 250;
         const MAX_TEXTS = 150;
         const MAX_MINES = 35;
@@ -3057,11 +3596,35 @@
         let ghostsPool = Array.from({length: 20}, () => ({active: false}));
         let beaconsPool = Array.from({length: MAX_BEACONS}, () => ({active: false}));
 
+        let groundHazards = [];
+        let enemyProjectiles = [];
+        let isEndlessMode = false;
+        let endlessWave = 0;
+
         function getFreeObj(pool) {
             for (let i = 0; i < pool.length; i++) {
                 if (!pool[i].active) return pool[i];
             }
             return null;
+        }
+
+        function getFreeGem() {
+            let free = getFreeObj(gemsPool);
+            if (free) return free;
+            // Si el pool está saturado, reciclar la gema normal no-cofre más lejana al jugador
+            let furthest = null;
+            let maxDistSq = -1;
+            for (let i = 0; i < gemsPool.length; i++) {
+                const g = gemsPool[i];
+                if (g.active && !g.isChest && !g.isSpectralSoul) {
+                    const dsq = player ? (Math.pow(player.x - g.x, 2) + Math.pow(player.y - g.y, 2)) : 1;
+                    if (dsq > maxDistSq) {
+                        maxDistSq = dsq;
+                        furthest = g;
+                    }
+                }
+            }
+            return furthest;
         }
 
         let player, camera, frames, kills, gameTimeSeconds, runCrystals;
@@ -3121,7 +3684,20 @@
             player.isDashing = true;
             player.dashTimer = 0.22;
             dashesCount++;
+            if (typeof reportDailyProgress === 'function') reportDailyProgress('dashes', 1);
             AudioSys.playDash();
+
+            const mDashBtn = document.getElementById('mobile-dash-btn');
+            if (mDashBtn) {
+                mDashBtn.style.transform = 'scale(0.85)';
+                mDashBtn.style.boxShadow = '0 0 35px var(--primary)';
+                setTimeout(() => {
+                    if (mDashBtn) {
+                        mDashBtn.style.transform = 'scale(1)';
+                        mDashBtn.style.boxShadow = '0 0 25px rgba(0, 255, 204, 0.35)';
+                    }
+                }, 180);
+            }
 
             if (selectedCharId === 'char_chronos') {
                 player.timeDistortionTimer = 2.0;
@@ -3188,6 +3764,10 @@
             currentWorldBossSpawned = false;
             miniboss1Spawned = false;
             miniboss2Spawned = false;
+            groundHazards = [];
+            enemyProjectiles = [];
+            isEndlessMode = false;
+            endlessWave = 0;
             document.getElementById('entropy-vignette').classList.remove('active');
 
             const charDef = charsData.find(c => c.id === selectedCharId);
@@ -3208,6 +3788,7 @@
             bLuck += (u.luck || 0) * 0.05;
             bMag += (u.mag || 0) * 25;
             bCdr *= Math.max(0.4, 1 - (u.cdr || 0) * 0.04);
+            bXpMult += (u.xp || 0) * 0.08;
             rerollsLeft = 2 + (u.rerolls || 0);
             revivesLeft = (u.revives || 0);
 
@@ -3402,6 +3983,23 @@
             });
         }
 
+        function spawnSpectralSoulGem(x, y, xpAmount, crystalsAmount) {
+            const g = getFreeGem();
+            if (!g) return;
+            g.active = true;
+            g.x = x + (Math.random() - 0.5) * 30;
+            g.y = y + (Math.random() - 0.5) * 30;
+            g.radius = 16;
+            g.color = '#10b981';
+            g.isChest = false;
+            g.isSpectralSoul = true;
+            g.xp = Math.round(xpAmount);
+            g.esencias = Math.round(crystalsAmount);
+            g.type = 'spectral_soul';
+            g.isTenMinuteBossReward = false;
+            spawnFloatingText(g.x, g.y - 35, `💀 ALMA COSECHADA +${g.xp} XP`, '16, 185, 129', 16);
+        }
+
         function launchSpectralScythe() {
             shakeScreen(16);
             AudioSys.playExplosion();
@@ -3420,19 +4018,35 @@
                 damage: scytheDmg
             });
 
-            // Daño masivo instantáneo a todos los enemigos en el área de corte
+            // Daño masivo instantáneo a todos los enemigos en el área de corte y cosecha garantizada de XP
             let enemiesSlashed = 0;
+            let harvestedXp = 0;
+            let harvestedCrystals = 0;
+            const timeMin = gameTimeSeconds / 60;
+            const worldXpMult = 1 + currentWorldIndex * 0.5;
+
             for (let i = 0; i < enemiesPool.length; i++) {
                 const e = enemiesPool[i];
                 if (e.active) {
                     const dist = Math.hypot(e.x - player.x, e.y - player.y);
                     if (dist <= scytheRadius + e.radius) {
+                        const willDie = e.hp <= scytheDmg;
+                        if (willDie) {
+                            const enemyXp = (e.type === 'elite' ? (50 + timeMin * 15) : (4 + timeMin * 2.2)) * worldXpMult;
+                            harvestedXp += enemyXp;
+                            harvestedCrystals += (e.type === 'elite' ? 10 : (Math.random() < 0.15 ? 1 : 0));
+                        }
                         damageEnemy(e, scytheDmg, true);
                         spawnParticle(e.x, e.y, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 8, '#10b981', 16, 0.04);
                         enemiesSlashed++;
                         if (enemiesSlashed >= 65) break;
                     }
                 }
+            }
+
+            // Si se eliminaron enemigos, condensar en una Gema de Alma Espectral concentrada
+            if (harvestedXp > 0) {
+                spawnSpectralSoulGem(player.x, player.y, harvestedXp, harvestedCrystals);
             }
 
             // Anillo de partículas espectrales
@@ -3460,6 +4074,14 @@
             const m = Math.floor(gameTimeSeconds / 60);
             const s = Math.floor(gameTimeSeconds % 60);
             document.getElementById('timer').innerText = `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
+
+            if (isEndlessMode) {
+                const wInd = document.getElementById('world-indicator');
+                if (wInd) {
+                    wInd.innerText = `🌌 SINGULARIDAD INFINITA (Oleada ${endlessWave})`;
+                    wInd.style.color = '#00ffea';
+                }
+            }
 
             // DPS
             const now = performance.now();
@@ -3544,6 +4166,43 @@
                 lowHpSurvivalTimer += dt;
             }
 
+            // 1. Actualización de Efectos de Terreno (Ground Hazards: fuego de pyro_crawler y charcos ácidos de acid_spitter)
+            let hazardSlowMult = 1.0;
+            for (let hIdx = groundHazards.length - 1; hIdx >= 0; hIdx--) {
+                const h = groundHazards[hIdx];
+                h.timer -= dt;
+                if (h.timer <= 0) {
+                    groundHazards.splice(hIdx, 1);
+                    continue;
+                }
+                const distToPlayer = Math.hypot(player.x - h.x, player.y - h.y);
+                if (distToPlayer < h.radius + player.radius) {
+                    if (h.type === 'acid') {
+                        hazardSlowMult = Math.min(hazardSlowMult, 0.80);
+                    } else if (h.type === 'fire') {
+                        if (frames % 22 === 0) {
+                            let fireDmg = 2.5 * (1 - Math.min(0.6, player.armor || 0));
+                            player.hp -= fireDmg;
+                            shakeScreen(2);
+                            spawnParticle(player.x, player.y, (Math.random()-0.5)*3, -Math.random()*3, '#f97316', 8, 0.1);
+                        }
+                    }
+                }
+            }
+
+            // 2. Drones Gravitatorios Supresores del Vacío (Mundo 3: ralentizan 15% a menos de 135px)
+            for (let eIdx = 0; eIdx < enemiesPool.length; eIdx++) {
+                const e = enemiesPool[eIdx];
+                if (e.active && e.subType === 'void_suppressor') {
+                    if (Math.hypot(player.x - e.x, player.y - e.y) < 135) {
+                        hazardSlowMult = Math.min(hazardSlowMult, 0.85);
+                        if (frames % 15 === 0) {
+                            spawnParticle(player.x, player.y, (Math.random()-0.5)*2, (Math.random()-0.5)*2, '#d946ef', 5, 0.1);
+                        }
+                    }
+                }
+            }
+
             // Movimiento
             let dx = 0, dy = 0;
             if (keys['w'] || keys['arrowup']) dy -= 1;
@@ -3551,11 +4210,18 @@
             if (keys['a'] || keys['arrowleft']) dx -= 1;
             if (keys['d'] || keys['arrowright']) dx += 1;
 
+            if (joyTouchId !== null && (joyDx !== 0 || joyDy !== 0)) {
+                dx = joyDx;
+                dy = joyDy;
+            }
+
             if (dx !== 0 || dy !== 0) {
                 const len = Math.hypot(dx, dy);
                 let moveSpd = player.isDashing ? player.speed * 3.2 : player.speed;
                 if (player.afterburnerTimer > 0) moveSpd *= 1.35;
-                const currentSpd = moveSpd * dt60;
+                moveSpd *= hazardSlowMult;
+                const inputMag = Math.min(1, len);
+                const currentSpd = moveSpd * dt60 * inputMag;
                 player.x += (dx / len) * currentSpd;
                 player.y += (dy / len) * currentSpd;
                 player.angle = Math.atan2(dy, dx) + Math.PI / 2;
@@ -3579,6 +4245,74 @@
 
             camera.x = player.x - canvas.width / 2;
             camera.y = player.y - canvas.height / 2;
+
+            // 3. Proyectiles Enemigos (Orbes de Vacío de void_watcher)
+            for (let epIdx = enemyProjectiles.length - 1; epIdx >= 0; epIdx--) {
+                const ep = enemyProjectiles[epIdx];
+                ep.x += ep.vx * dt60;
+                ep.y += ep.vy * dt60;
+                ep.timer -= dt;
+
+                if (frames % 4 === 0) {
+                    spawnParticle(ep.x, ep.y, (Math.random()-0.5)*2, (Math.random()-0.5)*2, '#c026d3', 6, 0.12);
+                }
+
+                let destroyed = false;
+                if (player.hasBladeBarrier && player.weapons.blades.active) {
+                    const wpBlades = player.weapons.blades;
+                    const bOrbit = wpBlades.orbitRadius * player.areaMult;
+                    const step = (Math.PI * 2) / wpBlades.count;
+                    for (let bi = 0; bi < wpBlades.count; bi++) {
+                        const bx = player.x + Math.cos(wpBlades.angle + step * bi) * bOrbit;
+                        const by = player.y + Math.sin(wpBlades.angle + step * bi) * bOrbit;
+                        if (Math.hypot(ep.x - bx, ep.y - by) < 22) {
+                            destroyed = true;
+                            spawnParticle(ep.x, ep.y, 0, 0, '#00ffea', 12, 0.2);
+                            break;
+                        }
+                    }
+                }
+
+                if (player.isDashing && player.hasOmnipresence) {
+                    if (Math.hypot(player.x - ep.x, player.y - ep.y) < player.radius + ep.radius + 15) {
+                        destroyed = true;
+                        spawnParticle(ep.x, ep.y, 0, 0, '#00ffea', 12, 0.2);
+                    }
+                }
+
+                if (destroyed) {
+                    enemyProjectiles.splice(epIdx, 1);
+                    continue;
+                }
+
+                if (!player.isDashing && Math.hypot(player.x - ep.x, player.y - ep.y) < player.radius + ep.radius) {
+                    const currentWDef = WORLDS[currentWorldIndex];
+                    let epDmg = 12 * (currentWDef ? currentWDef.hpScale : 1.0);
+                    if (player.armor > 0) epDmg *= (1 - Math.min(0.65, player.armor));
+                    if (player.maxShield > 0 && player.currentShield > 0) {
+                        player.shieldRechargeTimer = 4.0;
+                        const absorbed = Math.min(player.currentShield, epDmg);
+                        player.currentShield -= absorbed;
+                        epDmg -= absorbed;
+                        spawnFloatingText(player.x, player.y - 30, `🛡️ -${Math.round(absorbed)}`, '56, 189, 248', 13);
+                    }
+                    if (epDmg > 0) {
+                        player.hp -= epDmg;
+                        shakeScreen(7);
+                        document.getElementById('damage-vignette').classList.add('hit');
+                        setTimeout(() => document.getElementById('damage-vignette').classList.remove('hit'), 150);
+                    }
+                    for (let k = 0; k < 6; k++) {
+                        spawnParticle(ep.x, ep.y, (Math.random()-0.5)*6, (Math.random()-0.5)*6, '#d946ef', 10, 0.1);
+                    }
+                    enemyProjectiles.splice(epIdx, 1);
+                    continue;
+                }
+
+                if (ep.timer <= 0 || Math.abs(ep.x) > WORLD_SIZE / 2 || Math.abs(ep.y) > WORLD_SIZE / 2) {
+                    enemyProjectiles.splice(epIdx, 1);
+                }
+            }
 
             // Aura Electrostática Pasiva (Dr. Gauss o mejora static_aura_r)
             if (player.hasStaticAura && frames % 12 === 0) {
@@ -4010,18 +4744,24 @@
             } else if (gameTimeSeconds < 180) {
                 spawnRate = Math.max(14, Math.floor(18 - effectiveTimeMin * 2));
             } else {
-                // A partir del minuto 3 (180s): gran densidad de enemigos para el resto de la partida
-                spawnRate = Math.max(4, Math.floor(9 - effectiveTimeMin * 0.8));
+                // A partir del minuto 3 (180s): gran densidad de enemigos pero equilibrada (ajustada ligeramente a la baja)
+                spawnRate = Math.max(6, Math.floor(11 - effectiveTimeMin * 0.6));
             }
 
             if (frames % spawnRate === 0) {
                 spawnEnemy(false, currentW);
-                // Si han transcurrido 3 minutos o más, spawns en ráfagas para llenar la arena
+                // Si han transcurrido 3 minutos o más, spawn extra moderado para mantener ritmo sin saturar
                 if (gameTimeSeconds >= 180) {
-                    const extraSpawns = gameTimeSeconds >= 360 ? 2 : 1;
-                    for (let s = 0; s < extraSpawns; s++) {
-                        if (Math.random() < 0.75) spawnEnemy(false, currentW);
-                    }
+                    if (Math.random() < 0.40) spawnEnemy(false, currentW);
+                }
+            }
+
+            // Cada 5 minutos en Modo Sin Fin tras el minuto 30 (1800s): Titán Cósmico
+            if (isEndlessMode) {
+                const nextBossTime = 1800 + (endlessWave + 1) * 300;
+                if (gameTimeSeconds >= nextBossTime) {
+                    endlessWave++;
+                    spawnCosmicTitan();
                 }
             }
 
@@ -4079,6 +4819,84 @@
                     spd *= 0.65;
                 }
                 if (isEntropyActive) spd *= 1.35;
+
+                // --- Habilidades Únicas de Mundo 2: Purgatorio de Silicio ---
+                if (e.subType === 'pyro_crawler' && frames % 28 === 0) {
+                    const dP = Math.hypot(player.x - e.x, player.y - e.y);
+                    if (dP < 700 && groundHazards.length < 40) {
+                        groundHazards.push({ x: e.x, y: e.y, radius: 18, timer: 1.8, color: '#f97316', type: 'fire' });
+                    }
+                }
+
+                if (e.subType === 'magma_spectre') {
+                    if (e.dashCooldown > 0) e.dashCooldown -= dt;
+                    if (e.isDashing) {
+                        e.dashDuration -= dt;
+                        spd *= 2.2;
+                        if (frames % 3 === 0) spawnParticle(e.x, e.y, (Math.random()-0.5)*2, (Math.random()-0.5)*2, '#f97316', 7, 0.1);
+                        if (e.dashDuration <= 0) e.isDashing = false;
+                    } else if (e.dashCooldown <= 0 && Math.hypot(player.x - e.x, player.y - e.y) < 320) {
+                        e.isDashing = true;
+                        e.dashDuration = 0.35;
+                        e.dashCooldown = 3.8;
+                    }
+                }
+
+                if (e.subType === 'magma_elite') {
+                    if (e.pulseTimer > 0) {
+                        e.pulseTimer -= dt;
+                    } else {
+                        e.pulseTimer = 4.5;
+                        for (let k = 0; k < 12; k++) {
+                            const pA = (Math.PI * 2 * k) / 12;
+                            spawnParticle(e.x, e.y, Math.cos(pA) * 5, Math.sin(pA) * 5, '#f97316', 12, 0.08);
+                        }
+                        if (Math.hypot(player.x - e.x, player.y - e.y) < 130) {
+                            let pulseDmg = 8 * currentW.hpScale;
+                            if (player.armor > 0) pulseDmg *= (1 - Math.min(0.65, player.armor));
+                            player.hp -= pulseDmg;
+                            shakeScreen(4);
+                        }
+                    }
+                }
+
+                // --- Habilidades Únicas de Mundo 3: Singularity Void ---
+                if (e.subType === 'void_blinker') {
+                    if (e.blinkTimer > 0) {
+                        e.blinkTimer -= dt;
+                    } else {
+                        e.blinkTimer = 4.8;
+                        const bDist = Math.hypot(player.x - e.x, player.y - e.y);
+                        if (bDist > 160) {
+                            for (let k = 0; k < 6; k++) spawnParticle(e.x, e.y, (Math.random()-0.5)*4, (Math.random()-0.5)*4, '#818cf8', 9, 0.1);
+                            const bA = Math.atan2(player.y - e.y, player.x - e.x);
+                            e.x += Math.cos(bA) * 130;
+                            e.y += Math.sin(bA) * 130;
+                            for (let k = 0; k < 6; k++) spawnParticle(e.x, e.y, (Math.random()-0.5)*4, (Math.random()-0.5)*4, '#00ffea', 9, 0.1);
+                            spawnFloatingText(e.x, e.y - 20, '⚡ BLINK', '129, 140, 248', 11);
+                        }
+                    }
+                }
+
+                if (e.subType === 'void_watcher') {
+                    if (e.shootTimer > 0) {
+                        e.shootTimer -= dt;
+                    } else {
+                        e.shootTimer = 4.0;
+                        const pDist = Math.hypot(player.x - e.x, player.y - e.y);
+                        if (pDist < 800 && enemyProjectiles.length < 15) {
+                            const oAng = Math.atan2(player.y - e.y, player.x - e.x);
+                            enemyProjectiles.push({
+                                x: e.x,
+                                y: e.y,
+                                vx: Math.cos(oAng) * 4.2,
+                                vy: Math.sin(oAng) * 4.2,
+                                radius: 9,
+                                timer: 4.5
+                            });
+                        }
+                    }
+                }
 
                 const ang = Math.atan2(player.y - e.y, player.x - e.x);
                 e.x += Math.cos(ang) * spd * dt60;
@@ -4198,9 +5016,9 @@
                 if (!g.active) continue;
 
                 const distSq = Math.pow(player.x - g.x, 2) + Math.pow(player.y - g.y, 2);
-                if (distSq < magnetSq || g.isChest) {
+                if (distSq < magnetSq || g.isChest || g.isSpectralSoul) {
                     const ang = Math.atan2(player.y - g.y, player.x - g.x);
-                    const pullSpd = (g.isChest ? 10 : 22) * dt60;
+                    const pullSpd = (g.isChest ? 10 : (g.isSpectralSoul ? 32 : 22)) * dt60;
                     g.x += Math.cos(ang) * pullSpd;
                     g.y += Math.sin(ang) * pullSpd;
 
@@ -4210,6 +5028,7 @@
                             const chestCrystals = g.esencias;
                             runCrystals += chestCrystals;
                             saveData.esencias += chestCrystals;
+                            if (typeof reportDailyProgress === 'function') reportDailyProgress('crystals', chestCrystals);
                             saveGame();
                             AudioSys.playLevelUp();
                             triggerLevelUp(true, g.isTenMinuteBossReward);
@@ -4219,6 +5038,7 @@
                             if (g.esencias > 0) {
                                 runCrystals += g.esencias;
                                 saveData.esencias += g.esencias;
+                                if (typeof reportDailyProgress === 'function') reportDailyProgress('crystals', g.esencias);
                             }
                             AudioSys.playGem(kills);
                         }
@@ -4361,6 +5181,14 @@
         }
 
         function damageEnemy(e, dmg, isCrit = false) {
+            // Barrera Cuántica de la Sanguijuela del Vacío (Mundo 3: absorbe los primeros 2 impactos)
+            if (e.shieldHits && e.shieldHits > 0) {
+                e.shieldHits--;
+                spawnFloatingText(e.x, e.y - 25, '🛡️ ABSORBIDO', '192, 132, 252', 12);
+                spawnParticle(e.x, e.y, (Math.random()-0.5)*4, (Math.random()-0.5)*4, '#c084fc', 10, 0.1);
+                return;
+            }
+
             // Punta Hueca Táctica (bal_hollow_r): +15% de daño a enemigos con más del 80% HP
             if (player.hasHollowPoint && e.hp >= e.maxHp * 0.80) {
                 dmg *= 1.15;
@@ -4429,8 +5257,10 @@
                 e.active = false;
                 kills++;
                 document.getElementById('kills-display').innerText = `Bajas: ${kills}`;
+                if (typeof reportDailyProgress === 'function') reportDailyProgress('kills', 1);
                 if (e.type === 'boss') {
                     bossesDefeatedCount++;
+                    if (typeof reportDailyProgress === 'function') reportDailyProgress('bosses', 1);
                 }
                 shakeScreen(e.type === 'boss' ? 20 : 2.5);
 
@@ -4491,10 +5321,28 @@
                     spawnGhostDrone(e.x, e.y);
                 }
 
+                // Si muere un Reptador Ácido (Mundo 2), deja un charco cáustico
+                if (e.subType === 'acid_spitter') {
+                    groundHazards.push({ x: e.x, y: e.y, radius: 36, timer: 3.5, color: '#a3e635', type: 'acid' });
+                }
+
                 spawnGem(e.x, e.y, e.type, e.isTenMinuteBoss);
 
-                if (e.isTenMinuteBoss && !dimensionalPortal.active) {
-                    openDimensionalPortal(e.x, e.y);
+                if (e.isTenMinuteBoss) {
+                    if (currentWorldIndex < 2) {
+                        if (!dimensionalPortal.active) {
+                            openDimensionalPortal(e.x, e.y);
+                        }
+                    } else if (!isEndlessMode) {
+                        // ¡Jefe Final de los 30 min (Mundo 3) derrotado! Terminar run con victoria
+                        triggerVictory();
+                    } else {
+                        // Derrota de Titán en Modo Sin Fin
+                        spawnFloatingText(e.x, e.y - 50, '🌌 ¡TITÁN CÓSMICO ELIMINADO! +5,000 💎', '0, 255, 234', 22);
+                        runCrystals += 5000;
+                        saveData.esencias += 5000;
+                        saveGame();
+                    }
                 }
 
                 if (typeof checkAchievements === 'function') checkAchievements();
@@ -4627,6 +5475,14 @@
             e.flashTimer = 0;
             e.bladeHitTimer = 0;
             e.isTenMinuteBoss = false;
+            e.shieldHits = 0;
+            e.dashCooldown = 0;
+            e.isDashing = false;
+            e.dashDuration = 0;
+            e.blinkTimer = 0;
+            e.pulseTimer = 0;
+            e.shootTimer = 0;
+            e.subType = 'normal';
 
             const isElite = Math.random() < Math.min(0.25, 0.03 + effectiveTimeMin * 0.02);
             if (isElite) {
@@ -4635,29 +5491,75 @@
                 e.hp = 260 * dynamicHp;
                 e.maxHp = e.hp;
                 e.type = 'elite';
-                e.img = sprites.enemy_elite;
+                if (currentWorldIndex === 1) {
+                    e.img = sprites.enemy_magma_elite;
+                    e.subType = 'magma_elite';
+                    e.pulseTimer = 3.5;
+                    e.radius = 42;
+                } else if (currentWorldIndex === 2) {
+                    e.img = sprites.enemy_void_watcher;
+                    e.subType = 'void_watcher';
+                    e.shootTimer = 3.8;
+                    e.radius = 40;
+                } else {
+                    e.img = sprites.enemy_elite;
+                    e.subType = 'elite_normal';
+                }
             } else {
-                const types = [
-                    { radius: 22, spd: 3.8, hp: 44, img: sprites.enemy_scout },
-                    { radius: 26, spd: 2.6, hp: 120, img: sprites.enemy_tank },
-                    { radius: 20, spd: 4.4, hp: 40, img: sprites.enemy_stalker }
-                ];
-                const chosen = types[Math.floor(Math.random() * types.length)];
+                let chosen;
+                if (currentWorldIndex === 1) {
+                    // MUNDO 2: PURGATORIO DE SILICIO (Enemigos Únicos de Magma y Ácido)
+                    const m2Types = [
+                        { subType: 'pyro_crawler', radius: 22, spd: 3.6, hp: 50, img: sprites.enemy_pyro_crawler },
+                        { subType: 'acid_spitter', radius: 25, spd: 2.7, hp: 110, img: sprites.enemy_acid_spitter },
+                        { subType: 'magma_spectre', radius: 20, spd: 4.1, hp: 42, img: sprites.enemy_magma_spectre }
+                    ];
+                    chosen = m2Types[Math.floor(Math.random() * m2Types.length)];
+                } else if (currentWorldIndex === 2) {
+                    // MUNDO 3: SINGULARITY VOID (Enemigos Únicos del Vacío Cuántico)
+                    const m3Types = [
+                        { subType: 'void_blinker', radius: 22, spd: 3.5, hp: 68, img: sprites.enemy_void_blinker },
+                        { subType: 'void_suppressor', radius: 26, spd: 2.6, hp: 130, img: sprites.enemy_void_suppressor },
+                        { subType: 'void_leech', radius: 20, spd: 4.3, hp: 48, img: sprites.enemy_void_leech }
+                    ];
+                    chosen = m3Types[Math.floor(Math.random() * m3Types.length)];
+                } else {
+                    // MUNDO 1: ARENA CONFINADA (Enemigos Cibernéticos Clásicos)
+                    const m1Types = [
+                        { subType: 'scout', radius: 22, spd: 3.8, hp: 44, img: sprites.enemy_scout },
+                        { subType: 'tank', radius: 26, spd: 2.6, hp: 120, img: sprites.enemy_tank },
+                        { subType: 'stalker', radius: 20, spd: 4.4, hp: 40, img: sprites.enemy_stalker }
+                    ];
+                    chosen = m1Types[Math.floor(Math.random() * m1Types.length)];
+                }
+
                 e.radius = chosen.radius;
                 e.speed = chosen.spd * dynamicSpd;
                 e.hp = chosen.hp * dynamicHp;
                 e.maxHp = e.hp;
                 e.type = 'normal';
+                e.subType = chosen.subType;
                 e.img = chosen.img;
+
+                if (chosen.subType === 'void_leech') {
+                    e.shieldHits = 2; // Absorbe 2 impactos con su barrera cuántica
+                }
+                if (chosen.subType === 'magma_spectre') {
+                    e.dashCooldown = 2.0 + Math.random() * 2.0;
+                }
+                if (chosen.subType === 'void_blinker') {
+                    e.blinkTimer = 3.0 + Math.random() * 2.0;
+                }
             }
         }
 
         // ECONOMÍA DE CRISTALES Y XP EQUILIBRADA (ESCALADO DINÁMICO DE XP POR MINUTO Y MUNDO)
         function spawnGem(x, y, type, isTenMinuteBoss = false) {
-            const g = getFreeObj(gemsPool);
+            const g = getFreeGem();
             if (!g) return;
             g.active = true;
             g.x = x; g.y = y;
+            g.isSpectralSoul = false;
             g.isTenMinuteBossReward = isTenMinuteBoss;
 
             const timeMin = gameTimeSeconds / 60;
@@ -4902,6 +5804,28 @@
                 ctx.restore();
             }
 
+            // Render de Efectos de Terreno (Ground Hazards: brasas ígneas y charcos ácidos)
+            for (let i = 0; i < groundHazards.length; i++) {
+                const h = groundHazards[i];
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(h.x, h.y, h.radius, 0, Math.PI * 2);
+                if (h.type === 'acid') {
+                    ctx.fillStyle = 'rgba(163, 230, 53, 0.35)';
+                    ctx.strokeStyle = '#a3e635';
+                    ctx.shadowColor = '#a3e635';
+                } else {
+                    ctx.fillStyle = 'rgba(249, 115, 22, 0.35)';
+                    ctx.strokeStyle = '#f97316';
+                    ctx.shadowColor = '#f97316';
+                }
+                ctx.shadowBlur = 14;
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.restore();
+            }
+
             for (let i = 0; i < beaconsPool.length; i++) {
                 const b = beaconsPool[i];
                 if (b.active) {
@@ -4999,6 +5923,24 @@
                     ctx.fill();
                     ctx.restore();
                 }
+            }
+
+            // Render de Proyectiles Enemigos (Orbes de Vacío de void_watcher)
+            for (let i = 0; i < enemyProjectiles.length; i++) {
+                const ep = enemyProjectiles[i];
+                ctx.save();
+                ctx.translate(ep.x, ep.y);
+                ctx.beginPath();
+                ctx.arc(0, 0, ep.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#c026d3';
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = '#d946ef';
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(0, 0, ep.radius * 0.5, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                ctx.restore();
             }
 
             const wpBlades = player.weapons.blades;
@@ -5268,6 +6210,7 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             if (screenId) document.getElementById(screenId).classList.add('active');
             document.getElementById('hud').classList.remove('active');
+            if (typeof updateMobileControlsVisibility === 'function') updateMobileControlsVisibility();
         }
 
         function startGame() {
@@ -5277,6 +6220,7 @@
             gameState = 'playing';
             switchScreen(null);
             document.getElementById('hud').classList.add('active');
+            if (typeof updateMobileControlsVisibility === 'function') updateMobileControlsVisibility();
         }
 
         function openCharSelect() {
@@ -5376,13 +6320,38 @@
             switchScreen('screen-main');
         }
 
+        let optionsOrigin = 'menu';
+
         function openOptions() {
+            optionsOrigin = 'menu';
+            const speedSelect = document.getElementById('game-speed-select');
+            if (speedSelect && saveData.gameSpeed) speedSelect.value = saveData.gameSpeed;
             switchScreen('screen-options');
         }
 
         function openOptionsInGame() {
+            optionsOrigin = 'game';
+            const speedSelect = document.getElementById('game-speed-select');
+            if (speedSelect && saveData.gameSpeed) speedSelect.value = saveData.gameSpeed;
             document.getElementById('screen-pause').classList.remove('active');
             switchScreen('screen-options');
+        }
+
+        function closeOptions() {
+            const speedSelect = document.getElementById('game-speed-select');
+            if (speedSelect) {
+                saveData.gameSpeed = speedSelect.value;
+                saveGame();
+            }
+            if (optionsOrigin === 'game') {
+                switchScreen(null);
+                document.getElementById('hud').classList.add('active');
+                document.getElementById('screen-pause').classList.add('active');
+                updatePauseStats();
+                if (typeof updateMobileControlsVisibility === 'function') updateMobileControlsVisibility();
+            } else {
+                switchScreen('screen-main');
+            }
         }
 
         function updateAudioSettings() {
@@ -5398,9 +6367,11 @@
                 gameState = 'paused_manual';
                 updatePauseStats();
                 document.getElementById('screen-pause').classList.add('active');
+                if (typeof updateMobileControlsVisibility === 'function') updateMobileControlsVisibility();
             } else if (gameState === 'paused_manual') {
                 gameState = 'playing';
                 document.getElementById('screen-pause').classList.remove('active');
+                if (typeof updateMobileControlsVisibility === 'function') updateMobileControlsVisibility();
             }
         }
 
@@ -5488,6 +6459,10 @@
             const m = Math.floor(gameTimeSeconds / 60);
             const s = Math.floor(gameTimeSeconds % 60);
 
+            if (typeof submitRunToLeaderboard === 'function' && (gameTimeSeconds >= 10 || kills >= 5)) {
+                submitRunToLeaderboard();
+            }
+
             saveGame();
 
             document.getElementById('gameover-title').innerText = isEntropyActive ? "Consumido por el Colapso" : "Misión Finalizada";
@@ -5516,7 +6491,663 @@
             gameState = 'playing';
             switchScreen(null);
             document.getElementById('hud').classList.add('active');
+            if (typeof updateMobileControlsVisibility === 'function') updateMobileControlsVisibility();
         }
+
+        /* ==========================================================================
+           16. MÓDULO: MODO DE DISPOSITIVO Y CONTROLES MÓVILES (BRAWL STARS STYLE)
+           ========================================================================== */
+        let joyTouchId = null;
+        let joyBaseX = 0;
+        let joyBaseY = 0;
+        let joyDx = 0;
+        let joyDy = 0;
+
+        function toggleDeviceMode() {
+            saveData.controlMode = (saveData.controlMode === 'mobile') ? 'pc' : 'mobile';
+            saveGame();
+            updateDeviceModeUI();
+        }
+
+        function updateDeviceModeUI() {
+            const isMob = saveData.controlMode === 'mobile';
+            const text = isMob ? '📱 MÓVIL' : '🖥️ PC';
+            const color = isMob ? '#10b981' : 'var(--primary)';
+
+            // Botón flotante permanente superior
+            const floatBtn = document.getElementById('floating-device-btn');
+            const floatIcon = document.getElementById('floating-device-icon');
+            const floatText = document.getElementById('floating-device-text');
+            if (floatBtn) {
+                floatBtn.style.borderColor = isMob ? '#10b981' : 'var(--primary)';
+                floatBtn.style.boxShadow = isMob ? '0 0 20px rgba(16, 185, 129, 0.45)' : '0 0 20px rgba(0, 255, 204, 0.4)';
+            }
+            if (floatIcon) floatIcon.innerText = isMob ? '📱' : '🖥️';
+            if (floatText) {
+                floatText.innerText = isMob ? 'MODO: MÓVIL' : 'MODO: PC';
+                floatText.style.color = isMob ? '#10b981' : 'var(--primary)';
+            }
+
+            // Botón en la lista de acciones del menú principal
+            const menuBtn = document.getElementById('menu-device-action-btn');
+            const menuIcon = document.getElementById('menu-device-icon');
+            const menuTitle = document.getElementById('menu-device-title');
+            const menuSub = document.getElementById('menu-device-sub');
+            const menuBadge = document.getElementById('menu-device-badge');
+            if (menuBtn) {
+                menuBtn.style.borderColor = isMob ? '#10b981' : '#06b6d4';
+                menuBtn.style.boxShadow = isMob ? '0 0 15px rgba(16, 185, 129, 0.3)' : '0 0 15px rgba(6, 182, 212, 0.2)';
+            }
+            if (menuIcon) menuIcon.innerText = isMob ? '📱' : '🖥️';
+            if (menuTitle) menuTitle.innerText = isMob ? 'CONTROLES: MODO MÓVIL' : 'CONTROLES: MODO PC';
+            if (menuSub) menuSub.innerText = isMob ? 'Joystick táctil virtual Brawl Stars + Botón Dash activados' : 'Teclas WASD + Espacio / Clic derecho para Dash';
+            if (menuBadge) {
+                menuBadge.innerText = isMob ? 'MÓVIL' : 'PC';
+                menuBadge.style.background = isMob ? '#10b981' : '#06b6d4';
+            }
+
+            const mainBtn = document.getElementById('device-toggle-btn');
+            if (mainBtn) {
+                mainBtn.innerText = text;
+                mainBtn.style.color = color;
+                mainBtn.style.borderColor = color;
+            }
+
+            const hudBtn = document.getElementById('hud-device-toggle-btn');
+            if (hudBtn) {
+                hudBtn.innerText = text;
+                hudBtn.style.color = color;
+                hudBtn.style.borderColor = color;
+            }
+
+            updateMobileControlsVisibility();
+        }
+
+        function updateMobileControlsVisibility() {
+            const isMob = saveData.controlMode === 'mobile';
+            const isCombat = gameState === 'playing';
+
+            const dashBtn = document.getElementById('mobile-dash-btn');
+            if (dashBtn) {
+                dashBtn.style.display = (isMob && isCombat) ? 'flex' : 'none';
+            }
+
+            const joyContainer = document.getElementById('mobile-joystick-container');
+            if (!isMob || !isCombat) {
+                if (joyContainer) joyContainer.style.display = 'none';
+                joyTouchId = null;
+                joyDx = 0;
+                joyDy = 0;
+            }
+        }
+
+        function initMobileControls() {
+            const joyContainer = document.getElementById('mobile-joystick-container');
+            const joyStick = document.getElementById('joystick-stick');
+
+            window.addEventListener('touchstart', (e) => {
+                if (saveData.controlMode !== 'mobile' || gameState !== 'playing') return;
+                for (let i = 0; i < e.changedTouches.length; i++) {
+                    const touch = e.changedTouches[i];
+                    // Joystick se posiciona dinámicamente donde toque en el 65% izquierdo de la pantalla
+                    if (joyTouchId === null && touch.clientX < window.innerWidth * 0.65) {
+                        joyTouchId = touch.identifier;
+                        joyBaseX = touch.clientX;
+                        joyBaseY = touch.clientY;
+
+                        if (joyContainer) {
+                            joyContainer.style.left = `${joyBaseX}px`;
+                            joyContainer.style.top = `${joyBaseY}px`;
+                            joyContainer.style.display = 'block';
+                        }
+                        if (joyStick) {
+                            joyStick.style.transform = 'translate(0px, 0px)';
+                        }
+                        joyDx = 0;
+                        joyDy = 0;
+                    }
+                }
+            }, { passive: false });
+
+            window.addEventListener('touchmove', (e) => {
+                if (saveData.controlMode !== 'mobile' || joyTouchId === null) return;
+                for (let i = 0; i < e.changedTouches.length; i++) {
+                    const touch = e.changedTouches[i];
+                    if (touch.identifier === joyTouchId) {
+                        const deltaX = touch.clientX - joyBaseX;
+                        const deltaY = touch.clientY - joyBaseY;
+                        const dist = Math.hypot(deltaX, deltaY);
+                        const maxRadius = 50;
+                        const angle = Math.atan2(deltaY, deltaX);
+                        const clampedDist = Math.min(dist, maxRadius);
+
+                        if (joyStick) {
+                            const stickX = Math.cos(angle) * clampedDist;
+                            const stickY = Math.sin(angle) * clampedDist;
+                            joyStick.style.transform = `translate(${stickX}px, ${stickY}px)`;
+                        }
+
+                        // Relación analógica sensible (-1 a 1)
+                        joyDx = (Math.cos(angle) * clampedDist) / maxRadius;
+                        joyDy = (Math.sin(angle) * clampedDist) / maxRadius;
+                        break;
+                    }
+                }
+            }, { passive: false });
+
+            const releaseTouchHandler = (e) => {
+                if (joyTouchId === null) return;
+                for (let i = 0; i < e.changedTouches.length; i++) {
+                    if (e.changedTouches[i].identifier === joyTouchId) {
+                        joyTouchId = null;
+                        joyDx = 0;
+                        joyDy = 0;
+                        if (joyContainer) joyContainer.style.display = 'none';
+                        if (joyStick) joyStick.style.transform = 'translate(0px, 0px)';
+                        break;
+                    }
+                }
+            };
+
+            window.addEventListener('touchend', releaseTouchHandler, { passive: false });
+            window.addEventListener('touchcancel', releaseTouchHandler, { passive: false });
+        }
+
+        /* ==========================================================================
+           17. MÓDULO: PROTOCOLO DIARIO (CALENDARIO DE 7 DÍAS Y CONTRATOS CUÁNTICOS)
+           ========================================================================== */
+        const DAILY_REWARDS_CONFIG = [
+            { day: 1, crystals: 500, icon: '💎', title: 'Ración de Esencias I' },
+            { day: 2, crystals: 800, icon: '⚡', title: 'Batería Cuántica' },
+            { day: 3, crystals: 1200, icon: '🔮', title: 'Reserva de Plasma' },
+            { day: 4, crystals: 1800, icon: '🛡️', title: 'Blindaje Energético' },
+            { day: 5, crystals: 2500, icon: '🚀', title: 'Cargamento Pesado' },
+            { day: 6, crystals: 3500, icon: '⚛️', title: 'Fisión Concentrada' },
+            { day: 7, crystals: 6000, icon: '👑', title: 'Cofre Galáctico Supremo', isDay7: true }
+        ];
+
+        const DAILY_CONTRACTS_TEMPLATES = [
+            { id: 'kills_300', title: 'Cazador del Vacío', desc: 'Elimina a 300 enemigos en cualquier incursión', target: 300, type: 'kills', reward: 750, icon: '💀' },
+            { id: 'boss_1', title: 'Verdugo de Titanes', desc: 'Derrota a 1 Jefe o Mini-Jefe dimensional', target: 1, type: 'bosses', reward: 1200, icon: '👹' },
+            { id: 'dashes_15', title: 'Evasión Cuántica', desc: 'Ejecuta 15 Dashes tácticos en combate', target: 15, type: 'dashes', reward: 600, icon: '⚡' },
+            { id: 'crystals_1000', title: 'Minero Cósmico', desc: 'Recolecta 1,000 cristales en combate', target: 1000, type: 'crystals', reward: 800, icon: '💎' }
+        ];
+
+        function getTodayDateString() {
+            const d = new Date();
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function getYesterdayDateString() {
+            const d = new Date();
+            d.setDate(d.getDate() - 1);
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function initDailyData() {
+            if (!saveData.daily) {
+                saveData.daily = {
+                    lastClaimDate: null,
+                    streak: 0,
+                    contractsDate: null,
+                    contracts: []
+                };
+            }
+            const today = getTodayDateString();
+            const yesterday = getYesterdayDateString();
+
+            // Si el último reclamo no fue hoy ni ayer, se reinicia la racha de días
+            if (saveData.daily.lastClaimDate && saveData.daily.lastClaimDate !== today && saveData.daily.lastClaimDate !== yesterday) {
+                saveData.daily.streak = 0;
+            }
+
+            // Regenerar contratos diarios si es un nuevo día
+            if (saveData.daily.contractsDate !== today || !saveData.daily.contracts || saveData.daily.contracts.length === 0) {
+                saveData.daily.contractsDate = today;
+                saveData.daily.contracts = DAILY_CONTRACTS_TEMPLATES.slice(0, 3).map(c => ({
+                    id: c.id,
+                    title: c.title,
+                    desc: c.desc,
+                    target: c.target,
+                    type: c.type,
+                    reward: c.reward,
+                    icon: c.icon,
+                    progress: 0,
+                    claimed: false
+                }));
+                saveGame();
+            }
+        }
+
+        function canClaimDailyToday() {
+            initDailyData();
+            const today = getTodayDateString();
+            return saveData.daily.lastClaimDate !== today;
+        }
+
+        function updateDailyNotificationBadge() {
+            const badge = document.getElementById('daily-notification-badge');
+            if (!badge) return;
+            const canClaim = canClaimDailyToday();
+            if (canClaim) {
+                badge.innerText = '¡DISPONIBLE!';
+                badge.style.background = '#22c55e';
+                badge.style.color = '#020617';
+                badge.style.boxShadow = '0 0 14px #22c55e';
+            } else {
+                badge.innerText = 'ACTIVO';
+                badge.style.background = '#10b981';
+                badge.style.color = '#030307';
+                badge.style.boxShadow = 'none';
+            }
+        }
+
+        function openDailyScreen() {
+            initDailyData();
+            switchScreen('screen-daily');
+            renderDailyScreen();
+        }
+
+        function closeDailyScreen() {
+            switchScreen('screen-main');
+        }
+
+        function renderDailyScreen() {
+            initDailyData();
+            const dCount = document.getElementById('daily-crystals-count');
+            if (dCount) dCount.innerText = (saveData.esencias || 0).toLocaleString();
+
+            const grid = document.getElementById('daily-calendar-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const today = getTodayDateString();
+            const hasClaimedToday = (saveData.daily.lastClaimDate === today);
+            const currentStreak = saveData.daily.streak || 0;
+            // Día actual del ciclo (0 a 6 -> Día 1 a Día 7)
+            const activeDayIndex = hasClaimedToday ? ((currentStreak - 1) % 7) : (currentStreak % 7);
+
+            DAILY_REWARDS_CONFIG.forEach((r, idx) => {
+                const card = document.createElement('div');
+                let statusClass = '';
+                let statusBadge = '';
+
+                if (idx < activeDayIndex || (idx === activeDayIndex && hasClaimedToday)) {
+                    statusClass = 'claimed';
+                    statusBadge = '<span style="color:#10b981; font-size:11px; font-weight:800;">✓ RECLAMADO</span>';
+                } else if (idx === activeDayIndex && !hasClaimedToday) {
+                    statusClass = 'today';
+                    statusBadge = '<span style="color:var(--primary); font-size:11px; font-weight:800; animation:pulse 1.5s infinite;">⭐ HOY</span>';
+                } else {
+                    statusBadge = '<span style="color:#64748b; font-size:11px; font-weight:700;">🔒 BLOQUEADO</span>';
+                }
+
+                if (r.isDay7) statusClass += ' day7';
+
+                card.className = `daily-card ${statusClass}`;
+                card.innerHTML = `
+                    <div class="daily-day-label">DÍA ${r.day}</div>
+                    <div class="daily-reward-icon">${r.icon}</div>
+                    <div class="daily-reward-val">+${r.crystals.toLocaleString()} 💎</div>
+                    <div style="font-size:10.5px; color:#94a3b8; margin: 4px 0 8px 0;">${r.title}</div>
+                    ${statusBadge}
+                `;
+                grid.appendChild(card);
+            });
+
+            const claimBtn = document.getElementById('btn-claim-daily');
+            if (claimBtn) {
+                if (canClaimDailyToday()) {
+                    const todayDayNum = (currentStreak % 7) + 1;
+                    const rewardAmt = DAILY_REWARDS_CONFIG[currentStreak % 7].crystals;
+                    claimBtn.disabled = false;
+                    claimBtn.style.opacity = '1';
+                    claimBtn.style.cursor = 'pointer';
+                    claimBtn.innerHTML = `🎁 RECLAMAR DÍA ${todayDayNum} (+${rewardAmt.toLocaleString()} 💎)`;
+                } else {
+                    claimBtn.disabled = true;
+                    claimBtn.style.opacity = '0.55';
+                    claimBtn.style.cursor = 'not-allowed';
+                    claimBtn.innerHTML = `✅ RECOMPENSA DE HOY RECLAMADA (Vuelve mañana)`;
+                }
+            }
+
+            // Renderizar Contratos Cuánticos Diarios
+            const contractsContainer = document.getElementById('daily-contracts-list');
+            if (contractsContainer) {
+                contractsContainer.innerHTML = '';
+                (saveData.daily.contracts || []).forEach(c => {
+                    const pct = Math.min(100, Math.round((c.progress / c.target) * 100));
+                    const isReady = !c.claimed && c.progress >= c.target;
+
+                    const row = document.createElement('div');
+                    row.style.cssText = 'background: rgba(11, 16, 28, 0.95); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; gap: 14px;';
+                    row.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 12px; flex-grow: 1;">
+                            <span style="font-size: 26px;">${c.icon}</span>
+                            <div style="flex-grow: 1;">
+                                <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 13.5px; margin-bottom: 4px;">
+                                    <span style="color: #f1f5f9;">${c.title}</span>
+                                    <span style="color: var(--gold);">+${c.reward.toLocaleString()} 💎</span>
+                                </div>
+                                <div style="font-size: 11.5px; color: #94a3b8; margin-bottom: 6px;">${c.desc}</div>
+                                <div style="background: rgba(0,0,0,0.5); border-radius: 6px; height: 7px; overflow: hidden; width: 100%;">
+                                    <div style="width: ${pct}%; height: 100%; background: ${isReady ? '#10b981' : '#38bdf8'}; transition: width 0.3s;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="min-width: 130px; text-align: right;">
+                            <span style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">${c.progress} / ${c.target}</span>
+                            ${c.claimed 
+                                ? '<span style="color: #10b981; font-weight: 800; font-size: 12px;">✅ COMPLETADO</span>' 
+                                : `<button class="steam-btn-tiny" ${isReady ? '' : 'disabled'} style="${isReady ? 'background: #10b981; color: #000; font-weight: 900;' : 'opacity: 0.5;'}" onclick="claimDailyContract('${c.id}')">${isReady ? 'RECLAMAR' : 'EN CURSO'}</button>`
+                            }
+                        </div>
+                    `;
+                    contractsContainer.appendChild(row);
+                });
+            }
+        }
+
+        function claimDailyReward() {
+            if (!canClaimDailyToday()) return;
+            const today = getTodayDateString();
+            const currentStreak = saveData.daily.streak || 0;
+            const reward = DAILY_REWARDS_CONFIG[currentStreak % 7];
+
+            saveData.esencias = (saveData.esencias || 0) + reward.crystals;
+            saveData.daily.lastClaimDate = today;
+            saveData.daily.streak = currentStreak + 1;
+            saveGame();
+
+            AudioSys.init();
+            AudioSys.playLevelUp();
+            renderDailyScreen();
+            updateDailyNotificationBadge();
+        }
+
+        function claimDailyContract(contractId) {
+            initDailyData();
+            const contract = (saveData.daily.contracts || []).find(c => c.id === contractId);
+            if (!contract || contract.claimed || contract.progress < contract.target) return;
+
+            contract.claimed = true;
+            saveData.esencias = (saveData.esencias || 0) + contract.reward;
+            saveGame();
+
+            AudioSys.init();
+            AudioSys.playLevelUp();
+            renderDailyScreen();
+        }
+
+        function reportDailyProgress(type, amount = 1) {
+            initDailyData();
+            if (!saveData.daily.contracts) return;
+            let changed = false;
+            saveData.daily.contracts.forEach(c => {
+                if (c.type === type && !c.claimed && c.progress < c.target) {
+                    c.progress = Math.min(c.target, c.progress + amount);
+                    changed = true;
+                }
+            });
+            if (changed) saveGame();
+        }
+
+        function startDailyCountdownTimer() {
+            function updateTimer() {
+                const countdownEl = document.getElementById('daily-countdown');
+                if (!countdownEl) return;
+                const now = new Date();
+                const midnight = new Date();
+                midnight.setHours(24, 0, 0, 0);
+                const diff = midnight - now;
+
+                const hrs = String(Math.floor(diff / 3600000)).padStart(2, '0');
+                const mins = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+                const secs = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+                countdownEl.innerText = `Próximo suministro en: ${hrs}:${mins}:${secs}`;
+            }
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
+        /* ==========================================================================
+           18. MÓDULO: RANKING REAL DE TUS INCURSIONES (100% REGISTROS REALES)
+           ========================================================================== */
+        let activeLbTab = 'runs';
+
+        function openLeaderboard() {
+            switchScreen('screen-leaderboard');
+            const nameInput = document.getElementById('pilot-name-input');
+            if (nameInput) nameInput.value = saveData.playerName || 'Comandante Cuántico';
+            renderLeaderboard();
+        }
+
+        function closeLeaderboard() {
+            switchScreen('screen-main');
+        }
+
+        function switchLeaderboardTab(tab) {
+            activeLbTab = tab;
+            const tabRuns = document.getElementById('tab-lb-runs');
+            const tabRich = document.getElementById('tab-lb-rich');
+            if (tabRuns) tabRuns.className = `shop-tab ${tab === 'runs' ? 'active' : ''}`;
+            if (tabRich) tabRich.className = `shop-tab ${tab === 'rich' ? 'active' : ''}`;
+            renderLeaderboard();
+        }
+
+        function savePilotName() {
+            const input = document.getElementById('pilot-name-input');
+            if (!input) return;
+            const val = input.value.trim();
+            if (val.length > 0) {
+                saveData.playerName = val;
+                if (saveData.leaderboardRuns) {
+                    saveData.leaderboardRuns.forEach(r => {
+                        if (r.isPlayer) r.name = val;
+                    });
+                }
+                saveGame();
+                renderLeaderboard();
+                alert(`Identificador de piloto actualizado: "${val}"`);
+            }
+        }
+
+        function submitRunToLeaderboard() {
+            if (!saveData.leaderboardRuns) saveData.leaderboardRuns = [];
+            const pName = saveData.playerName || 'Comandante Cuántico';
+            const wName = WORLDS[currentWorldIndex] ? WORLDS[currentWorldIndex].name : 'Arena Confinada';
+            const runScore = Math.round(kills * 25 + gameTimeSeconds * 10 + runCrystals * 2);
+
+            const now = new Date();
+            const dateStr = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth()+1).padStart(2, '0')}`;
+
+            saveData.leaderboardRuns.push({
+                name: pName,
+                world: wName,
+                time: Math.floor(gameTimeSeconds),
+                kills: kills,
+                crystals: runCrystals,
+                score: runScore,
+                date: dateStr,
+                isPlayer: true
+            });
+
+            // Ordenar descendentemente por puntuación
+            saveData.leaderboardRuns.sort((a, b) => b.score - a.score);
+            // Mantener top 50
+            if (saveData.leaderboardRuns.length > 50) {
+                saveData.leaderboardRuns = saveData.leaderboardRuns.slice(0, 50);
+            }
+            saveGame();
+        }
+
+        function refreshLeaderboard() {
+            AudioSys.init();
+            AudioSys.playShoot();
+            const statusEl = document.getElementById('lb-sync-status');
+            if (statusEl) {
+                statusEl.innerText = '🟡 Sincronizando registros locales...';
+                setTimeout(() => {
+                    statusEl.innerText = '🟢 Registros de Piloto: Actualizados';
+                    renderLeaderboard();
+                }, 300);
+            }
+        }
+
+        function renderLeaderboard() {
+            const thead = document.getElementById('lb-table-head');
+            const tbody = document.getElementById('lb-table-body');
+            if (!thead || !tbody) return;
+
+            // Filtro de seguridad: eliminar cualquier rastro de bots ficticios
+            const fakeNames = ['Sora_Apex', 'Valkyrie_9', 'Zero_Void', 'Kaelen_Star', 'Glitch_Master', 'Nova_Runner', 'Titan_Slayer', 'Aethelgard_X', 'Kage_Shinobi', 'Cipher_Ghost'];
+            const playerRuns = (saveData.leaderboardRuns || []).filter(r => r.isPlayer === true && !fakeNames.includes(r.name));
+
+            if (activeLbTab === 'runs') {
+                thead.innerHTML = `
+                    <tr>
+                        <th style="width: 70px;">Rango</th>
+                        <th>Fecha</th>
+                        <th>Piloto</th>
+                        <th>Mundo Alcanzado</th>
+                        <th>Tiempo</th>
+                        <th>Bajas</th>
+                        <th>Cristales</th>
+                        <th style="text-align: right;">Puntuación</th>
+                    </tr>
+                `;
+
+                tbody.innerHTML = '';
+                const runs = playerRuns.slice().sort((a, b) => b.score - a.score);
+
+                if (runs.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8" style="text-align:center; padding: 45px 20px; color: #94a3b8; font-size: 14px;">
+                                <div style="font-size:36px; margin-bottom:10px;">⚔️</div>
+                                <b style="color:#fff; font-size:16px;">Sin incursiones registradas todavía</b><br>
+                                <span style="font-size:12.5px; color:#64748b; display:inline-block; margin-top:6px;">¡Inicia una partida y sobrevive al combate para que tus récords reales aparezcan aquí!</span>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                runs.forEach((r, idx) => {
+                    const rank = idx + 1;
+                    let rankBadge = `${rank}º`;
+                    if (rank === 1) rankBadge = '🥇 1º';
+                    else if (rank === 2) rankBadge = '🥈 2º';
+                    else if (rank === 3) rankBadge = '🥉 3º';
+
+                    const m = Math.floor((r.time || 0) / 60);
+                    const s = Math.floor((r.time || 0) % 60);
+                    const timeStr = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'lb-player-row';
+
+                    tr.innerHTML = `
+                        <td><span class="lb-rank-badge rank-${rank}">${rankBadge}</span></td>
+                        <td style="color: #64748b; font-size: 12px;">${r.date || '--/--'}</td>
+                        <td><b style="color: var(--primary);">${r.name}</b> <span style="font-size:10px; background:var(--primary); color:#000; padding:1px 5px; border-radius:3px; font-weight:900; margin-left:4px;">TÚ</span></td>
+                        <td style="color: #cbd5e1;">${r.world || 'Arena'}</td>
+                        <td style="color: #38bdf8;">${timeStr}</td>
+                        <td style="color: #f43f5e; font-weight: 700;">${(r.kills || 0).toLocaleString()}</td>
+                        <td style="color: #00ffea; font-weight: 700;">💎 ${(r.crystals || 0).toLocaleString()}</td>
+                        <td style="text-align: right; font-weight: 900; color: var(--gold);">${(r.score || 0).toLocaleString()} pts</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } else {
+                // Pestaña: Récords de Bajas y Cristales (Ordenado por Cristales ganados y bajas de partidas reales)
+                thead.innerHTML = `
+                    <tr>
+                        <th style="width: 70px;">Rango</th>
+                        <th>Fecha</th>
+                        <th>Piloto</th>
+                        <th>Cristales Ganados</th>
+                        <th>Bajas Totales</th>
+                        <th>Tiempo</th>
+                        <th>Mundo Alcanzado</th>
+                        <th style="text-align: right;">Puntuación</th>
+                    </tr>
+                `;
+
+                tbody.innerHTML = '';
+                const runs = playerRuns.slice().sort((a, b) => {
+                    const cDiff = (b.crystals || 0) - (a.crystals || 0);
+                    if (cDiff !== 0) return cDiff;
+                    return (b.kills || 0) - (a.kills || 0);
+                });
+
+                if (runs.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8" style="text-align:center; padding: 45px 20px; color: #94a3b8; font-size: 14px;">
+                                <div style="font-size:36px; margin-bottom:10px;">💎</div>
+                                <b style="color:#fff; font-size:16px;">Sin récords de cristales registrados</b><br>
+                                <span style="font-size:12.5px; color:#64748b; display:inline-block; margin-top:6px;">Recolecta gemas y esencias en tus partidas para posicionar tus mejores cosechas aquí.</span>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                runs.forEach((r, idx) => {
+                    const rank = idx + 1;
+                    let rankBadge = `${rank}º`;
+                    if (rank === 1) rankBadge = '🥇 1º';
+                    else if (rank === 2) rankBadge = '🥈 2º';
+                    else if (rank === 3) rankBadge = '🥉 3º';
+
+                    const m = Math.floor((r.time || 0) / 60);
+                    const s = Math.floor((r.time || 0) % 60);
+                    const timeStr = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'lb-player-row';
+
+                    tr.innerHTML = `
+                        <td><span class="lb-rank-badge rank-${rank}">${rankBadge}</span></td>
+                        <td style="color: #64748b; font-size: 12px;">${r.date || '--/--'}</td>
+                        <td><b style="color: var(--primary);">${r.name}</b> <span style="font-size:10px; background:var(--primary); color:#000; padding:1px 5px; border-radius:3px; font-weight:900; margin-left:4px;">TÚ</span></td>
+                        <td style="color: #00ffea; font-weight: 900; font-size: 14px;">💎 ${(r.crystals || 0).toLocaleString()}</td>
+                        <td style="color: #f43f5e; font-weight: 700;">${(r.kills || 0).toLocaleString()}</td>
+                        <td style="color: #38bdf8;">${timeStr}</td>
+                        <td style="color: #cbd5e1;">${r.world || 'Arena'}</td>
+                        <td style="text-align: right; font-weight: 900; color: var(--gold);">${(r.score || 0).toLocaleString()} pts</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+
+        // Inicialización y persistencia de velocidad de juego
+        const speedSel = document.getElementById('game-speed-select');
+        if (speedSel) {
+            if (saveData.gameSpeed) speedSel.value = saveData.gameSpeed;
+            speedSel.addEventListener('change', (e) => {
+                saveData.gameSpeed = e.target.value;
+                saveGame();
+            });
+        }
+
+        initMobileControls();
+        updateDeviceModeUI();
+        initDailyData();
+        updateDailyNotificationBadge();
+        startDailyCountdownTimer();
+
+        const pInput = document.getElementById('pilot-name-input');
+        if (pInput) pInput.value = saveData.playerName || 'Comandante Cuántico';
 
         if (typeof updateAchievementsBadge === 'function') updateAchievementsBadge();
         saveGame();
