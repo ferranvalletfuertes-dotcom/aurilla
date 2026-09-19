@@ -2,8 +2,25 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUANTUM BREACH: SURVIVORS - Arena Dimensional</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#030307">
+    <meta name="description" content="QUANTUM BREACH: SURVIVORS - El roguelite cósmico de acción y supervivencia. Forja tu arsenal, activa anomalías dimensionales y domina el ranking mundial.">
+    <meta name="keywords" content="roguelite, survivors, web game, bullet heaven, juego navegador, quantum breach">
+    <meta name="author" content="Quantum Breach Team">
+    <!-- PWA & Mobile Web Capabilities -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Quantum Breach">
+    <!-- Open Graph / Discord / Twitter Sharing Card -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="QUANTUM BREACH: SURVIVORS - Arena Roguelite">
+    <meta property="og:description" content="Sobrevive a la brecha cuántica, forja tu arsenal de plasma y domina el ranking de supervivientes. ¡Juega gratis ahora!">
+    <meta property="og:site_name" content="Quantum Breach">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- Favicon SVG Dinámico de Neón -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23030307' stroke='%2300ffcc' stroke-width='6'/><polygon points='50,15 80,75 20,75' fill='%2300ffea'/><circle cx='50' cy='55' r='14' fill='%23f59e0b'/></svg>">
+    <title>QUANTUM BREACH: SURVIVORS - Arena Roguelite</title>
     <style>
         :root {
             --primary: #00ffcc;
@@ -1462,6 +1479,139 @@
         .lb-rank-3 { background: #b45309; color: #fff; box-shadow: 0 0 10px #b45309; }
         .lb-rank-other { background: rgba(255, 255, 255, 0.08); color: #cbd5e1; }
 
+        /* DESTELLO DE BOMBA ANTIMATERIA (NUKE) */
+        #nuke-vignette {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 150;
+            background: #ffffff;
+            opacity: 0;
+            transition: opacity 0.45s cubic-bezier(0.1, 0.9, 0.2, 1);
+        }
+        #nuke-vignette.active {
+            opacity: 0.94;
+            transition: opacity 0.04s ease-in;
+        }
+
+        /* HUD DE BOOSTS TÁCTICOS ACTIVOS */
+        #boosts-hud {
+            position: absolute;
+            left: 20px;
+            top: 105px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 85;
+            pointer-events: none;
+        }
+        .boost-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(10, 15, 28, 0.9);
+            border: 1.5px solid var(--primary);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #fff;
+            box-shadow: 0 0 16px rgba(0, 255, 204, 0.35);
+            backdrop-filter: blur(8px);
+            animation: pulseChip 1.2s infinite alternate;
+        }
+        .boost-chip.strength { border-color: #f97316; box-shadow: 0 0 18px rgba(249, 115, 22, 0.6); }
+        .boost-chip.luck { border-color: #10b981; box-shadow: 0 0 18px rgba(16, 185, 129, 0.6); }
+        .boost-chip.speed { border-color: #00ffea; box-shadow: 0 0 18px rgba(0, 255, 234, 0.6); }
+        @keyframes pulseChip {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.04); }
+        }
+
+        /* MODALES CYBERPUNK PARA EVENTOS Y VIRALIDAD */
+        .cyber-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(3, 5, 10, 0.9);
+            backdrop-filter: blur(14px);
+            z-index: 99999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .cyber-modal.active { display: flex; }
+        .cyber-modal-card {
+            background: linear-gradient(160deg, rgba(14, 20, 36, 0.98), rgba(8, 12, 22, 0.99));
+            border: 1.5px solid var(--primary);
+            border-radius: 16px;
+            padding: 26px 30px;
+            max-width: 560px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 45px rgba(0, 255, 204, 0.25);
+            text-align: center;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .cyber-modal-close {
+            position: absolute;
+            top: 14px; right: 18px;
+            background: none; border: none;
+            color: #94a3b8; font-size: 24px;
+            cursor: pointer; font-weight: 900;
+            transition: color 0.2s;
+        }
+        .cyber-modal-close:hover { color: #fff; }
+
+        /* RULETA CUÁNTICA */
+        .roulette-wrapper {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 18px auto;
+        }
+        #roulette-canvas {
+            border-radius: 50%;
+            box-shadow: 0 0 35px rgba(245, 158, 11, 0.4);
+            border: 4px solid #f59e0b;
+        }
+        .roulette-needle {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; height: 0;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-top: 24px solid #ef4444;
+            filter: drop-shadow(0 0 10px #ef4444);
+            z-index: 10;
+        }
+
+        /* TARJETA ANOMALÍA DIARIA */
+        .anomaly-hero-box {
+            background: linear-gradient(135deg, rgba(38, 9, 56, 0.92), rgba(12, 16, 32, 0.96));
+            border: 1.5px solid #a855f7;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.25);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+        .anomaly-hero-box::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0;
+            width: 80px;
+            background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.15));
+            pointer-events: none;
+        }
+
     </style>
 </head>
 <body>
@@ -1471,8 +1621,15 @@
         <span id="floating-device-text" style="font-size: 13px; font-weight: 900; color: var(--primary); letter-spacing: 1px;">MODO: PC</span>
     </div>
 
+    <!-- BOTÓN FLOTANTE PANTALLA COMPLETA (F11 / WEB) -->
+    <div id="floating-fullscreen-btn" onclick="toggleFullscreen()" title="Pantalla Completa" style="position: fixed; top: 18px; left: 168px; z-index: 999999; display: flex; align-items: center; gap: 8px; background: rgba(11, 16, 28, 0.94); border: 2px solid #a855f7; box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); border-radius: 30px; padding: 8px 16px; cursor: pointer; user-select: none; backdrop-filter: blur(10px); transition: all 0.2s;">
+        <span style="font-size: 18px;">⛶</span>
+        <span style="font-size: 13px; font-weight: 900; color: #c084fc; letter-spacing: 1px;">FULLSCREEN</span>
+    </div>
+
     <div id="damage-vignette"></div>
     <div id="entropy-vignette"></div>
+    <div id="nuke-vignette"></div>
     <div id="warning">¡LEVIATÁN OMEGA DETECTADO!</div>
     <div id="dimension-banner">¡VÓRTICE DIMENSIONAL ABIERTO!</div>
 
@@ -1500,6 +1657,14 @@
                     <span class="stat-icon">💀</span>
                     <span class="stat-num" id="main-best-kills">0</span>
                     <span class="stat-unit">BAJAS</span>
+                </div>
+                <div class="steam-stat-chip" style="cursor:pointer; border-color: #ec4899; color: #f472b6;" onclick="openRouletteModal()" title="Ruleta Cuántica Diaria (1 tirada gratis al día)">
+                    <span class="stat-icon">🎡</span>
+                    <span class="stat-num" id="main-roulette-badge" style="font-size:12px;">GIRAR</span>
+                </div>
+                <div class="steam-stat-chip" style="cursor:pointer; border-color: #f59e0b; color: #fbbf24;" onclick="openAnomalyInfo()" title="Anomalía Cósmica del Día">
+                    <span class="stat-icon">🪐</span>
+                    <span class="stat-num" id="main-anomaly-badge" style="font-size:11px;">MUTADOR</span>
                 </div>
                 <div id="device-toggle-btn" class="steam-stat-chip" style="cursor:pointer; border-color:var(--primary); font-weight:800; color:var(--primary);" onclick="toggleDeviceMode()" title="Cambiar modo PC / Móvil">🖥️ PC</div>
                 <div id="secret-gambler" class="steam-dice-btn" onclick="clickGamblerSecret()" title="Cálculo Cuántico">🎲</div>
@@ -1533,6 +1698,33 @@
                             <div class="steam-btn-sub" id="menu-device-sub">WASD + Espacio. Clic para cambiar a Joystick táctil de Móvil</div>
                         </div>
                         <span class="steam-btn-badge" style="background:#06b6d4; color:#030307;" id="menu-device-badge">PC</span>
+                    </div>
+
+                    <div class="steam-btn" style="border-color: #ec4899; box-shadow: 0 0 18px rgba(236, 72, 153, 0.25);" onclick="openRouletteModal()">
+                        <div class="steam-btn-icon">🎡</div>
+                        <div class="steam-btn-text">
+                            <div class="steam-btn-title">RULETA CUÁNTICA DIARIA</div>
+                            <div class="steam-btn-sub">1 tirada gratis al día con gemas colosales y buffs cósmicos</div>
+                        </div>
+                        <span class="steam-btn-badge" style="background:#ec4899; color:#fff;" id="action-roulette-badge">RULETA</span>
+                    </div>
+
+                    <div class="steam-btn" style="border-color: #8b5cf6; box-shadow: 0 0 18px rgba(139, 92, 246, 0.22);" onclick="openRedeemModal()">
+                        <div class="steam-btn-icon">🎁</div>
+                        <div class="steam-btn-text">
+                            <div class="steam-btn-title">CANJEAR CÓDIGOS SECRETOS</div>
+                            <div class="steam-btn-sub">Usa códigos de la comunidad: JUEGAZO2026, FOMO, TIKTOK...</div>
+                        </div>
+                        <span class="steam-btn-badge" style="background:#8b5cf6; color:#fff;">CÓDIGOS</span>
+                    </div>
+
+                    <div class="steam-btn" style="border-color: #06b6d4; box-shadow: 0 0 18px rgba(6, 182, 212, 0.22);" onclick="openWebGuideModal()">
+                        <div class="steam-btn-icon">🌐</div>
+                        <div class="steam-btn-text">
+                            <div class="steam-btn-title">PUBLICAR EN LA WEB (ONLINE)</div>
+                            <div class="steam-btn-sub">Guía para alojarlo gratis en Vercel, Netlify o GitHub Pages</div>
+                        </div>
+                        <span class="steam-btn-badge" style="background:#06b6d4; color:#030307;">WEB</span>
                     </div>
 
                     <div class="steam-btn steam-btn-gold" onclick="openShop()">
@@ -1598,6 +1790,14 @@
 
             <!-- Columna Derecha: Steam Intelligence Hub & Notas de Parche -->
             <div class="steam-intel-column">
+                <!-- Tarjeta Destacada de Anomalía Cósmica Diaria -->
+                <div class="anomaly-hero-box" id="daily-anomaly-hero" onclick="openAnomalyInfo()">
+                    <div class="anomaly-tag">🪐 ANOMALÍA CÓSMICA DEL DÍA (ROTATIVA)</div>
+                    <div class="anomaly-title" id="daily-anomaly-title">CARGANDO ANOMALÍA...</div>
+                    <div class="anomaly-desc" id="daily-anomaly-desc">Calculando mutaciones gravitacionales del cuadrante...</div>
+                    <div class="anomaly-timer" id="daily-anomaly-timer">Próxima rotación en: --:--:--</div>
+                </div>
+
                 <div class="steam-intel-card">
                     <div class="intel-header">
                         <div class="intel-title">📡 BOLETÍN // PARCHE v23.0 OMNIVERSE</div>
@@ -1607,40 +1807,118 @@
                         <div class="intel-news-item">
                             <div class="news-dot gold"></div>
                             <div>
-                                <b style="color:#f59e0b;">PROGRESIÓN A 30 MIN Y MODO SIN FIN:</b>
-                                <p>Jefes a los 10m (M1), 20m (M2) y 30m (Jefe Final M3). ¡Derrótalo para alcanzar la Victoria o trascender al Modo Sin Fin infinito!</p>
+                                <b style="color:#f59e0b;">BOOSTS TÁCTICOS EN COMBATE:</b>
+                                <p>Aparecen orbes cósmicos aleatorios: Hiperimán (atrae toda la XP del mapa), Nuke Aniquiladora (pantallazo blanco y wipe total), Sobrecarga, Suerte y Velocidad Warp.</p>
                             </div>
                         </div>
                         <div class="intel-news-item">
                             <div class="news-dot purple"></div>
                             <div>
-                                <b style="color:#a855f7;">ENEMIGOS ÚNICOS POR MUNDO:</b>
-                                <p>Nuevos enemigos exclusivos en Mundo 2 (llamas, ácido, micro-dash) y Mundo 3 (teletransporte, escudos cuánticos y orbes de vacío).</p>
+                                <b style="color:#a855f7;">RULETA Y CÓDIGOS DE COMUNIDAD:</b>
+                                <p>Gira la Ruleta Cuántica 1 vez al día gratis y canjea códigos como JUEGAZO2026, FOMO, TIKTOK y DISCORD para miles de cristales.</p>
                             </div>
                         </div>
                         <div class="intel-news-item">
                             <div class="news-dot green"></div>
                             <div>
-                                <b style="color:#22c55e;">XP CHETADA Y MEJORAS DE TIENDA:</b>
-                                <p>Nueva mejora permanente de XP en tienda, cartas de XP con hasta +60% y orbes de almas esmeralda para la Guadaña Espectral.</p>
+                                <b style="color:#22c55e;">ANOMALÍA CÓSMICA DIARIA:</b>
+                                <p>Cada 24 horas el universo cambia sus reglas: Tormenta de Plasma, Gravedad Cero, Hiper Suerte o Mareas del Vacío. ¡Adapta tu build!</p>
                             </div>
                         </div>
                         <div class="intel-news-item">
                             <div class="news-dot cyan"></div>
                             <div>
-                                <b style="color:#38bdf8;">PRIORIDAD DE ARMAS DE TIENDA:</b>
-                                <p>El Cañón Mortero y Dron Láser adquiridos en tienda aparecen garantizados en tus primeros niveles de run.</p>
+                                <b style="color:#38bdf8;">MODO MÓVIL + FULLSCREEN + WEB:</b>
+                                <p>Optimizado para jugar en cualquier navegador móvil con joystick táctil o en PC a pantalla completa con F11.</p>
                             </div>
                         </div>
                     </div>
                     <div class="intel-footer">
-                        <span>💡 Consejo: Sobrevive los 30 minutos para desbloquear la Victoria Suprema y el acceso a la Singularidad Infinita.</span>
+                        <span>💡 Consejo: ¡Sube tu HTML a Vercel o Netlify en 1 clic para compartir tu link con amigos y viralizar tus partidas!</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="anomaly" style="position: absolute; bottom: 8px; right: 8px; width: 14px; height: 14px; cursor: crosshair; opacity: 0.05;" onclick="triggerAnomaly()">⚡</div>
+    </div>
+
+    <!-- MODAL: RULETA CUÁNTICA DIARIA -->
+    <div id="screen-roulette" class="cyber-modal">
+        <div class="cyber-modal-card">
+            <h1 style="font-size: 30px; margin: 0; color: #ec4899; text-shadow: 0 0 20px rgba(236, 72, 153, 0.6);">🎡 RULETA CUÁNTICA DIARIA</h1>
+            <p style="color: #94a3b8; font-size: 14px; margin: 6px 0 20px 0;">Gira cada 24h para obtener premios legendarios, esencias masivas y bendiciones dimensionales.</p>
+            
+            <div class="roulette-wrapper">
+                <div class="roulette-needle"></div>
+                <canvas id="roulette-canvas" width="340" height="340"></canvas>
+            </div>
+
+            <div id="roulette-result" style="min-height: 28px; font-size: 16px; font-weight: 800; color: var(--gold); margin: 15px 0 10px 0;"></div>
+            <div id="roulette-timer" style="font-size: 12px; color: #64748b; margin-bottom: 18px;">Próximo giro en: Calculando...</div>
+
+            <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+                <button id="btn-spin-roulette" class="btn" style="border-color: #ec4899; background: linear-gradient(135deg, #ec4899, #be185d); color: #fff; font-weight: 900; box-shadow: 0 0 25px rgba(236, 72, 153, 0.5);" onclick="spinRoulette()">
+                    🎡 GIRAR RULETA (GRATIS)
+                </button>
+                <button class="btn btn-danger" onclick="closeRouletteModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: CANJEAR CÓDIGOS DE COMUNIDAD -->
+    <div id="modal-redeem" class="cyber-modal">
+        <div class="cyber-modal-card">
+            <h1 style="font-size: 28px; margin: 0; color: #8b5cf6; text-shadow: 0 0 20px rgba(139, 92, 246, 0.6);">🎁 CÓDIGOS DE COMUNIDAD</h1>
+            <p style="color: #94a3b8; font-size: 13px; margin: 6px 0 18px 0;">Introduce códigos promocionales secretos de la comunidad y redes sociales para desbloquear recompensas instantáneas.</p>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 15px; justify-content: center;">
+                <input type="text" id="code-redeem-input" class="steam-input" style="font-size: 16px; text-transform: uppercase; font-weight: 800; letter-spacing: 2px; text-align: center; max-width: 280px;" placeholder="CÓDIGO AQUÍ" maxlength="20">
+                <button class="btn" style="border-color: #8b5cf6; color: #fff; background: linear-gradient(135deg, #7c3aed, #8b5cf6); padding: 8px 18px;" onclick="redeemCommunityCode()">CANJEAR</button>
+            </div>
+
+            <div id="code-redeem-status" style="min-height: 24px; font-size: 14px; font-weight: 700; margin-bottom: 15px;"></div>
+
+            <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 10px; padding: 12px 16px; text-align: left; font-size: 12px; color: #cbd5e1; margin-bottom: 20px;">
+                <div style="font-weight: 800; color: #c084fc; margin-bottom: 6px;">💡 Códigos activos disponibles para nuevos jugadores:</div>
+                <ul style="margin: 0; padding-left: 18px; line-height: 1.6;">
+                    <li><b style="color:#fbbf24;">JUEGAZO2026</b> (+10,000 Cristales de bienvenida)</li>
+                    <li><b style="color:#fbbf24;">FOMO</b> (+5,000 Cristales)</li>
+                    <li><b style="color:#fbbf24;">TIKTOK</b> (+4,000 Cristales)</li>
+                    <li><b style="color:#fbbf24;">DISCORD</b> (+4,000 Cristales)</li>
+                    <li><b style="color:#00ffcc;">FERRVN</b> (Easter Egg Secreto del Creador)</li>
+                </ul>
+            </div>
+
+            <button class="btn btn-danger" onclick="closeRedeemModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- MODAL: GUÍA DE PUBLICACIÓN WEB (ON-LINE) -->
+    <div id="modal-web-guide" class="cyber-modal">
+        <div class="cyber-modal-card" style="max-width: 680px; text-align: left;">
+            <h1 style="font-size: 26px; margin: 0 0 8px 0; color: #06b6d4; text-shadow: 0 0 20px rgba(6, 182, 212, 0.6); text-align: center;">🚀 CÓMO SUBIR TU JUEGO A INTERNET GRATIS</h1>
+            <p style="color: #94a3b8; font-size: 13px; text-align: center; margin-bottom: 20px;">Este juego es un archivo HTML autónomo completo (cero dependencias). Puedes ponerlo online en 30 segundos con un enlace público para que cualquiera juegue en móvil o PC:</p>
+
+            <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px; color: #e2e8f0; margin-bottom: 22px;">
+                <div style="background: rgba(6, 182, 212, 0.08); border-left: 3px solid #06b6d4; border-radius: 6px; padding: 10px 14px;">
+                    <b style="color: #38bdf8;">OPCIÓN 1: Vercel / Netlify Drop (La más rápida - 10 Segundos)</b>
+                    <p style="margin: 4px 0 0 0; color: #cbd5e1;">Entra en <b style="color:#fff;">app.netlify.com/drop</b> arrastra este archivo <code style="color:#00ffcc;">index.html</code> (o la carpeta) ¡y te dará un enlace público HTTPS al instante gratis!</p>
+                </div>
+                <div style="background: rgba(16, 185, 129, 0.08); border-left: 3px solid #10b981; border-radius: 6px; padding: 10px 14px;">
+                    <b style="color: #34d399;">OPCIÓN 2: GitHub Pages (Ideal para portafolio y comunidad)</b>
+                    <p style="margin: 4px 0 0 0; color: #cbd5e1;">Crea un repositorio en GitHub, sube este <code style="color:#00ffcc;">index.html</code>, ve a <i>Settings > Pages</i> y selecciona la rama <i>main</i>. Tu juego estará disponible en <i>tu-usuario.github.io/tu-juego</i>.</p>
+                </div>
+                <div style="background: rgba(245, 158, 11, 0.08); border-left: 3px solid #f59e0b; border-radius: 6px; padding: 10px 14px;">
+                    <b style="color: #fbbf24;">OPCIÓN 3: Itch.io (Comunidad de Videojuegos)</b>
+                    <p style="margin: 4px 0 0 0; color: #cbd5e1;">Crea un proyecto HTML en itch.io, comprime tu <code style="color:#00ffcc;">index.html</code> en un .zip y súbelo seleccionando "This file will be played in the browser". ¡Aparecerás en las búsquedas de itch.io!</p>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="btn" style="border-color: #06b6d4; background: linear-gradient(135deg, #0891b2, #06b6d4); color: #000; font-weight: 900;" onclick="closeWebGuideModal()">¡ENTENDIDO, A VIRALIZAR EL JUEGO!</button>
+            </div>
+        </div>
     </div>
 
     <!-- SELECCIÓN DE CHASIS -->
@@ -1859,6 +2137,8 @@
         </div>
 
         <div id="weapons-hud"></div>
+        <!-- CHIPS FLOTANTES DE BOOSTS ACTIVOS -->
+        <div id="boosts-hud"></div>
         <div id="minimap-container"><canvas id="minimapCanvas" width="190" height="190"></canvas></div>
     </div>
 
@@ -1903,8 +2183,9 @@
     <div id="screen-gameover" class="screen">
         <h1 id="gameover-title" style="color: var(--danger); font-size: 48px;">ANIQUILADO</h1>
         <h2 id="gameover-stats" style="max-width: 600px; line-height: 1.6;"></h2>
-        <div style="display: flex; gap: 15px; margin-top: 25px;">
+        <div style="display: flex; gap: 15px; margin-top: 25px; flex-wrap: wrap; justify-content: center;">
             <button id="btn-revive" class="btn" style="display:none; border-color: #34db84; color: #34db84;" onclick="useRevive()">Protocolo Lázaro (Revivir)</button>
+            <button class="btn" style="border-color: #38bdf8; color: #38bdf8; background: rgba(56, 189, 248, 0.1);" onclick="shareRunRecord()">📢 COMPARTIR RÉCORD</button>
             <button class="btn" onclick="switchScreen('screen-main')">Volver a la Base</button>
         </div>
     </div>
@@ -1917,6 +2198,7 @@
         <h2 id="victory-stats" style="max-width: 620px; line-height: 1.7; font-size: 15px; color: #cbd5e1; background: rgba(2, 6, 23, 0.7); border: 1px solid rgba(0, 255, 234, 0.3); border-radius: 12px; padding: 18px 24px; margin-bottom: 25px;"></h2>
         <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
             <button class="btn" style="border-color: #f59e0b; color: #000; background: linear-gradient(135deg, #f59e0b, #fbbf24); font-weight: 900; box-shadow: 0 0 25px rgba(245, 158, 11, 0.5);" onclick="claimVictory()">💎 RECLAMAR VICTORIA (+25,000 💎)</button>
+            <button class="btn" style="border-color: #38bdf8; color: #fff; background: linear-gradient(135deg, #0284c7, #0ea5e9); font-weight: 900; box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);" onclick="shareRunRecord()">📢 COMPARTIR RÉCORD</button>
             <button class="btn" style="border-color: #a855f7; color: #fff; background: linear-gradient(135deg, #7c3aed, #9333ea); font-weight: 900; box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);" onclick="startEndlessMode()">🌌 MODO SIN FIN (SINGULARIDAD)</button>
         </div>
     </div>
@@ -2146,6 +2428,85 @@
 
                 osc.start(t);
                 osc.stop(t + 1.3);
+            },
+
+            playNuke() {
+                if (!this.ctx) return;
+                const t = this.ctx.currentTime;
+                // Grave retumbo y detonación sísmica
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(260, t);
+                osc.frequency.exponentialRampToValueAtTime(22, t + 1.6);
+                gain.gain.setValueAtTime(0.85, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 1.7);
+                osc.connect(gain);
+                gain.connect(this.sfxGain);
+                osc.start(t);
+                osc.stop(t + 1.8);
+
+                // Silbido y radiación de onda expansiva
+                const osc2 = this.ctx.createOscillator();
+                const gain2 = this.ctx.createGain();
+                osc2.type = 'triangle';
+                osc2.frequency.setValueAtTime(1400, t);
+                osc2.frequency.exponentialRampToValueAtTime(70, t + 0.9);
+                gain2.gain.setValueAtTime(0.45, t);
+                gain2.gain.exponentialRampToValueAtTime(0.01, t + 0.9);
+                osc2.connect(gain2);
+                gain2.connect(this.sfxGain);
+                osc2.start(t);
+                osc2.stop(t + 0.95);
+            },
+
+            playMagnet() {
+                if (!this.ctx) return;
+                const t = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(320, t);
+                osc.frequency.exponentialRampToValueAtTime(1300, t + 0.55);
+                gain.gain.setValueAtTime(0.4, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.6);
+                osc.connect(gain);
+                gain.connect(this.sfxGain);
+                osc.start(t);
+                osc.stop(t + 0.65);
+            },
+
+            playPowerup() {
+                if (!this.ctx) return;
+                const t = this.ctx.currentTime;
+                [440, 554.37, 659.25, 880].forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(freq, t + idx * 0.065);
+                    gain.gain.setValueAtTime(0.18, t + idx * 0.065);
+                    gain.gain.exponentialRampToValueAtTime(0.01, t + idx * 0.065 + 0.22);
+                    osc.connect(gain);
+                    gain.connect(this.sfxGain);
+                    osc.start(t + idx * 0.065);
+                    osc.stop(t + idx * 0.065 + 0.25);
+                });
+            },
+
+            playSpinTick() {
+                if (!this.ctx) return;
+                const t = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(880, t);
+                osc.frequency.exponentialRampToValueAtTime(420, t + 0.04);
+                gain.gain.setValueAtTime(0.12, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.04);
+                osc.connect(gain);
+                gain.connect(this.sfxGain);
+                osc.start(t);
+                osc.stop(t + 0.05);
             },
 
             startSynthwaveBGM() {
@@ -2558,6 +2919,12 @@
             // Eliminar cualquier bot o jugador ficticio predeterminado: solo partidas reales del jugador
             const fakeNames = ['Sora_Apex', 'Valkyrie_9', 'Zero_Void', 'Kaelen_Star', 'Glitch_Master', 'Nova_Runner', 'Titan_Slayer', 'Aethelgard_X', 'Kage_Shinobi', 'Cipher_Ghost'];
             saveData.leaderboardRuns = saveData.leaderboardRuns.filter(r => r.isPlayer === true && !fakeNames.includes(r.name));
+        }
+        if (!saveData.redeemedCodes || !Array.isArray(saveData.redeemedCodes)) {
+            saveData.redeemedCodes = [];
+        }
+        if (!saveData.lastRouletteDate) {
+            saveData.lastRouletteDate = null;
         }
 
         function saveGame() {
@@ -3906,6 +4273,18 @@
             mortarShells = [];
             activeScytheSwings = [];
             laserDroneBeam = null;
+            boostsPool = [];
+            nextBoostSpawnTimer = 35.0;
+            activeBoostTimers = { overdrive: 0, luck: 0, speed: 0 };
+            hitstopTimer = 0;
+            updateBoostsHUD();
+
+            // Aplicar Anomalía Cósmica Diaria
+            const todayAnomaly = getDailyAnomaly();
+            if (todayAnomaly && typeof todayAnomaly.apply === 'function') {
+                todayAnomaly.apply(player);
+                spawnFloatingText(0, -60, `🪐 ANOMALÍA: ${todayAnomaly.name}`, '251, 191, 36', 18);
+            }
 
             for (let i = 0; i < 5; i++) spawnExplosiveBeacon();
 
@@ -4058,16 +4437,671 @@
         }
 
         /* ==========================================================================
+           9.5. SISTEMA DE BOOSTS TÁCTICOS, ANOMALÍAS DIARIAS, RULETA Y COMUNIDAD
+           ========================================================================== */
+        const BOOST_TYPES = {
+            magnet: {
+                id: 'magnet',
+                name: 'Hiperimán Cuántico',
+                icon: '🧲',
+                color: '#00ffcc',
+                glowColor: 'rgba(0, 255, 204, 0.6)',
+                duration: 0,
+                desc: '¡Atrae instantáneamente todas las gemas y cristales del mapa!'
+            },
+            nuke: {
+                id: 'nuke',
+                name: 'Nuke Aniquiladora',
+                icon: '💣',
+                color: '#ff0055',
+                glowColor: 'rgba(255, 0, 85, 0.7)',
+                duration: 0,
+                desc: '¡Aniquilación total en pantalla con onda expansiva cósmica!'
+            },
+            overdrive: {
+                id: 'overdrive',
+                name: 'Sobrecarga de Plasma',
+                icon: '⚔️',
+                color: '#f97316',
+                glowColor: 'rgba(249, 115, 22, 0.6)',
+                duration: 15,
+                desc: '+150% Daño de Ataque (x2.5) con aura llameante'
+            },
+            luck: {
+                id: 'luck',
+                name: 'Suerte Cuántica',
+                icon: '🍀',
+                color: '#facc15',
+                glowColor: 'rgba(250, 204, 21, 0.6)',
+                duration: 15,
+                desc: '100% Críticos garantizados y +300% de Suerte'
+            },
+            speed: {
+                id: 'speed',
+                name: 'Velocidad Warp',
+                icon: '⚡',
+                color: '#38bdf8',
+                glowColor: 'rgba(56, 189, 248, 0.6)',
+                duration: 15,
+                desc: '+80% Velocidad de Movimiento y recarga de Dash ultrarrápida'
+            }
+        };
+
+        let boostsPool = [];
+        let nextBoostSpawnTimer = 35.0;
+        let activeBoostTimers = {
+            overdrive: 0,
+            luck: 0,
+            speed: 0
+        };
+        let hitstopTimer = 0;
+
+        function triggerHitstop(ms = 100) {
+            hitstopTimer = ms / 1000;
+        }
+
+        function spawnBoost(typeId, x, y) {
+            const bDef = BOOST_TYPES[typeId];
+            if (!bDef) return;
+            let b = boostsPool.find(item => !item.active);
+            if (!b) {
+                b = {};
+                boostsPool.push(b);
+            }
+            b.active = true;
+            b.type = typeId;
+            b.x = (x !== undefined) ? x : (player ? player.x + (Math.random() - 0.5) * 1200 : 0);
+            b.y = (y !== undefined) ? y : (player ? player.y + (Math.random() - 0.5) * 1200 : 0);
+            b.x = Math.max(-WORLD_SIZE / 2 + 120, Math.min(WORLD_SIZE / 2 - 120, b.x));
+            b.y = Math.max(-WORLD_SIZE / 2 + 120, Math.min(WORLD_SIZE / 2 - 120, b.y));
+            b.radius = 24;
+            b.lifetime = 45.0;
+            b.pulse = 0;
+        }
+
+        function spawnRandomBoost(x, y) {
+            const types = ['magnet', 'nuke', 'overdrive', 'luck', 'speed'];
+            const chosen = types[Math.floor(Math.random() * types.length)];
+            spawnBoost(chosen, x, y);
+        }
+
+        function activateHyperMagnet() {
+            AudioSys.playMagnet();
+            shakeScreen(8);
+            let pulledCount = 0;
+            for (let i = 0; i < gemsPool.length; i++) {
+                const g = gemsPool[i];
+                if (g.active) {
+                    g.isMagnetPulled = true;
+                    pulledCount++;
+                }
+            }
+            spawnFloatingText(player.x, player.y - 45, `🧲 ¡HIPERIMÁN! (${pulledCount} Gemas)`, '0, 255, 204', 22);
+        }
+
+        function activateNukeBomb() {
+            AudioSys.playNuke();
+            shakeScreen(28);
+            triggerHitstop(120);
+
+            const nukeEl = document.getElementById('nuke-vignette');
+            if (nukeEl) {
+                nukeEl.classList.remove('active');
+                void nukeEl.offsetWidth;
+                nukeEl.classList.add('active');
+                setTimeout(() => nukeEl.classList.remove('active'), 1200);
+            }
+
+            let wipeCount = 0;
+            const margin = 200;
+            const vLeft = camera.x - margin;
+            const vRight = camera.x + canvas.width + margin;
+            const vTop = camera.y - margin;
+            const vBottom = camera.y + canvas.height + margin;
+
+            for (let i = 0; i < enemiesPool.length; i++) {
+                const e = enemiesPool[i];
+                if (!e.active) continue;
+                if (e.x >= vLeft && e.x <= vRight && e.y >= vTop && e.y <= vBottom) {
+                    if (e.isBoss) {
+                        damageEnemy(e, 4500 * (player.globalDamageMultiplier || 1), true);
+                    } else {
+                        damageEnemy(e, e.hp + 99999, true);
+                        wipeCount++;
+                    }
+                }
+            }
+            spawnFloatingText(player.x, player.y - 50, `💣 ¡NUKE ANIQUILADORA! (-${wipeCount} Enemigos)`, '255, 255, 255', 24);
+        }
+
+        function activateBoost(typeId) {
+            const def = BOOST_TYPES[typeId];
+            if (!def) return;
+            AudioSys.playPowerup();
+            shakeScreen(10);
+            const durationMult = (player && player.boostsDurationMult) ? player.boostsDurationMult : 1.0;
+
+            if (typeId === 'magnet') {
+                activateHyperMagnet();
+            } else if (typeId === 'nuke') {
+                activateNukeBomb();
+            } else if (typeId === 'overdrive') {
+                activeBoostTimers.overdrive = def.duration * durationMult;
+                spawnFloatingText(player.x, player.y - 45, '⚔️ ¡SOBRECARGA (+150% DAÑO)!', '249, 115, 22', 20);
+            } else if (typeId === 'luck') {
+                activeBoostTimers.luck = def.duration * durationMult;
+                spawnFloatingText(player.x, player.y - 45, '🍀 ¡SUERTE CUÁNTICA (+300% & CRIT 100%)!', '250, 204, 21', 20);
+            } else if (typeId === 'speed') {
+                activeBoostTimers.speed = def.duration * durationMult;
+                spawnFloatingText(player.x, player.y - 45, '⚡ ¡VELOCIDAD WARP (+80% VEL)!', '56, 189, 248', 20);
+            }
+            updateBoostsHUD();
+        }
+
+        function updateBoostsHUD() {
+            const container = document.getElementById('boosts-hud');
+            if (!container) return;
+            let html = '';
+            for (let k in activeBoostTimers) {
+                if (activeBoostTimers[k] > 0) {
+                    const def = BOOST_TYPES[k];
+                    if (def) {
+                        const sLeft = Math.ceil(activeBoostTimers[k]);
+                        html += `
+                            <div class="boost-chip" style="border-color:${def.color}; box-shadow:0 0 15px ${def.glowColor};">
+                                <span class="boost-chip-icon">${def.icon}</span>
+                                <span class="boost-chip-name" style="color:${def.color};">${def.name}</span>
+                                <span class="boost-chip-timer">${sLeft}s</span>
+                            </div>
+                        `;
+                    }
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        /* ANOMALÍAS CÓSMICAS ROTATIVAS DIARIAS (7 DÍAS) */
+        const DAILY_ANOMALIES = [
+            {
+                id: 'plasma_storm',
+                name: 'Tormenta Solar de Plasma',
+                icon: '🔥',
+                color: '#f97316',
+                desc: 'El calor cósmico sobrecarga las armas: +40% Daño de armas, pero los enemigos son un 10% más veloces.',
+                apply(p) { p.globalDamageMultiplier *= 1.4; },
+                enemySpdMult: 1.10
+            },
+            {
+                id: 'gravity_warp',
+                name: 'Pozo de Microgravedad',
+                icon: '🌌',
+                color: '#8b5cf6',
+                desc: 'La gravedad se desvanece: +60% Radio de imán y Dash recarga un 30% más rápido.',
+                apply(p) { p.magnet *= 1.6; p.dashCooldownMax *= 0.70; },
+                enemySpdMult: 1.0
+            },
+            {
+                id: 'quantum_fortune',
+                name: 'Alineación de la Fortuna',
+                icon: '🍀',
+                color: '#facc15',
+                desc: 'Convergencia probabilística: +80% Suerte, +15% Crítico y +30% Cristales recolectados.',
+                apply(p) { p.luck += 0.80; p.critChance += 0.15; p.crystalMult *= 1.30; },
+                enemySpdMult: 1.0
+            },
+            {
+                id: 'void_surge',
+                name: 'Mareas del Vacío',
+                icon: '💀',
+                color: '#ef4444',
+                desc: 'El Vacío se expande: +15% Densidad de hordas, pero todos los enemigos otorgan +50% más de XP.',
+                apply(p) { p.xpMult *= 1.50; },
+                enemySpdMult: 1.05
+            },
+            {
+                id: 'chrono_flux',
+                name: 'Fluctuación Temporal',
+                icon: '⏳',
+                color: '#06b6d4',
+                desc: 'Distorsión cuántica: +35% Cadencia de disparo de todas las armas y +15% Velocidad de chasis.',
+                apply(p) { p.attackSpeedMult *= 1.35; p.speed *= 1.15; },
+                enemySpdMult: 0.95
+            },
+            {
+                id: 'shields_up',
+                name: 'Sobretensión de Escudos',
+                icon: '🛡️',
+                color: '#3b82f6',
+                desc: 'Campos de fuerza ionizados: Inicias con +50 HP de Escudo Ionizado auto-recargable y +20% Blindaje.',
+                apply(p) { p.maxShield += 50; p.currentShield += 50; p.armor += 0.20; },
+                enemySpdMult: 1.0
+            },
+            {
+                id: 'hyper_resonance',
+                name: 'Hiper-Resonancia Berserker',
+                icon: '⚡',
+                color: '#ec4899',
+                desc: 'Furia desatada: Los Boosts en combate duran el doble de tiempo y aparecen con mayor frecuencia.',
+                apply(p) { p.boostsDurationMult = 2.0; },
+                enemySpdMult: 1.0
+            }
+        ];
+
+        function getDailyAnomaly() {
+            const epochDays = Math.floor(Date.now() / 86400000);
+            return DAILY_ANOMALIES[epochDays % DAILY_ANOMALIES.length];
+        }
+
+        function updateDailyAnomalyUI() {
+            const anomaly = getDailyAnomaly();
+            if (!anomaly) return;
+            const hTitle = document.getElementById('daily-anomaly-title');
+            const hDesc = document.getElementById('daily-anomaly-desc');
+            const hTimer = document.getElementById('daily-anomaly-timer');
+            const mBadge = document.getElementById('main-anomaly-badge');
+
+            if (hTitle) hTitle.innerHTML = `<span style="color:${anomaly.color};">${anomaly.icon} ${anomaly.name}</span>`;
+            if (hDesc) hDesc.innerText = anomaly.desc;
+            if (mBadge) mBadge.innerText = anomaly.name.toUpperCase().substring(0, 10);
+
+            const now = new Date();
+            const tomorrow = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
+            const diff = Math.max(0, tomorrow.getTime() - now.getTime());
+            const hrs = String(Math.floor(diff / 3600000)).padStart(2, '0');
+            const mins = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+            const secs = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+            if (hTimer) hTimer.innerText = `Próxima rotación en: ${hrs}:${mins}:${secs}`;
+        }
+
+        function openAnomalyInfo() {
+            const anomaly = getDailyAnomaly();
+            if (!anomaly) return;
+            alert(`🪐 ANOMALÍA CÓSMICA DEL DÍA: ${anomaly.name}\n\n${anomaly.desc}\n\n¡Rota cada 24 horas con nuevas mutaciones para cambiar tus tácticas de combate!`);
+        }
+
+        /* RULETA CUÁNTICA DIARIA */
+        const ROULETTE_PRIZES = [
+            { label: '+1,500 💎', color: '#1e293b', textColor: '#38bdf8', crystals: 1500 },
+            { label: '+3,000 💎', color: '#312e81', textColor: '#a855f7', crystals: 3000 },
+            { label: '+5,000 💎', color: '#065f46', textColor: '#34d399', crystals: 5000 },
+            { label: '🌟 15,000 💎', color: '#831843', textColor: '#fbbf24', crystals: 15000, jackpot: true },
+            { label: '+2,000 💎', color: '#1e293b', textColor: '#38bdf8', crystals: 2000 },
+            { label: '+4,000 💎', color: '#1e3a8a', textColor: '#60a5fa', crystals: 4000 },
+            { label: '+8,000 💎', color: '#701a75', textColor: '#f472b6', crystals: 8000 },
+            { label: '+10,000 💎', color: '#7c2d12', textColor: '#fbbf24', crystals: 10000 }
+        ];
+
+        let rouletteCurrentAngle = 0;
+        let isSpinningRoulette = false;
+
+        function canSpinRouletteToday() {
+            const today = getTodayDateString();
+            return saveData.lastRouletteDate !== today;
+        }
+
+        function openRouletteModal() {
+            AudioSys.init();
+            AudioSys.playShoot();
+            const modal = document.getElementById('screen-roulette');
+            if (modal) modal.classList.add('active');
+            drawRouletteWheel(rouletteCurrentAngle);
+            updateRouletteUI();
+        }
+
+        function closeRouletteModal() {
+            if (isSpinningRoulette) return;
+            const modal = document.getElementById('screen-roulette');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function updateRouletteUI() {
+            const btn = document.getElementById('btn-spin-roulette');
+            const timerEl = document.getElementById('roulette-timer');
+            const badgeEl = document.getElementById('main-roulette-badge');
+            const actBadge = document.getElementById('action-roulette-badge');
+            const canSpin = canSpinRouletteToday();
+
+            if (btn) {
+                btn.disabled = !canSpin || isSpinningRoulette;
+                btn.style.opacity = (!canSpin || isSpinningRoulette) ? '0.45' : '1';
+                btn.innerText = canSpin ? '🎡 GIRAR RULETA (GRATIS)' : '✅ TIRADA DE HOY COMPLETADA';
+            }
+
+            if (badgeEl) badgeEl.innerText = canSpin ? '¡GIRAR!' : 'ESPERA';
+            if (actBadge) {
+                actBadge.innerText = canSpin ? '¡DISPONIBLE!' : 'MAÑANA';
+                actBadge.style.background = canSpin ? '#ec4899' : 'rgba(255,255,255,0.15)';
+            }
+
+            if (timerEl) {
+                if (canSpin) {
+                    timerEl.innerText = '✨ ¡Tu tirada gratuita diaria está lista para girar!';
+                    timerEl.style.color = '#34d399';
+                } else {
+                    const now = new Date();
+                    const midnight = new Date();
+                    midnight.setHours(24, 0, 0, 0);
+                    const diff = midnight - now;
+                    const hrs = String(Math.floor(diff / 3600000)).padStart(2, '0');
+                    const mins = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+                    const secs = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+                    timerEl.innerText = `Próxima tirada gratuita en: ${hrs}:${mins}:${secs}`;
+                    timerEl.style.color = '#94a3b8';
+                }
+            }
+        }
+
+        function drawRouletteWheel(currentAngle) {
+            const canvas = document.getElementById('roulette-canvas');
+            if (!canvas) return;
+            const rCtx = canvas.getContext('2d');
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            const radius = cx - 12;
+            const numSlices = ROULETTE_PRIZES.length;
+            const sliceAngle = (Math.PI * 2) / numSlices;
+
+            rCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Borde exterior neon
+            rCtx.save();
+            rCtx.beginPath();
+            rCtx.arc(cx, cy, radius + 6, 0, Math.PI * 2);
+            rCtx.strokeStyle = '#ec4899';
+            rCtx.lineWidth = 4;
+            rCtx.shadowBlur = 20;
+            rCtx.shadowColor = '#ec4899';
+            rCtx.stroke();
+            rCtx.restore();
+
+            // Segmentos
+            for (let i = 0; i < numSlices; i++) {
+                const prize = ROULETTE_PRIZES[i];
+                const startA = currentAngle + i * sliceAngle;
+                const endA = startA + sliceAngle;
+
+                rCtx.save();
+                rCtx.beginPath();
+                rCtx.moveTo(cx, cy);
+                rCtx.arc(cx, cy, radius, startA, endA);
+                rCtx.closePath();
+                rCtx.fillStyle = prize.color;
+                rCtx.fill();
+                rCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                rCtx.lineWidth = 2;
+                rCtx.stroke();
+
+                // Texto del premio
+                rCtx.translate(cx, cy);
+                rCtx.rotate(startA + sliceAngle / 2);
+                rCtx.textAlign = 'right';
+                rCtx.fillStyle = prize.textColor || '#fff';
+                rCtx.font = 'bold 13px sans-serif';
+                rCtx.shadowBlur = 8;
+                rCtx.shadowColor = prize.textColor || '#fff';
+                rCtx.fillText(prize.label, radius - 18, 5);
+                rCtx.restore();
+            }
+
+            // Núcleo central
+            rCtx.save();
+            rCtx.beginPath();
+            rCtx.arc(cx, cy, 28, 0, Math.PI * 2);
+            rCtx.fillStyle = '#0f172a';
+            rCtx.shadowBlur = 15;
+            rCtx.shadowColor = '#00ffcc';
+            rCtx.fill();
+            rCtx.strokeStyle = '#00ffcc';
+            rCtx.lineWidth = 3;
+            rCtx.stroke();
+
+            rCtx.font = '18px sans-serif';
+            rCtx.textAlign = 'center';
+            rCtx.textBaseline = 'middle';
+            rCtx.fillText('💎', cx, cy);
+            rCtx.restore();
+        }
+
+        function spinRoulette() {
+            if (isSpinningRoulette || !canSpinRouletteToday()) return;
+            isSpinningRoulette = true;
+            const resEl = document.getElementById('roulette-result');
+            if (resEl) resEl.innerText = '¡Girando el vórtice cuántico...!';
+            updateRouletteUI();
+
+            const numSlices = ROULETTE_PRIZES.length;
+            const sliceAngle = (Math.PI * 2) / numSlices;
+
+            // Elegir índice del premio
+            const prizeIndex = Math.floor(Math.random() * numSlices);
+            const targetSliceCenter = 1.5 * Math.PI - (prizeIndex * sliceAngle + sliceAngle / 2);
+            const totalSpins = 6 + Math.floor(Math.random() * 4);
+            const targetAngle = totalSpins * Math.PI * 2 + targetSliceCenter;
+
+            const startAngle = rouletteCurrentAngle % (Math.PI * 2);
+            const delta = targetAngle - startAngle;
+            const duration = 4800;
+            const startTime = performance.now();
+            let lastTickIndex = -1;
+
+            function animateSpin(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(1, elapsed / duration);
+                const ease = 1 - Math.pow(1 - progress, 3);
+                rouletteCurrentAngle = startAngle + delta * ease;
+
+                const currentSliceAtTop = Math.floor(((1.5 * Math.PI - rouletteCurrentAngle) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2) / sliceAngle);
+                if (currentSliceAtTop !== lastTickIndex) {
+                    lastTickIndex = currentSliceAtTop;
+                    AudioSys.playSpinTick();
+                }
+
+                drawRouletteWheel(rouletteCurrentAngle);
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateSpin);
+                } else {
+                    isSpinningRoulette = false;
+                    const wonPrize = ROULETTE_PRIZES[prizeIndex];
+                    saveData.esencias = (saveData.esencias || 0) + wonPrize.crystals;
+                    saveData.lastRouletteDate = getTodayDateString();
+                    saveGame();
+
+                    AudioSys.playLevelUp();
+                    shakeScreen(12);
+
+                    if (resEl) {
+                        resEl.innerHTML = `<span style="color:#34d399;">🎉 ¡HAS GANADO ${wonPrize.label}!</span>`;
+                    }
+                    updateRouletteUI();
+                }
+            }
+            requestAnimationFrame(animateSpin);
+        }
+
+        /* CANJEAR CÓDIGOS DE COMUNIDAD */
+        const COMMUNITY_CODES = {
+            'JUEGAZO2026': { crystals: 10000, desc: '¡Bienvenido al juegazo 2026! +10,000 Cristales 💎' },
+            'FOMO': { crystals: 5000, desc: '¡No te pierdas nada! +5,000 Cristales 💎' },
+            'TIKTOK': { crystals: 4000, desc: '¡Bonus para la comunidad de TikTok! +4,000 Cristales 💎' },
+            'DISCORD': { crystals: 4000, desc: '¡Bonus para la comunidad de Discord! +4,000 Cristales 💎' },
+            'FERRVN': { crystals: 7777, desc: '🔥 ¡PROTOCOLO SECRETO FERRVN! +7,777 Cristales y Chasis Glitch desbloqueado 👾', unlockGlitch: true }
+        };
+
+        function openRedeemModal() {
+            AudioSys.init();
+            AudioSys.playShoot();
+            const modal = document.getElementById('modal-redeem');
+            if (modal) modal.classList.add('active');
+            const input = document.getElementById('code-redeem-input');
+            if (input) {
+                input.value = '';
+                input.focus();
+            }
+            const statusEl = document.getElementById('code-redeem-status');
+            if (statusEl) statusEl.innerText = '';
+        }
+
+        function closeRedeemModal() {
+            const modal = document.getElementById('modal-redeem');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function redeemCommunityCode() {
+            const input = document.getElementById('code-redeem-input');
+            const statusEl = document.getElementById('code-redeem-status');
+            if (!input || !statusEl) return;
+
+            const code = input.value.trim().toUpperCase();
+            if (!code) {
+                statusEl.innerHTML = '<span style="color:#ef4444;">Introduce un código promocional.</span>';
+                return;
+            }
+
+            if (saveData.redeemedCodes.includes(code)) {
+                statusEl.innerHTML = '<span style="color:#f59e0b;">❌ Este código ya fue canjeado en tu terminal.</span>';
+                AudioSys.playBeep(220, 0.15);
+                return;
+            }
+
+            const promo = COMMUNITY_CODES[code];
+            if (promo) {
+                saveData.redeemedCodes.push(code);
+                saveData.esencias = (saveData.esencias || 0) + promo.crystals;
+
+                if (promo.unlockGlitch && !saveData.unlockedChars.includes('char_glitch')) {
+                    saveData.unlockedChars.push('char_glitch');
+                }
+
+                saveGame();
+                AudioSys.playLevelUp();
+                shakeScreen(10);
+                input.value = '';
+                statusEl.innerHTML = `<span style="color:#34d399; font-size:15px;">✅ ${promo.desc}</span>`;
+            } else {
+                statusEl.innerHTML = '<span style="color:#ef4444;">❌ Código no reconocido o caducado.</span>';
+                AudioSys.playBeep(180, 0.15);
+            }
+        }
+
+        /* MODAL GUÍA DE PUBLICACIÓN WEB */
+        function openWebGuideModal() {
+            AudioSys.init();
+            AudioSys.playShoot();
+            const modal = document.getElementById('modal-web-guide');
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeWebGuideModal() {
+            const modal = document.getElementById('modal-web-guide');
+            if (modal) modal.classList.remove('active');
+        }
+
+        /* PANTALLA COMPLETA FULLSCREEN */
+        function toggleFullscreen() {
+            AudioSys.init();
+            AudioSys.playShoot();
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                }
+            }
+        }
+
+        /* COMPARTIR RÉCORD VIRAL */
+        function shareRunRecord() {
+            AudioSys.init();
+            AudioSys.playLevelUp();
+            const m = Math.floor(gameTimeSeconds / 60);
+            const s = Math.floor(gameTimeSeconds % 60);
+            const timeStr = `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
+            const killsCount = kills || 0;
+            const crystalsCount = runCrystals || 0;
+            const charName = (charsData.find(c => c.id === selectedCharId) || {}).name || 'Piloto';
+            const text = `🔥 ¡Sobreviví ${timeStr} con ${killsCount.toLocaleString()} bajas y ${crystalsCount.toLocaleString()} cristales usando ${charName} en QUANTUM BREACH // SURVIVORS! 🚀 ¿Podrás superarme? Juega gratis ahora.`;
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('📋 ¡Récord copiado al portapapeles!\nPégalo en WhatsApp, Discord, TikTok o tus redes para desafiar a tus amigos.');
+                }).catch(() => {
+                    prompt('Copia tu récord para compartirlo con tus amigos:', text);
+                });
+            } else {
+                prompt('Copia tu récord para compartirlo con tus amigos:', text);
+            }
+        }
+
+        /* ==========================================================================
            10. LÓGICA DE ACTUALIZACIÓN CON ESCALADO DINÁMICO CONTINUO
            ========================================================================== */
         function update(dt60) {
             if (gameState !== 'playing') return;
+
+            // Hitstop: congela la física y la lógica durante impacto cósmico
+            if (hitstopTimer > 0) {
+                hitstopTimer -= (dt60 / 60);
+                return;
+            }
 
             frameFloatingTextsCount = 0;
             frameParticlesCount = 0;
 
             const dt = dt60 / 60;
             gameTimeSeconds += dt;
+
+            // Actualizar temporizadores de Boosts Activos
+            let boostsChanged = false;
+            for (let k in activeBoostTimers) {
+                if (activeBoostTimers[k] > 0) {
+                    activeBoostTimers[k] -= dt;
+                    if (activeBoostTimers[k] <= 0) {
+                        activeBoostTimers[k] = 0;
+                        boostsChanged = true;
+                    }
+                }
+            }
+            if (boostsChanged || frames % 20 === 0) {
+                updateBoostsHUD();
+            }
+
+            // Aura y partículas visuales de Boosts en el Jugador
+            if (activeBoostTimers.overdrive > 0) {
+                if (frames % 4 === 0) spawnParticle(player.x, player.y, (Math.random()-0.5)*5, (Math.random()-0.5)*5, '#f97316', 10, 0.08);
+            }
+            if (activeBoostTimers.luck > 0) {
+                if (frames % 4 === 0) spawnParticle(player.x, player.y, (Math.random()-0.5)*4, (Math.random()-0.5)*4, '#facc15', 8, 0.08);
+            }
+            if (activeBoostTimers.speed > 0) {
+                if (frames % 3 === 0) spawnParticle(player.x, player.y, (Math.random()-0.5)*3, (Math.random()-0.5)*3, '#38bdf8', 9, 0.1);
+            }
+
+            // Spawn periódico de Boosts Tácticos (cada 45-60s o más rápido con anomalía)
+            nextBoostSpawnTimer -= dt;
+            if (nextBoostSpawnTimer <= 0) {
+                const boostTypesArr = ['magnet', 'nuke', 'overdrive', 'luck', 'speed'];
+                const randType = boostTypesArr[Math.floor(Math.random() * boostTypesArr.length)];
+                spawnBoost(randType);
+                const baseInterval = (player && player.boostsDurationMult === 2.0) ? 25 : 48;
+                nextBoostSpawnTimer = baseInterval + Math.random() * 15;
+            }
+
+            // Chequeo de recogida de Boosts en el Mapa
+            for (let i = 0; i < boostsPool.length; i++) {
+                const b = boostsPool[i];
+                if (!b.active) continue;
+                b.lifetime -= dt;
+                if (b.lifetime <= 0) {
+                    b.active = false;
+                    continue;
+                }
+                const bDistSq = Math.pow(player.x - b.x, 2) + Math.pow(player.y - b.y, 2);
+                if (bDistSq < Math.pow(player.radius + b.radius + 12, 2)) {
+                    b.active = false;
+                    activateBoost(b.type);
+                }
+            }
 
             if (player.tankShockwaveCooldown > 0) player.tankShockwaveCooldown -= dt;
 
@@ -4145,6 +5179,9 @@
             }
 
             // Dash
+            if (activeBoostTimers.speed > 0) {
+                player.dashCooldownTimer = Math.min(player.dashCooldownTimer, 0.25);
+            }
             if (player.dashCooldownTimer > 0) {
                 player.dashCooldownTimer -= dt;
                 const pct = Math.max(0, 1 - (player.dashCooldownTimer / player.dashCooldownMax));
@@ -4218,6 +5255,7 @@
             if (dx !== 0 || dy !== 0) {
                 const len = Math.hypot(dx, dy);
                 let moveSpd = player.isDashing ? player.speed * 3.2 : player.speed;
+                if (activeBoostTimers.speed > 0) moveSpd *= 1.80;
                 if (player.afterburnerTimer > 0) moveSpd *= 1.35;
                 moveSpd *= hazardSlowMult;
                 const inputMag = Math.min(1, len);
@@ -4245,6 +5283,10 @@
 
             camera.x = player.x - canvas.width / 2;
             camera.y = player.y - canvas.height / 2;
+
+            const boostDmgMult = (activeBoostTimers.overdrive > 0) ? 2.5 : 1.0;
+            const boostCritBonus = (activeBoostTimers.luck > 0) ? 1.0 : 0;
+            const boostLuckBonus = (activeBoostTimers.luck > 0) ? 3.0 : 0;
 
             // 3. Proyectiles Enemigos (Orbes de Vacío de void_watcher)
             for (let epIdx = enemyProjectiles.length - 1; epIdx >= 0; epIdx--) {
@@ -4321,7 +5363,7 @@
                 for (let j = 0; j < enemiesPool.length; j++) {
                     const e = enemiesPool[j];
                     if (e.active && Math.hypot(player.x - e.x, player.y - e.y) < auraRadius + e.radius) {
-                        damageEnemy(e, 8.5 * player.globalDamageMultiplier);
+                        damageEnemy(e, 8.5 * player.globalDamageMultiplier * boostDmgMult);
                         e.slowTimer = 0.5;
                         spawnParticle(e.x, e.y, (Math.random()-0.5)*3, (Math.random()-0.5)*3, '#00ffcc', 6, 0.08);
                         auraHits++;
@@ -4358,7 +5400,7 @@
                             const p = getFreeObj(projectilesPool);
                             if (p) {
                                 const offset = wpBlaster.multishot > 1 ? -0.25 + (0.5 / (wpBlaster.multishot - 1)) * i : 0;
-                                let effectiveCrit = player.critChance + (player.luck - 1) * 0.03;
+                                let effectiveCrit = player.critChance + boostCritBonus + (player.luck + boostLuckBonus - 1) * 0.03;
                                 if (player.hasDeadlyFocus && (dx === 0 && dy === 0)) effectiveCrit += 0.12;
                                 const isCrit = Math.random() < effectiveCrit;
                                 const isJackpot = selectedCharId === 'char_gambler' && Math.random() < (0.12 * player.luck);
@@ -4372,7 +5414,7 @@
                                 p.radius = isCrit ? 8 : 6;
                                 p.color = isJackpot ? '#facc15' : (isCrit ? '#ff00ff' : '#00ffcc');
                                 
-                                let baseDmg = 18 * (1 + wpBlaster.level * 0.18) * player.globalDamageMultiplier;
+                                let baseDmg = 18 * (1 + wpBlaster.level * 0.18) * player.globalDamageMultiplier * boostDmgMult;
                                 if (player.hasBerserker) {
                                     const missingHpPct = Math.max(0, 1 - (player.hp / player.maxHp));
                                     baseDmg *= (1 + missingHpPct * 0.80);
@@ -4420,12 +5462,12 @@
                         if (distSq < Math.pow(22 + e.radius, 2)) {
                             if (!e.bladeHitTimer || e.bladeHitTimer <= 0) {
                                 e.bladeHitTimer = 0.20; // 5 cortes por segundo por enemigo
-                                let bladeDmg = wpBlades.damage * player.globalDamageMultiplier;
+                                let bladeDmg = wpBlades.damage * player.globalDamageMultiplier * boostDmgMult;
                                 if (player.hasBerserker) {
                                     const missingHpPct = Math.max(0, 1 - (player.hp / player.maxHp));
                                     bladeDmg *= (1 + missingHpPct * 0.80);
                                 }
-                                const isCrit = Math.random() < (player.critChance + (player.luck - 1) * 0.03);
+                                const isCrit = Math.random() < (player.critChance + boostCritBonus + (player.luck + boostLuckBonus - 1) * 0.03);
                                 if (isCrit) bladeDmg *= player.critMult;
                                 damageEnemy(e, bladeDmg, isCrit);
                                 AudioSys.playHit(false);
@@ -4468,7 +5510,7 @@
                 if (wpTesla.timer <= 0) {
                     const firstTarget = getClosestEnemy(player.x, player.y, 380 * player.areaMult);
                     if (firstTarget) {
-                        let teslaDmg = wpTesla.damage * player.globalDamageMultiplier;
+                        let teslaDmg = wpTesla.damage * player.globalDamageMultiplier * boostDmgMult;
                         if (player.hasBerserker) {
                             const missingHpPct = Math.max(0, 1 - (player.hp / player.maxHp));
                             teslaDmg *= (1 + missingHpPct * 0.80);
@@ -4488,7 +5530,7 @@
                 for (let k = 0; k < enemiesPool.length; k++) {
                     const se = enemiesPool[k];
                     if (se.active) {
-                        zapTeslaChain(player, se, 2, wpTesla.damage * 0.85 * player.globalDamageMultiplier);
+                        zapTeslaChain(player, se, 2, wpTesla.damage * 0.85 * player.globalDamageMultiplier * boostDmgMult);
                         stormTargets++;
                         if (stormTargets >= 2) break;
                     }
@@ -4500,7 +5542,7 @@
             if (wpMines.active) {
                 wpMines.timer -= dt60;
                 if (wpMines.timer <= 0) {
-                    let mineDmg = wpMines.damage * player.globalDamageMultiplier;
+                    let mineDmg = wpMines.damage * player.globalDamageMultiplier * boostDmgMult;
                     if (player.hasBerserker) {
                         const missingHpPct = Math.max(0, 1 - (player.hp / player.maxHp));
                         mineDmg *= (1 + missingHpPct * 0.80);
@@ -4568,7 +5610,7 @@
                 if (wpMortar.timer <= 0) {
                     const target = getClosestEnemy(player.x, player.y, wpMortar.range);
                     if (target) {
-                        let mDmg = wpMortar.damage * player.globalDamageMultiplier;
+                        let mDmg = wpMortar.damage * player.globalDamageMultiplier * boostDmgMult;
                         if (player.hasBerserker) {
                             const missingHpPct = Math.max(0, 1 - (player.hp / player.maxHp));
                             mDmg *= (1 + missingHpPct * 0.80);
@@ -4625,7 +5667,7 @@
                 if (target) {
                     laserDroneBeam = { sx: droneX, sy: droneY, tx: target.x, ty: target.y };
                     if (wpDrone.timer <= 0) {
-                        let lDmg = wpDrone.damage * player.globalDamageMultiplier;
+                        let lDmg = wpDrone.damage * player.globalDamageMultiplier * boostDmgMult;
                         damageEnemy(target, lDmg);
                         AudioSys.playHit(false);
                         spawnParticle(target.x, target.y, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4, '#00e5ff', 8);
@@ -5016,9 +6058,9 @@
                 if (!g.active) continue;
 
                 const distSq = Math.pow(player.x - g.x, 2) + Math.pow(player.y - g.y, 2);
-                if (distSq < magnetSq || g.isChest || g.isSpectralSoul) {
+                if (distSq < magnetSq || g.isChest || g.isSpectralSoul || g.isMagnetPulled) {
                     const ang = Math.atan2(player.y - g.y, player.x - g.x);
-                    const pullSpd = (g.isChest ? 10 : (g.isSpectralSoul ? 32 : 22)) * dt60;
+                    const pullSpd = (g.isMagnetPulled ? 42 : (g.isChest ? 10 : (g.isSpectralSoul ? 32 : 22))) * dt60;
                     g.x += Math.cos(ang) * pullSpd;
                     g.y += Math.sin(ang) * pullSpd;
 
@@ -5043,6 +6085,7 @@
                             AudioSys.playGem(kills);
                         }
                         g.active = false;
+                        g.isMagnetPulled = false;
                         document.getElementById('run-crystals').innerText = runCrystals.toLocaleString();
                     }
                 }
@@ -5128,6 +6171,7 @@
                 spawnParticle(x, y, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 8, '#38bdf8', 20);
             }
             spawnFloatingText(x, y, '💥 ONDA EXPANSIVA 450', '56, 189, 248', 18);
+            if (Math.random() < 0.40) spawnRandomBoost(x, y);
         }
 
         function zapTeslaChain(source, target, chainsLeft, dmg) {
@@ -5327,6 +6371,10 @@
                 }
 
                 spawnGem(e.x, e.y, e.type, e.isTenMinuteBoss);
+
+                if ((e.type === 'elite' || e.type === 'boss') && Math.random() < 0.35) {
+                    spawnRandomBoost(e.x, e.y);
+                }
 
                 if (e.isTenMinuteBoss) {
                     if (currentWorldIndex < 2) {
@@ -5882,6 +6930,45 @@
                 }
             }
 
+            // Boosts Tácticos en el Mapa (Orbes de Energía Cuántica)
+            for (let i = 0; i < boostsPool.length; i++) {
+                const b = boostsPool[i];
+                if (!b.active) continue;
+                const bDef = BOOST_TYPES[b.type];
+                if (!bDef) continue;
+                b.pulse = (b.pulse || 0) + 0.06;
+                const pulseScale = Math.sin(b.pulse) * 3;
+                const r = b.radius + pulseScale;
+
+                ctx.save();
+                ctx.shadowBlur = 18 + Math.sin(b.pulse) * 8;
+                ctx.shadowColor = bDef.color;
+                ctx.fillStyle = bDef.color;
+                ctx.beginPath();
+                ctx.arc(b.x, b.y, r, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(b.x, b.y, r * 0.55, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.shadowBlur = 0;
+                ctx.font = 'bold 16px "Segoe UI Emoji", "Apple Color Emoji", sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(bDef.icon, b.x, b.y);
+
+                if (b.lifetime < 10) {
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${0.4 + 0.6 * Math.sin(frames * 0.25)})`;
+                    ctx.lineWidth = 2.5;
+                    ctx.beginPath();
+                    ctx.arc(b.x, b.y, r + 5, 0, Math.PI * 2 * (b.lifetime / 10));
+                    ctx.stroke();
+                }
+                ctx.restore();
+            }
+
             for (let i = 0; i < enemiesPool.length; i++) {
                 const e = enemiesPool[i];
                 if (e.active) {
@@ -6143,6 +7230,50 @@
             ctx.fillStyle = '#00ffcc';
             ctx.fillRect(canvas.width / 2 - 45, canvas.height / 2 + 38, 90 * Math.max(0, player.hp / player.maxHp), 8);
 
+            // Indicadores direccionales para Boosts Tácticos fuera de pantalla
+            for (let i = 0; i < boostsPool.length; i++) {
+                const b = boostsPool[i];
+                if (!b.active) continue;
+                const bDef = BOOST_TYPES[b.type];
+                if (!bDef) continue;
+                const scrX = b.x - camera.x;
+                const scrY = b.y - camera.y;
+                const margin = 45;
+                if (scrX < margin || scrX > canvas.width - margin || scrY < margin || scrY > canvas.height - margin) {
+                    const ang = Math.atan2(b.y - player.y, b.x - player.x);
+                    const cx = canvas.width / 2;
+                    const cy = canvas.height / 2;
+                    const maxDistX = canvas.width / 2 - 45;
+                    const maxDistY = canvas.height / 2 - 45;
+                    const cosA = Math.cos(ang);
+                    const sinA = Math.sin(ang);
+                    const scaleX = Math.abs(cosA) > 0.0001 ? maxDistX / Math.abs(cosA) : 99999;
+                    const scaleY = Math.abs(sinA) > 0.0001 ? maxDistY / Math.abs(sinA) : 99999;
+                    const borderDist = Math.min(scaleX, scaleY);
+                    const arrX = cx + cosA * borderDist;
+                    const arrY = cy + sinA * borderDist;
+
+                    ctx.save();
+                    ctx.translate(arrX, arrY);
+                    ctx.rotate(ang);
+                    ctx.fillStyle = bDef.color;
+                    ctx.shadowBlur = 12;
+                    ctx.shadowColor = bDef.color;
+                    ctx.beginPath();
+                    ctx.moveTo(10, 0);
+                    ctx.lineTo(-8, -7);
+                    ctx.lineTo(-4, 0);
+                    ctx.lineTo(-8, 7);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.font = '14px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(bDef.icon, -18, 0);
+                    ctx.restore();
+                }
+            }
+
             ctx.restore();
         }
 
@@ -6169,6 +7300,17 @@
                 if (g.active && g.isChest) {
                     miniCtx.fillStyle = '#f1c40f';
                     miniCtx.fillRect(ox + g.x * scale - 2, oy + g.y * scale - 2, 4, 4);
+                }
+            }
+
+            for (let i = 0; i < boostsPool.length; i++) {
+                const b = boostsPool[i];
+                if (b.active) {
+                    const bDef = BOOST_TYPES[b.type];
+                    miniCtx.fillStyle = bDef ? bDef.color : '#00ffea';
+                    miniCtx.beginPath();
+                    miniCtx.arc(ox + b.x * scale, oy + b.y * scale, 3.5, 0, Math.PI * 2);
+                    miniCtx.fill();
                 }
             }
 
@@ -7145,6 +8287,10 @@
         initDailyData();
         updateDailyNotificationBadge();
         startDailyCountdownTimer();
+        updateDailyAnomalyUI();
+        updateRouletteUI();
+        setInterval(updateDailyAnomalyUI, 1000);
+        setInterval(updateRouletteUI, 1000);
 
         const pInput = document.getElementById('pilot-name-input');
         if (pInput) pInput.value = saveData.playerName || 'Comandante Cuántico';
